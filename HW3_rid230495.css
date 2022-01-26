@@ -9,7 +9,7 @@ a, a:hover, a:focus{
 
 a:active{
     /* text-decoration: none; */
-    color: blueviolet;
+    color: rgb(174,148,83);
 }
 
 
@@ -31,7 +31,8 @@ body{
     box-sizing: border-box;
     z-index: 1;
     font-family: Arial, Helvetica, sans-serif;
-    /* padding-left: 60px; */
+    padding-left: 116px;
+    padding-right: 26px;
 
 }
 
@@ -51,15 +52,16 @@ body{
 }
 
 .nav-li{
-    margin-right: 30px;
+    margin-right: 48px;
 }
 
 .memories{
     color: white;
     background-image: url("image3.png");
     background-repeat: no-repeat;
-    background-size: cover;
-    height: 650px;
+    background-size: 1239px 1150px;
+    height: 950px;
+    background-position: center;
     background-attachment: fixed;
     display: flex;
     justify-content: center;
@@ -72,8 +74,10 @@ body{
 
 .memories p{
     margin: 0px;
-    font-size: 36px;
+    font-size: 50px;
     margin-bottom: 12px;
+    letter-spacing: 12px;
+    line-height: 1.5;
 }
 
 .services-main{
@@ -105,23 +109,26 @@ body{
 
 .content1{
     position: absolute;
-    top: 124px;
-    font-size: 23px;
+    top: 110px;
+    font-size: 26px;
     font-family: Arial, Helvetica, sans-serif;
 }
 
 .content2{
     position: absolute;
-    bottom: 219px;
-    width: 155px;
+    bottom: 200px;
+    width: 194px;
+    font-size: 18px;
+    letter-spacing: 2px;
     text-align: center;
     font-family: "Times New Roman", Times, serif;
+    line-height: 2;
 }
 .content3{
     position: absolute;
     bottom: 82px;
     border: 1px solid;
-    padding: 13px 41px;
+    padding: 13px 59px;
     font-size: 14px;
     font-family: Arial, Helvetica, sans-serif;
 }
@@ -144,11 +151,18 @@ body{
     padding-bottom: 50px;
     font-family: "Times New Roman", Times, serif;
 }
+
+.testimonial h1{
+    font-size: 50px;
+    margin-bottom: 10px;
+}
 .testimonial2{
     text-align: center;
     font-size: 30px;
     margin-bottom: 40px;
-    width: 386px;
+    width: 450px;
+    letter-spacing: 2px;
+    line-height: 1.6;
 }
 
 .testimonial3{
@@ -204,17 +218,20 @@ body{
 
 .gallery-content2{
     position: relative;
-    top: 220px;
+    top: 200px;
     text-align: center;
-    width: 152px;
+    width: 170px;
     font-family: "Times New Roman", Times, serif;
+    letter-spacing: 4px;
+    line-height: 2;
+    font-size: 20px;
 }
 
 .gallery-content3{
     position: relative;
-    top: 315px;
+    top: 250px;
     border: 1px solid;
-    padding: 13px 36px;
+    padding: 13px 41px;
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -224,9 +241,10 @@ body{
     display: flex;
     justify-content: space-around;
     align-items: center;
-    height: 150px;
+    height: 200px;
     font-family: Arial, Helvetica, sans-serif;
     margin: 50px;
+    padding-left: 50px;
 }
 
 .address-container{
@@ -236,14 +254,18 @@ body{
 
 .vertical-line{
     width: 1px;
-    height: 40px;
     background-color: white;
-    margin: 0 20px;
-    height: 56px;
+    margin: 0 25px;
+    height: 62px;
+}
+
+.address{
+    line-height: 1.5;
 }
 
 .telephone{
     width: 132px;
+    line-height: 1.5;
 }
 
 .book-consulatation{
