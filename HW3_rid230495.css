@@ -1,37 +1,252 @@
+html {
+    scroll-behavior: smooth;
+}
+
+a, a:hover, a:focus{
+    text-decoration: none;
+    color: inherit;
+}
+
+a:active{
+    /* text-decoration: none; */
+    color: blueviolet;
+}
+
+
 body{
-    background-image: url("image3.png");
-    background-repeat: no-repeat;
     font-family: 'Roboto';
     margin: 0 auto;
-    background-size: cover;
+    width: 1239px;
+    /* background-color: pink; */
 }
 
 .nav-bar{
-    background-color: mintcream;
-    height: 60px;
+    background-color: rgb(255,255,255);
+    height: 70px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: fixed;
+    width: inherit;
+    box-sizing: border-box;
+    z-index: 1;
+    font-family: Arial, Helvetica, sans-serif;
     /* padding-left: 60px; */
 
 }
 
 .nav-bar-main{
     padding-left: 60px;
+    width: 100%;
+    color: rgb(174,148,83);
 }
 
 .nav-ul{
     display: flex;
     /* width: 100%; */
-    justify-content: flex-end;
+    /* justify-content: flex-end; */
     list-style-type: none;
-    padding-right: 20px;
+    /* padding-right: 20px; */
+    /* justify-content: space-between; */
 }
 
 .nav-li{
     margin-right: 30px;
 }
 
-#home{
+.memories{
     color: white;
+    background-image: url("image3.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 650px;
+    background-attachment: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: "Times New Roman", Times, serif;
+    font-size: x-large;
+    align-items: center;
+}
+
+.memories p{
+    margin: 0px;
+    font-size: 36px;
+    margin-bottom: 12px;
+}
+
+.services-main{
+    height: 500px;
+    /* margin-block: 60px;
+    margin-left: 60px;
+    margin-right: 60px; */
+    display: flex;
+    padding: 7% 8%;
+    justify-content: space-between;
+    color: white;
+    /* flex-direction: column; */
+    /* position: relative; */
+    background: white;
+
+}
+
+.services1{
+    background-image: url("flower.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    width: 408px;
+    align-items: center;
+    position: relative;
+    justify-content: center;
+    background-position: center;
+}
+
+.content1{
+    position: absolute;
+    top: 124px;
+    font-size: 23px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.content2{
+    position: absolute;
+    bottom: 219px;
+    width: 155px;
+    text-align: center;
+    font-family: "Times New Roman", Times, serif;
+}
+.content3{
+    position: absolute;
+    bottom: 82px;
+    border: 1px solid;
+    padding: 13px 41px;
+    font-size: 14px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.services2{
+    margin-left: 10%;
+}
+
+.flower-container{
+    position: absolute;
+    text-align: center;
+    color: white;
+}
+.testimonial{
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding-bottom: 50px;
+    font-family: "Times New Roman", Times, serif;
+}
+.testimonial2{
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 40px;
+    width: 386px;
+}
+
+.testimonial3{
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    margin-bottom: 50px;
+    color: rgb(174,148,83);
+}
+
+.gallery-main{
+    background-image: url("image2.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 600px;
+    background-attachment: fixed;
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin: 50px;
+}
+
+.gallery-discover{
+    background-image: url("flower.png");
+    position: absolute;
+    height: 488px;
+    width: 340px;
+    background-position: center;
+    right: 87px;
+}
+
+.gallery-container{
+    position: relative;
+    color: white;
+    height: inherit;
+    width: inherit;
+}
+
+.gallery-content{
+    position: absolute;
+    height: inherit;
+    width: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.gallery-content1{
+    position: relative;
+    top: 90px;
+    font-size: 28px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.gallery-content2{
+    position: relative;
+    top: 220px;
+    text-align: center;
+    width: 152px;
+    font-family: "Times New Roman", Times, serif;
+}
+
+.gallery-content3{
+    position: relative;
+    top: 315px;
+    border: 1px solid;
+    padding: 13px 36px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.contact{
+    color: white;
+    background-color: rgb(174,148,83);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 150px;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 50px;
+}
+
+.address-container{
+    display: flex;
+    font-size: 15px;
+}
+
+.vertical-line{
+    width: 1px;
+    height: 40px;
+    background-color: white;
+    margin: 0 20px;
+    height: 56px;
+}
+
+.telephone{
+    width: 132px;
+}
+
+.book-consulatation{
+    border: 1px solid;
+    padding: 16px;
 }
