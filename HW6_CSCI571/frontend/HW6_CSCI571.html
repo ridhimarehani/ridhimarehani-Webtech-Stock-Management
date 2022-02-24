@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="HW6_CSCI571.css">
+    <script src="HW6_CSCI571.js" defer>
+
+    </script>
+</head>
+
+<body>
+
+    <div class="stock_search_head">
+        <div id="search_menu">
+            <div>
+                Stock Search
+            </div>
+            <br />
+            <div>
+                <button id="stock_search_button" onclick="searchCompany()"><img id="search_image" src="search-solid.svg"
+                        alt="search"></button>
+                <input type="text" id="stock_search_input">
+                <button id="clear_search_button"><img src="times-solid.svg" alt="search"></button>
+            </div>
+        </div>
+    </div>
+    <div id="company_info">
+
+        <div class="tab">
+            <button class="tablinks active" onclick="openTab(event, 'company_info_tab')">Company</button>
+            <button class="tablinks" onclick="openStockSummaryTab(event, 'stock_summary_tab')">Stock Summary</button>
+            <button class="tablinks" onclick="openTab(event, 'charts_tab')">Charts</button>
+            <button class="tablinks" onclick="openStockSummaryTab(event, 'latest_news_tab')">Latest News</button>
+        </div>
+        <div id="company_info_tab" class="tabcontent">
+            <div class="grid_container">
+                <div class="grid_item1">Company Name</div>
+                <div class="grid_item1">Stock Ticker Symbol</div>
+                <div class="grid_item1">Stock Exchange Code</div>
+                <div class="grid_item1">Company IPO Date</div>
+                <div class="grid_item1">Category</div>
+            </div>
+
+            <div class="grid_container">
+                <div class="grid_item2" id="comp_name"></div>
+                <div class="grid_item2" id="stock_tick_sym"></div>
+                <div class="grid_item2" id="stock_ex_code"></div>
+                <div class="grid_item2" id="ipo_date"></div>
+                <div class="grid_item2" id="category"></div>
+            </div>
+
+        </div>
+
+        <div id="stock_summary_tab" class="tabcontent">
+            <div id="stock_summary_data">
+                <div class="grid_container">
+                    <div class="grid_item1">Stock Ticker Symbol</div>
+                    <div class="grid_item1">Trading Day</div>
+                    <div class="grid_item1">Previous Closing Price</div>
+                    <div class="grid_item1">Opening Price</div>
+                    <div class="grid_item1">High Price</div>
+                    <div class="grid_item1">Low Price</div>
+                    <div class="grid_item1">Change</div>
+                    <div class="grid_item1">Change Percent</div>
+                </div>
+
+                <div class="grid_container">
+                    <div class="grid_item2" id="stock_ticker_symbol"></div>
+                    <div class="grid_item2" id="trading_day"></div>
+                    <div class="grid_item2" id="previous_closing_price"></div>
+                    <div class="grid_item2" id="opening_price"></div>
+                    <div class="grid_item2" id="high_price"></div>
+                    <div class="grid_item2" id="low_price"></div>
+                    <div class="grid_item2" id="change"></div>
+                    <div class="grid_item2" id="change_percent"></div>
+                </div>
+
+            </div>
+            <div id="recommendation_trends">
+                <div id="recommend_val1">1</div>
+                <div id="recommend_val2"></div>
+                <div id="recommend_val3"></div>
+                <div id="recommend_val4"></div>
+                <div id="recommend_val5"></div>
+
+            </div>
+
+        </div>
+
+
+        <div id="charts_tab" class="tabcontent">
+            3
+        </div>
+
+        <div id="latest_news_tab" class="tabcontent">
+            mmm
+            <!-- <div class="news_container">
+                <div class="news_container_left">
+                    <img src="" alt="news Image" id="news_image" height="70" width="70">
+                </div>
+                <div class="news_container_right">
+                    <div id="news_headline"></div>
+                    <div id="news_date"></div>
+                    <a id = "news_url" target="__blank__">See Original Post</a>
+                </div>
+            </div> -->
+        </div>
+
+    </div>
+
+</body>
+
+</html>
