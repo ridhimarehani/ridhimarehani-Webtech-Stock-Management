@@ -3,9 +3,12 @@
 
 <head>
     <link rel="stylesheet" href="HW6_CSCI571.css">
-    <script src="HW6_CSCI571.js" defer>
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/data.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
+    <script src="HW6_CSCI571.js" defer></script>
 
-    </script>
 </head>
 
 <body>
@@ -15,15 +18,28 @@
             <div>
                 Stock Search
             </div>
-            <br />
-            <div>
-                <button id="stock_search_button" onclick="searchCompany()"><img id="search_image" src="search-solid.svg"
-                        alt="search"></button>
-                <input type="text" id="stock_search_input">
-                <button id="clear_search_button"><img src="times-solid.svg" alt="search"></button>
-            </div>
+            <!-- <div class="stock_search_area"> -->
+                <form class="stock_search_area" >
+                    <img class="search_image" src="search-solid.svg" alt="search" onclick="searchCompany()" width="15"
+                        height="15">
+
+                    <input type="text" id="stock_search_input" placeholder="Enter Stock Ticker Symbol"
+                        onkeydown="if (event.keyCode == 13) searchCompany()">
+
+
+                    <img src="times-solid.svg" alt="search" class="clear_search_button" width="15" height="15"
+                        onclick="onCrossClick()">
+                </form>
+                <!-- <div class="arrow-up"></div> -->
+                <!-- <div class="error_tooltip">Please fill out this field.</div> -->
+            <!-- </div> -->
+
         </div>
     </div>
+    <div class="error_company" id="error_company">
+        Error : No record has been found, please enter a valid symbol
+    </div>
+
     <div id="company_info">
 
         <div class="tab">
@@ -77,7 +93,7 @@
 
             </div>
             <div id="recommendation_trends">
-                <div id="recommend_val1">1</div>
+                <div id="recommend_val1"></div>
                 <div id="recommend_val2"></div>
                 <div id="recommend_val3"></div>
                 <div id="recommend_val4"></div>
@@ -89,11 +105,11 @@
 
 
         <div id="charts_tab" class="tabcontent">
-            3
+
+            <div id="chart_container" style="height: 400px; min-width: 310px"></div>
         </div>
 
         <div id="latest_news_tab" class="tabcontent">
-            mmm
             <!-- <div class="news_container">
                 <div class="news_container_left">
                     <img src="" alt="news Image" id="news_image" height="70" width="70">

@@ -1,27 +1,43 @@
 function searchCompany() {
     let data;
     let companyName
+    let chart; // globally available
     company_name = document.getElementById('stock_search_input').value;
-    console.log(company_name);
+    console.log('ssssss> ' + company_name);
     fetch(`http://127.0.0.1:5000/stock_search?company_name=${company_name}`)
         .then(response => response.json())
         .then(res => {
-            console.log(res);
-            // data = res.stock_search_company;
-            data = res;
-            // document.getElementById("company_info").innerHTML = data.country;
-            document.getElementById("comp_name").innerHTML = data.name;
-            document.getElementById("stock_tick_sym").innerHTML = data.ticker;
-            companyName = data.ticker;
-            document.getElementById("stock_ex_code").innerHTML = data.exchange;
-            document.getElementById("ipo_date").innerHTML = data.ipo;
-            document.getElementById("category").innerHTML = data.finnhubIndustry;
+            console.log('checkError>' + res);
+            if (company_name !== '') {
+                if (Object.keys(res).length === 0) {
+                    console.log('insodeIf')
+                    document.querySelector('.error_company').style.display = 'flex';
+                    document.querySelector('#company_info').style.display = 'none';
+                   
+                }
+                else {
+                    document.querySelector('.error_company').style.display = 'none';
+                    data = res;
+                    document.getElementById("comp_name").innerHTML = data.name;
+                    document.getElementById("stock_tick_sym").innerHTML = data.ticker;
+                    companyName = data.ticker;
+                    document.getElementById("stock_ex_code").innerHTML = data.exchange;
+                    document.getElementById("ipo_date").innerHTML = data.ipo;
+                    document.getElementById("category").innerHTML = data.finnhubIndustry;
 
-            var companyInfo = document.getElementById("company_info");
-            companyInfo.style.display = "block";
+                    var companyInfo = document.getElementById("company_info");
+                    companyInfo.style.display = "block";
 
-            // var companyInfoTab = document.getElementById("company_info_tab");
-            // companyInfoTab.classList.add("active");
+                }
+                 //Display None for error tooltip
+
+            }
+            // else{
+            //     console.log('kkkk>');
+            //     document.querySelector("#stock_search_input").setCustomValidity( "This username is not available" );
+            //     // document.querySelector( ".search_image" ).click();
+            // }
+
         });
 
     fetch(`http://127.0.0.1:5000/stock_summary?company_name=${company_name}`)
@@ -51,14 +67,139 @@ function searchCompany() {
     fetch(`http://127.0.0.1:5000/stock_charts?company_name=${company_name}`)
         .then(response => response.json())
         .then(res => {
-            console.log('stock_charts>> ' + res);
+            console.log('stock_charts>> ' + JSON.stringify(res));
+
+            //Chart Data Logic Start
+            data_charts = res
+            console.log('len1> ' + data_charts.c.length)
+            console.log('len2> ' + data_charts.t.length)
+            console.log('len3> ' + data_charts.v.length)
+            chartData1 = []
+            volumeData1 = []
+            dataLen = data_charts.c.length
+
+            for (let i = 0; i < dataLen; i += 1) {
+                let tempVar1 = []
+                let tempVar2 = []
+                tempVar1.push(data_charts.t[i] * 1000);
+                tempVar1.push(data_charts.c[i]);
+
+                chartData1.push(tempVar1)
+                tempVar2.push(data_charts.t[i] * 1000);
+                tempVar2.push(data_charts.v[i]);
+
+                volumeData1.push(tempVar2)
+            }
+
+            console.log('dataType> ', typeof (chartData1))
+            console.log('dataaaaa>' + chartData1)
+            console.log('dataType> ', typeof (volumeData1))
+            console.log('dataqqqq>' + volumeData1)
+
+
+            //Chart Data Logic End
+            //Chart Data Start
+
+
+            // let volume = []
+
+            // for (let i = 0; i < volData.length; i += 1) {
+            //     volume.push([
+            //         volData[i][0], // the date
+            //         volData[i][5] // the volume
+            //     ]);
+            // }
+
+            // let groupingUnits = [[
+            //     'week',                         // unit name
+            //     [1]                             // allowed multiples
+            // ], [
+            //     'month',
+            //     [1, 2, 3, 4, 6]
+            // ]];
+
+
+            //Chart Data End
+            // //Charts Dummy Start
+            // console.log('dataType> ', typeof (data))
+            // console.log('data>' + data)
+            // console.log('dataType> ', typeof (chartData))
+            // console.log('data>' + chartData)
+            // Create the chart
+            Highcharts.stockChart('chart_container', {
+
+                rangeSelector: {
+                    selected: 1
+                },
+
+                title: {
+                    text: 'AAPL Stock Price'
+                },
+
+                yAxis: [{
+                    title: {
+                        text: 'Stock Price'
+                    },
+                    opposite: false
+                }, {
+                    labels: {
+                        align: 'right',
+                        x: -3
+                    },
+                    title: {
+                        text: 'Volume'
+                    },
+                    top: '65%',
+                    height: '35%',
+                    offset: 0,
+                    lineWidth: 2,
+                    opposite: true
+                }],
+
+                tooltip: {
+                    split: true
+                },
+
+                series: [{
+                    name: 'AAPL Stock Price',
+                    data: chartData1,
+                    type: 'area',
+                    threshold: null,
+                    tooltip: {
+                        valueDecimals: 2
+                    },
+                    fillColor: {
+                        linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1
+                        },
+                        stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [1, Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                        ]
+                    }
+                },
+                {
+                    type: 'column',
+                    name: 'Volume',
+                    data: volumeData1,
+                    yAxis: 1,
+                    // dataGrouping: {
+                    //     units: groupingUnits
+                    // }
+                }
+                ]
+            });
         });
+    //Dummy chart end
 
     fetch(`http://127.0.0.1:5000/stock_news?company_name=${company_name}`)
         .then(response => response.json())
         .then(res => {
-            dataNews = res.dataNews
-            let newsContent
+            dataNews = res.dataNews;
+            let newsContent = '';
             for (let data of dataNews) {
                 newsContent += `<div class="news_container">
                 <div class="news_container_left">
@@ -73,64 +214,13 @@ function searchCompany() {
 
             }
             document.getElementById("latest_news_tab").innerHTML = newsContent;
-
-            // document.getElementById("news_image").src = dataNews[0].image;
-            // document.getElementById("news_headline").innerHTML = dataNews[0].headline;
-            // document.getElementById("news_date").innerHTML = dataNews[0].datetime;
-            // document.getElementById("news_url").href = dataNews[0].url;
-
-            //             for (let data of dataNews) {
-            //                 // Elements inside News tab
-            //                 const news_container = document.createElement("div");
-            //                 const news_container_left = document.createElement("div");
-            //                 const news_container_right = document.createElement("div");
-
-            //                 news_container.setAttribute("id", "news_container");
-            //                 news_container.className = "news_container";
-            //                 news_container_left.setAttribute("id", "news_container_left");
-            //                 news_container_left.className = "news_container_left";
-            //                 news_container_right.setAttribute("id", "news_container_right");
-            //                 news_container_right.className = "news_container_right";
-
-            //                 news_container.appendChild(news_container_left);
-            //                 news_container.appendChild(news_container_right);
-
-            //                 // Elements inside news_container_left
-            //                 const news_image = document.createElement("img");
-            //                 news_image.setAttribute("id", "news_image");
-            //                 news_image.setAttribute("height", "70");
-            //                 news_image.setAttribute("width", "70");
-            //                 console.log('imData> '+ dataNews[0].image)
-            //                 news_image.setAttribute("src", data.image);
-            // {/* <div class="news_container_right">
-            //                     <div id="news_headline"></div>
-            //                     <div id="news_date"></div>
-            //                     <a id = "news_url" target="__blank__">See Original Post</a>
-            //                 </div> */}
-
-            //                 news_container_left.appendChild(news_image);
-
-            //                 // Elements inside news_container_right
-            //                 const  news_headline = document.createElement("div");
-            //                 const  news_date = document.createElement("div");
-            //                 const  news_url = document.createElement("a");
-            //                 news_headline.id = "news_headline"
-            //                 news_headline.textContent = data.headline
-            //                 news_date.id = "news_date"
-            //                 news_date.textContent = data.datetime
-            //                 news_url.href = data.url
-            //                 news_url.target = "_blank"
-            //                 news_url.textContent = "See Original Post"
-
-            //                 news_container_right.appendChild(news_headline);
-            //                 news_container_right.appendChild(news_date);
-            //                 news_container_right.appendChild(news_url);
-
-            //                 document
-            //                     .getElementById("latest_news_tab")
-            //                     .appendChild(news_container);
-            //             }
         });
+}
+
+function onCrossClick() {
+    document.getElementById('stock_search_input').value = ''
+    document.querySelector('.error_company').style.display = 'none';
+    document.querySelector('#company_info').style.display = 'none';
 }
 
 function openTab(evt, cityName) {

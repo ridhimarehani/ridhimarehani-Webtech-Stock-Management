@@ -9,21 +9,92 @@
     align-items: center;
     padding: 40px;
 }
-#stock_search_button{
-    height: 40px;
-    width: 40px;
-}
-#stock_search_input{
-    height: 40px;
+.stock_search_area{
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 0 15px;
+    border-radius: 10px;
+    box-shadow: 0px 3px 3px lightgrey;
+    position: relative;
 }
 
-#clear_search_button{
-    height: 40px;
-    width: 40px;
+.stock_search_area img{
+    opacity: 15%;
+}
+
+.stock_search_area img:hover{
+    opacity: 40%;
+}
+ 
+
+.search_image{
+    background: white;
+}
+
+#stock_search_input{
+    height: 36px;
+    width: 400px;
+    border: none;
+    margin-left: 15px;
+    color: lightgray;
+}
+
+
+#stock_search_input::placeholder{
+    color: lightgray;
+}
+
+#stock_search_input:focus{
+    outline: none;
+}
+.arrow-up {
+    width: 0; 
+    height: 0; 
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid black;
+    position: absolute;
+    top: 41px;
+    left: 173px;
+    z-index: 2
+  }
+
+.arrow-up:after{
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-bottom: 9px solid #fff;
+    position: absolute;
+    right: -9px;
+    top: 1px;
+}
+
+.error_tooltip{
+    top: 50px;
+    position: absolute;
+    left: 165px;
+    border: 1px solid;
+    background: white;
+    padding: 10px;
 }
 
 #company_info{
     display: none;
+}
+
+.error_company{
+    margin: 0 auto;
+    background-color: rgb(216, 216, 216);
+    width: 475px;
+    height: 30px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    color: gray;
+    border-radius: 5px;
 }
 
 .tab {
@@ -98,7 +169,7 @@
 }
 
 .news_container_right{
-    
+
 }
 
 
