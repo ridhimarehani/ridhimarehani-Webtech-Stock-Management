@@ -11,7 +11,7 @@ body{
     font-size: 23px;
     font-family: sans-serif;
 }
-
+/* test */
 #search_menu{
     display: flex;
     flex-direction: column;
@@ -22,6 +22,7 @@ body{
     display: flex;
     align-items: center;
     background: white;
+    margin: 0 313px;
     padding: 0 15px;
     border-radius: 10px;
     box-shadow: 0px 3px 3px lightgrey;
@@ -48,8 +49,9 @@ body{
     height: 36px;
     width: 450px;
     border: none;
-    margin-left: 15px;
     color: rgb(109,109,113);
+    margin: 0 15px;
+    border-right: 1px solid #f1f1f1;
 }
 
 
