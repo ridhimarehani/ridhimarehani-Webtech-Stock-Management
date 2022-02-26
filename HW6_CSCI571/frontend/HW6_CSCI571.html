@@ -15,16 +15,14 @@
 
     <div class="stock_search_head">
         <div id="search_menu">
-            <div>
+            <div class="stock_search_text">
                 Stock Search
             </div>
             <!-- <div class="stock_search_area"> -->
-                <form class="stock_search_area" >
-                    <img class="search_image" src="search-solid.svg" alt="search" onclick="searchCompany()" width="15"
-                        height="15">
-
+                <form class="stock_search_area" onsubmit="return false" autocomplete="off">
+                    <button type= "submit" onclick="searchCompany()"  class="search_button"><img class="search_image" src="search-solid.svg" alt="search" width="15" height="15"> </button>
                     <input type="text" id="stock_search_input" placeholder="Enter Stock Ticker Symbol"
-                        onkeydown="if (event.keyCode == 13) searchCompany()">
+                        onkeydown="if (event.keyCode == 13) searchCompany()" required>
 
 
                     <img src="times-solid.svg" alt="search" class="clear_search_button" width="15" height="15"
@@ -43,34 +41,43 @@
     <div id="company_info">
 
         <div class="tab">
-            <button class="tablinks active" onclick="openTab(event, 'company_info_tab')">Company</button>
+            <button class="tablinks active" onclick="openStockSummaryTab(event, 'company_info_tab')">Company</button>
             <button class="tablinks" onclick="openStockSummaryTab(event, 'stock_summary_tab')">Stock Summary</button>
             <button class="tablinks" onclick="openTab(event, 'charts_tab')">Charts</button>
             <button class="tablinks" onclick="openStockSummaryTab(event, 'latest_news_tab')">Latest News</button>
         </div>
         <div id="company_info_tab" class="tabcontent">
-            <div class="grid_container">
-                <div class="grid_item1">Company Name</div>
-                <div class="grid_item1">Stock Ticker Symbol</div>
-                <div class="grid_item1">Stock Exchange Code</div>
-                <div class="grid_item1">Company IPO Date</div>
-                <div class="grid_item1">Category</div>
+            <div class="company_info_image">
+                <div id="company_logo_valid">
+                    <!-- <img src="" id="comapny_logo" alt="" height="100px" width="100px"> -->
+                </div>
+                
             </div>
-
-            <div class="grid_container">
-                <div class="grid_item2" id="comp_name"></div>
-                <div class="grid_item2" id="stock_tick_sym"></div>
-                <div class="grid_item2" id="stock_ex_code"></div>
-                <div class="grid_item2" id="ipo_date"></div>
-                <div class="grid_item2" id="category"></div>
+            <div class="company_info_data">
+                <div class="grid_container">
+                    <div class="grid_item1 top_border_grid">Company Name</div>
+                    <div class="grid_item1">Stock Ticker Symbol</div>
+                    <div class="grid_item1">Stock Exchange Code</div>
+                    <div class="grid_item1">Company IPO Date</div>
+                    <div class="grid_item1">Category</div>
+                </div>
+    
+                <div class="grid_container">
+                    <div class="grid_item2 top_border_grid" id="comp_name"></div>
+                    <div class="grid_item2" id="stock_tick_sym"></div>
+                    <div class="grid_item2" id="stock_ex_code"></div>
+                    <div class="grid_item2" id="ipo_date"></div>
+                    <div class="grid_item2" id="category"></div>
+                </div>
             </div>
+            
 
         </div>
 
         <div id="stock_summary_tab" class="tabcontent">
             <div id="stock_summary_data">
                 <div class="grid_container">
-                    <div class="grid_item1">Stock Ticker Symbol</div>
+                    <div class="grid_item1 top_border_grid">Stock Ticker Symbol</div>
                     <div class="grid_item1">Trading Day</div>
                     <div class="grid_item1">Previous Closing Price</div>
                     <div class="grid_item1">Opening Price</div>
@@ -81,7 +88,7 @@
                 </div>
 
                 <div class="grid_container">
-                    <div class="grid_item2" id="stock_ticker_symbol"></div>
+                    <div class="grid_item2 top_border_grid" id="stock_ticker_symbol"></div>
                     <div class="grid_item2" id="trading_day"></div>
                     <div class="grid_item2" id="previous_closing_price"></div>
                     <div class="grid_item2" id="opening_price"></div>
@@ -93,12 +100,17 @@
 
             </div>
             <div id="recommendation_trends">
-                <div id="recommend_val1"></div>
-                <div id="recommend_val2"></div>
-                <div id="recommend_val3"></div>
-                <div id="recommend_val4"></div>
-                <div id="recommend_val5"></div>
+                <div class="strong_sell">Strong Sell</div>
+                <div id="recommend_val1" class="recomm_val"></div>
+                <div id="recommend_val2" class="recomm_val"></div>
+                <div id="recommend_val3" class="recomm_val"></div>
+                <div id="recommend_val4" class="recomm_val"></div>
+                <div id="recommend_val5" class="recomm_val"></div>
+                <div class="strong_buy">Strong Buy</div>
 
+            </div>
+            <div class="recommendation_trends_text">
+                Recommendation Trends
             </div>
 
         </div>
