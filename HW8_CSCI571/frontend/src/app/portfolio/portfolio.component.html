@@ -1,0 +1,84 @@
+<ng-template #portfolioModal let-modal class="modal-backdrop">
+    <div class="modal-header">
+        <div class="modal-title" id="modal-basic-title">
+            {{currentStockModal}}<span><button type="button" class="transaction-close" aria-label="Close"
+                    (click)="modal.dismiss('Cross click')"></button></span>
+        </div>
+    </div>
+    <div class="modal-body">
+        Current Price : stock.c
+        Money in wallet : {{moneyInWallet}}
+        Quantity : Input Qty number
+    </div>
+    <div class="modal-footer">
+        Total : Qty * Current Price //Change when qty is entered
+        <button type="button" class="btn btn-success" *ngIf="isBuyStock">Buy</button>
+        <button type="button" class="btn btn-success" *ngIf="!isBuyStock">Sell</button>
+    </div>
+</ng-template>
+
+<div class="portfolio-main d-flex col-md-12">
+    <div class="empty col-md-2"> </div>
+    <div class="portfolio-heading col-12 col-md-8 pt-4">
+        My Portfolio
+    </div>
+    <div class="empty col-0 col-md-2"> </div>
+</div>
+<div class="portfolio-main d-flex col-md-12">
+    <div class="empty col-xs-0 col-md-2"></div>
+    <div class="portfolio-money col-12 col-md-8 pt-3">
+        Money in Wallet: ${{moneyInWallet}}
+    </div>
+    <div class="empty col-xs-0 col-md-2"></div>
+</div>
+
+<div class="portfolio-main d-flex col-md-12">
+    <div class="empty col-xs-0 col-md-2"></div>
+
+    <div class="main-div col-12 col-md-8 pt-3" *ngIf="alertPortfolio">
+        <ngb-alert [dismissible]="false" class="text-center">Currently you don't have any stock.
+        </ngb-alert>
+    </div>
+    <div class="empty col-xs-0 col-md-2"></div>
+</div>
+
+<div class="portfolio-cards row justify-content-center">
+    <!-- <div class="card col-md-7 p-0" *ngFor = "let portItem of portfolioStockDataMap.values()"> -->
+    <div class="card col-md-7 p-0" *ngFor="let portItem of portfolioStockDataMap | keyvalue">
+        <div class="card-header"><span>{{portItem.key}} </span> <span>{{portItem.value.companyName}}</span></div>
+        <div class="card-body row">
+            <div class="port-items-left col-md-6">
+                <div class="d-flex justify-content-between"><span>Quantity:
+                    </span><span>{{portItem.value.quantity}}</span></div>
+                <div class="d-flex justify-content-between"><span>Avg. Cost/ Share: </span>
+                    <span>{{portItem.value.totalCost / portItem.value.quantity}}</span></div>
+                <div class="d-flex justify-content-between"><span>Total Cost </span>
+                    <span>{{portItem.value.totalCost}}</span></div>
+            </div>
+            <div class="port-items-right col-md-6">
+                <div *ngIf='(portItem.value.totalCost/portItem.value.quantity-portItem.value.currentPrice) >= 0'>
+                    <div class="d-flex justify-content-between"><span>Change Green:</span>
+                        <span>{{portItem.value.totalCost/portItem.value.quantity-portItem.value.currentPrice | number:'1.2-2'}}</span></div>
+                    <div class="d-flex justify-content-between"><span>Current Price:
+                        </span><span>{{portItem.value.currentPrice | number:'1.2-2'}}</span></div>
+                    <div class="d-flex justify-content-between"><span>Market Value:
+                        </span><span>{{portItem.value.quantity * portItem.value.currentPrice  | number:'1.2-2'}}</span></div>
+                </div>
+                <div *ngIf='(portItem.value.totalCost/portItem.value.quantity-portItem.value.currentPrice) < 0'>
+                    <div class="d-flex justify-content-between"><span>Change Red:</span>
+                        <span>{{portItem.value.totalCost/portItem.value.quantity-portItem.value.currentPrice | number:'1.2-2'}}</span></div>
+                    <div class="d-flex justify-content-between"><span>Current Price:
+                        </span><span>{{portItem.value.currentPrice | number:'1.2-2'}}</span></div>
+                    <div class="d-flex justify-content-between"><span>Market Value:
+                        </span><span>{{portItem.value.quantity * portItem.value.currentPrice | number:'1.2-2'}}</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer d-flex flex-row-reverse">
+            <button type="button" class="btn btn-danger"
+                (click)="openPortfolioBuy(portfolioModal,'sellStock',portItem.key)">Sell</button>
+            <button type="button" class="btn btn-primary mr-3"
+                (click)="openPortfolioBuy(portfolioModal,'buyStock',portItem.key)">Buy</button>
+        </div>
+    </div>
+</div>
