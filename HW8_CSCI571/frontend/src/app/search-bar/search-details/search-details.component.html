@@ -36,7 +36,7 @@
             <br> -->
 
         <!-- Div starts for Ticker Description and Image -->
-        <div class="lolly col-12 d-flex justify-content-center">
+        <div class="lolly col-12 d-flex flex-column align-items-center justify-content-center">
             <div class="company-details col-12 col-md-8 d-flex justify-content-center" *ngIf="companyDescription">
                 <div class="col-4 col-md-4 d-flex flex-column align-items-start justify-content-start">
                     <div class="company-ticker d-flex align-items-end mb-2">{{companyDescription.ticker}} <div
@@ -74,122 +74,148 @@
                     <div class="timestamp">{{timestamp}}</div>
                 </div>
             </div>
+            <div>Market is open</div>
         </div>
         <!-- Div ends for Ticker Description and Image -->
 
         <div class="col-12 d-flex justify-content-center">
             <div class="tabsDiv col-md-8 col-10">
-                <mat-tab-group class="mat-stretch-tabs w-100" mat-align-tabs="start">
+                <mat-tab-group class="mat-stretch-tabs w-100 row" mat-align-tabs="start">
 
-                    <mat-tab label="Summary"> Lolly
+                    <mat-tab label="Summary" class="col-10"> 
                         <div class="all-element col-12 col-md-12 d-flex">
-
-                            <div class="first-element col-12 col-md-6">
-                                <div class="latest-price col-12 col-md-6">
+                            <div
+                                class="first-element col-12 col-md-6 mt-3 py-2 d-flex flex-column justify-content-between">
+                                <div class="latest-price col-12 col-md-6 ml-4">
                                     <table>
                                         <tr>
                                             <th>High Price:</th>
-                                            <td class="latest-price-value">{{stockPrice.h | number:'1.2-2'}}</td>
-
+                                            <td class="latest-price-value">
+                                                {{ stockPrice.h | number: "1.2-2" }}
+                                            </td>
                                         </tr>
                                         <tr>
                                             <th>Low Price:</th>
-                                            <td class="latest-price-value">{{stockPrice.l | number:'1.2-2'}}</td>
-
+                                            <td class="latest-price-value">
+                                                {{ stockPrice.l | number: "1.2-2" }}
+                                            </td>
                                         </tr>
                                         <tr>
                                             <th>Open Price:</th>
-                                            <td class="latest-price-value">{{stockPrice.o | number:'1.2-2'}}</td>
-
+                                            <td class="latest-price-value">
+                                                {{ stockPrice.o | number: "1.2-2" }}
+                                            </td>
                                         </tr>
                                         <tr>
                                             <th>Prev. Close:</th>
-                                            <td class="latest-price-value">{{stockPrice.pc | number:'1.2-2'}}</td>
-
+                                            <td class="latest-price-value">
+                                                {{ stockPrice.pc | number: "1.2-2" }}
+                                            </td>
                                         </tr>
                                     </table>
                                 </div>
-                                <div class="about-heading">About the company</div>
+
+                                <div class="about-heading text-center">
+                                    <b><u>About the company</u></b>
+                                </div>
 
                                 <div class="about-data">
-                                    <div class="about"><span class="about-value">IPO Start Date:
-                                        </span>{{companyDescription.ipo}}</div>
-                                    <div class="about"><span class="about-value">Industry:
-                                        </span>{{companyDescription.finnhubIndustry}}</div>
-                                    <div class="about"><span class="about-value">Webpage: </span><a
-                                            href="{{companyDescription.weburl}}"
-                                            target="_blank">{{companyDescription.weburl}}</a></div>
-                                    <div class="about"><span class="about-value">Company Peers: </span></div>
-                                    <div class="about"><span *ngFor="let peer of companyPeers let isLast=last">
-                                            <a class="peerLink" (click)="peerCall(peer)">{{peer}}{{isLast ? '' : ',
-                                                '}}</a>
-
-                                        </span></div>
-
+                                    <div class="about mb-1">
+                                        <span class="about-value"><b>IPO Start Date: </b></span>{{
+                                        companyDescription.ipo }}
+                                    </div>
+                                    <div class="about mb-1">
+                                        <span class="about-value"><b>Industry: </b></span>{{
+                                        companyDescription.finnhubIndustry }}
+                                    </div>
+                                    <div class="about mb-1">
+                                        <span class="about-value"><b>Webpage: </b></span><a
+                                            href="{{ companyDescription.weburl }}" target="_blank">{{
+                                            companyDescription.weburl }}</a>
+                                    </div>
+                                    <div class="about mb-1">
+                                        <span class="about-value"><b>Company peers: </b></span>
+                                    </div>
+                                    <div class="about">
+                                        <span *ngFor="let peer of companyPeers; let isLast = last">
+                                            <a class="peerLink" (click)="peerCall(peer)">{{ peer
+                                                }}{{
+                                                isLast
+                                                ? ""
+                                                : ",
+                                                "
+                                                }}</a>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="second-element col-md-6" *ngIf="showChart">
+                            <div class="second-element col-md-6 mt-2" *ngIf="showChart">
                                 <highcharts-chart [Highcharts]="Highcharts" [options]="chartOptionsSummary"
-                                    style="width: 100%; height: 300px; display: block;"></highcharts-chart>
+                                    style="width: 100%; height: 300px; display: block"></highcharts-chart>
                             </div>
-
                         </div>
                     </mat-tab>
 
 
 
-                    <mat-tab label="Top News">
-                        <div class="top-news-vals col-12" *ngIf="isNewsLoaded">
-                            <div class="cardGroup d-flex" *ngFor="let newsItem of newsData20">
-                                <div class="col-md-6 pl-0">
-                                    <div class="card mb-3 d-flex flex-row col-md-12 card-news"
+                    <mat-tab label="Top News" class="col-10">
+                        <div class="top-news-vals col-10 mx-auto mx-0 w-100 pt-3" *ngIf="isNewsLoaded">
+                            <div class="cardGroup d-flex justify-content-center align-items-center"
+                                *ngFor="let newsItem of newsData20">
+                                <div class="card col-md-6 pl-0 mb-3 mr-4 py-3">
+                                    <div class="d-flex justify-content-center align-items-start col-md-12 card-news"
                                         (click)="open(content, newsItem[0])">
-                                        <div class="d-flex align-items-center">
-                                            <img class="card-img" src={{newsItem[0].image}} alt="Card image cap"
-                                                width="40px" height="40px">
+                                        <div class="d-flex align-items-center mr-2">
+                                            <img class="card-img" src="{{ newsItem[0].image }}" alt="Card image cap" />
                                         </div>
-                                        <div class="card-body">
-                                            <h5 class="card-title">{{newsItem[0].headline}}</h5>
+                                        <div class="card-body p-0">
+                                            <h5 class="card-title mb-0" style="line-height: 1.2;">
+                                                {{ newsItem[0].headline }}
+                                            </h5>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6 pr-0" *ngIf="newsItem[1].length != 0">
-                                    <div class="card mb-3 d-flex flex-row col-md-12 card-news"
+                                <div class="card col-md-6 pr-0 mb-3 py-3" *ngIf="newsItem[1].length != 0">
+                                    <div class="d-flex justify-content-center align-items-start col-md-12 card-news"
                                         (click)="open(content, newsItem[1])">
-                                        <div class="d-flex align-items-center">
-                                            <img class="card-img" src={{newsItem[1].image}} alt="Card image cap"
-                                                width="40px" height="40px">
+                                        <div class="d-flex align-items-center mr-2">
+                                            <img class="card-img" src="{{ newsItem[1].image }}" alt="Card image cap" />
                                         </div>
-                                        <div class="card-body">
-                                            <h5 class="card-title">{{newsItem[1].headline}}</h5>
+                                        <div class="card-body p-0">
+                                            <h5 class="card-title mb-0" style="line-height: 1.2;">
+                                                {{ newsItem[1].headline }}
+                                            </h5>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </mat-tab>
-                    <mat-tab label="Charts">
+
+
+                    <mat-tab label="Charts" class="col-10">
                         <ng-template matTabContent>
-                            <div class="main-chart d-flex col-12 col-md-12" *ngIf="showMainChart">
+                            <div class="main-chart d-flex justify-content-center col-12 col-md-12" *ngIf="showMainChart">
                                 <highcharts-chart [Highcharts]="Highcharts" [options]="chartOptionsMain"
-                                    class="hisChart">
+                                    class="hisChart" style="width: 100%; display: flex; justify-content: center;" >
                                 </highcharts-chart>
                             </div>
                         </ng-template>
                     </mat-tab>
-                    <mat-tab label="Insights">
+                    <mat-tab label="Insights" class="col-10">
                         <ng-template matTabContent>
                             <div class="social-sent-heading w-100">
                                 Social Sentiments
                             </div>
                             <!-- <div class="row d-flex justify-content-center"> -->
-                            <div class="social-sent-table d-flex justify-content-center">
+                            <div class="social-sent-table d-flex justify-content-center text-center mb-4">
                                 <table>
                                     <tr class="social-tab-row social-color-grey">
-                                        <td class="social-col1">{{companyDescription.name}}</td>
-                                        <td class="social-col2">Reddit</td>
-                                        <td class="social-col2">Twitter</td>
+                                        <td class="social-col1 px-5">
+                                            {{ companyDescription.name }}
+                                        </td>
+                                        <td class="social-col2 px-5">Reddit</td>
+                                        <td class="social-col2 px-5">Twitter</td>
                                     </tr>
                                     <tr class="social-tab-row">
                                         <td class="social-color-grey">Total Mentions</td>
@@ -238,7 +264,51 @@
     </div>
 </div>
 
-<ng-template #content let-modal id="modal-backdrop" class="modal-backdrop">
+<ng-template #content let-modal id="modal-backdrop" class="modal-backdrop mt-5">
+    <div class="modal-header">
+        <div class="modal-title d-flex justify-content-between align-items-start" id="modal-basic-title">
+            <span>{{ currentNews.source }}</span>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"
+                style="font-size: 20px">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <div style="color: #6d767d">{{ currentNews.datetime }}</div>
+    </div>
+    <div class="modal-body">
+        <div class="news-headline">{{ currentNews.headline }}</div>
+        <div>{{ currentNews.summary }}</div>
+        <div class="news-url mb-4">
+            <span style="color: #6d767d">For more details click </span>
+            <a href="{{ currentNews.url }}" target="_blank">here</a>
+        </div>
+        <div class="news-social border p-3">
+            <p>Share</p>
+            <div class="news-social-buttons d-flex">
+                <div class="mr-2">
+                    <a class="twitter-share-button" target="_blank"
+                        href="https://twitter.com/intent/tweet?text={{ currentNews.url }}">
+                        <fa-icon [icon]="faTwitter" class="fa-2x"></fa-icon>
+                    </a>
+                </div>
+                <div>
+                    <div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/"
+                        data-layout="button_count" data-size="small">
+                        <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{currentNews.url}}"
+                            class="fb-xfbml-parse-ignore">
+                            <fa-icon [icon]="faFacebook" class="fa-2x"></fa-icon>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+
+
+<!-- <ng-template #content let-modal id="modal-backdrop" class="modal-backdrop">
     <div class="modal-header">
         <div class="modal-title" id="modal-basic-title">{{currentNews.source}}<span><button type="button"
                     class="news-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button></span></div>
@@ -273,7 +343,7 @@
             </div>
         </div>
     </div>
-</ng-template>
+</ng-template> -->
 
 
 <ng-template #portfolioModalBuy let-modal id="modal-backdrop" class="modal-backdrop">
