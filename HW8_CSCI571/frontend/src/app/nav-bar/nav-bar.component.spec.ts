@@ -5,6 +5,7 @@ import { NavBarComponent } from './nav-bar.component';
 describe('NavBarComponent', () => {
   let component: NavBarComponent;
   let fixture: ComponentFixture<NavBarComponent>;
+  let isCollapsed = false;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({

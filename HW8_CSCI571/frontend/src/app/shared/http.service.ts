@@ -6,18 +6,24 @@ import { HttpClient } from '@angular/common/http'; //R
   providedIn: 'root'
 })
 export class HttpService {
-  private baseUrl = 'http://localhost:8080/'; //R
+  private baseUrl = 'http://localhost:8080/'; 
+  // private baseUrl = 'https://csci571hw8-backend-346006.wl.r.appspot.com/';
   urlPath = ''
   constructor(private http: HttpClient) { }
 
   getData(urlPath: string, ticker: string) {
-    console.log('yayy> '+`${this.baseUrl}${urlPath}?ticker=${ticker}`);
+    
     return this.http.get(`${this.baseUrl}${urlPath}?ticker=${ticker}`);
   }
 
   getDataHistoric(urlPath: string, ticker: string, fromDate : any, toDate : any) {
-    console.log('yayy> '+`${this.baseUrl}${urlPath}?ticker=${ticker}&fromDate=${fromDate}&toDate=${toDate}`);
+    
     return this.http.get(`${this.baseUrl}${urlPath}?ticker=${ticker}&fromDate=${fromDate}&toDate=${toDate}`);
+  }
+
+  getDataAutoComplete(urlPath: string, queryVal : string){
+    console.log('URL in Service> '+ `${this.baseUrl}${urlPath}?queryVal=${queryVal}`);
+    return this.http.get(`${this.baseUrl}${urlPath}?queryVal=${queryVal}`);
   }
 
   // Error handling

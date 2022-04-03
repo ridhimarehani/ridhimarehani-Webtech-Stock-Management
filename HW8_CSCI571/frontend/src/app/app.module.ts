@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 import { SearchDetailsComponent } from './search-bar/search-details/search-details.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { FooterComponent } from './footer/footer.component';
 import { WatchlistComponent } from './watchlist/watchlist.component';
@@ -17,6 +17,9 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+
 // import { ModalNewsComponent } from './search-bar/modal-news/modal-news.component';
 
 @NgModule({
@@ -40,7 +43,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     HighchartsChartModule,
     NgbModule,
     BrowserAnimationsModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    ReactiveFormsModule,
+    MatProgressSpinnerModule,
+    MatAutocompleteModule
   ],
   // exports: [ModalNewsComponent],
   providers: [],

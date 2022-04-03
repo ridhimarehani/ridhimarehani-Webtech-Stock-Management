@@ -1,0 +1,23 @@
+runtime: python27
+api_version: 1
+threadsafe: yes
+handlers:
+  - url: /
+    secure: always
+    static_files: dist/frontend/index.html
+    upload: dist/frontend/index.html
+  - url: /
+    static_dir: dist/frontend
+
+  # #  Routing rules for resources, css, js, images etc. Any file with format filename.ext
+  # - url: /(.*\.(.+))$
+  #   secure: always
+  #   static_files: dist/frontend/\1
+  #   upload: dist/frontend/(.*\.(.+))$
+
+  #  Routing rule for Angular Routing
+  - url: /(.*)
+    secure: always
+    static_files: dist/frontend/index.html
+    upload: dist/frontend/index.html
+  

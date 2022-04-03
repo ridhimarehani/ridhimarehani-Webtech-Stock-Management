@@ -1,0 +1,15 @@
+#page-container {
+    position: relative;
+    min-height: 100vh;
+    background-image: url('.././assets/background-graph.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-blend-mode: overlay;
+    background-position: top;
+    /* padding-top: 40px; */
+    background-color: rgba(247, 247, 247, 0.925);
+  }
+  
+#content-wrap {
+    padding-bottom: 2.5rem;    /* Footer height */
+  }
