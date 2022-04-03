@@ -1,5 +1,5 @@
-<div class="alerts_main d-flex justify-content-center row mt-5">
-    <div class="alert-wishlist col-12 col-md-9" *ngIf="invalidTicker">
+<div class="alerts_main mt-5 col-8 mx-auto">
+    <div class="alert-wishlist" *ngIf="invalidTicker">
         <ngb-alert class="text-center" type="danger">No data found. Please enter a valid Ticker</ngb-alert>
     </div>
 </div>
@@ -36,7 +36,7 @@
             <br> -->
 
         <!-- Div starts for Ticker Description and Image -->
-        <div class="lolly col-12 d-flex flex-column align-items-center justify-content-center">
+        <div class="mb-4 col-12 d-flex flex-column align-items-center justify-content-center">
             <div class="company-details col-12 col-md-8 d-flex justify-content-center" *ngIf="companyDescription">
                 <div class="col-4 col-md-4 d-flex flex-column align-items-start justify-content-start">
                     <div class="company-ticker d-flex align-items-end mb-2">{{companyDescription.ticker}} <div
@@ -61,20 +61,23 @@
                 </div>
                 <div class="stock-details col-4 col-md-4 d-flex flex-column align-items-end justify-content-start"
                     *ngIf="stockPrice">
-                    <div class="stock-positive" *ngIf="change_percent">
-                        <div class="curr-price">{{stockPrice.c | number:'1.2-2'}}</div>
-                        <div class="change-price"><i class="bi bi-caret-up-fill"></i>{{stockPrice.d |
+                    <div *ngIf="change_percent">
+                        <div class="company-ticker mb-2 text-right" style="color: green;">{{stockPrice.c | number:'1.2-2'}}</div>
+                        <div class="company-name mb-1" style="color: green;"><i
+                                class="bi bi-caret-up-fill"></i>{{stockPrice.d |
                             number:'1.2-2'}}({{stockPrice.dp | number:'1.2-2'}}%)</div>
                     </div>
-                    <div class="stock-negative" *ngIf="change_percent === false">
-                        <div class="curr-price">{{stockPrice.c | number:'1.2-2'}}</div>
-                        <div class="change-price"><i class="bi bi-caret-down-fill"></i>{{stockPrice.d |
+                    <div *ngIf="!change_percent">
+                        <div class="company-ticker mb-2 text-right" style="color: red;">{{stockPrice.c | number:'1.2-2'}}</div>
+                        <div class="company-name mb-1" style="color: red;"><i
+                                class="bi bi-caret-down-fill"></i>{{stockPrice.d |
                             number:'1.2-2'}}({{stockPrice.dp | number:'1.2-2'}}%)</div>
                     </div>
-                    <div class="timestamp">{{timestamp}}</div>
+                    <div class="timestamp company-exchange">{{timestamp}}</div>
                 </div>
             </div>
-            <div>Market is open</div>
+            <div *ngIf="market_open" style="color: green;">{{this.marketMessage}}</div>
+            <div *ngIf="!market_open" style="color: red;">{{this.marketMessage}}</div>
         </div>
         <!-- Div ends for Ticker Description and Image -->
 
@@ -82,7 +85,7 @@
             <div class="tabsDiv col-md-8 col-10">
                 <mat-tab-group class="mat-stretch-tabs w-100 row" mat-align-tabs="start">
 
-                    <mat-tab label="Summary" class="col-10"> 
+                    <mat-tab label="Summary" class="col-10">
                         <div class="all-element col-12 col-md-12 d-flex">
                             <div
                                 class="first-element col-12 col-md-6 mt-3 py-2 d-flex flex-column justify-content-between">
@@ -195,9 +198,10 @@
 
                     <mat-tab label="Charts" class="col-10">
                         <ng-template matTabContent>
-                            <div class="main-chart d-flex justify-content-center col-12 col-md-12" *ngIf="showMainChart">
+                            <div class="main-chart d-flex justify-content-center col-12 col-md-12"
+                                *ngIf="showMainChart">
                                 <highcharts-chart [Highcharts]="Highcharts" [options]="chartOptionsMain"
-                                    class="hisChart" style="width: 100%; display: flex; justify-content: center;" >
+                                    class="hisChart" style="width: 100%; display: flex; justify-content: center;">
                                 </highcharts-chart>
                             </div>
                         </ng-template>
@@ -368,11 +372,11 @@
             <div class="quantity mb-0 mr-2">Quantity </div>
             <input class="form-control" id="quantity-value" type="number" value=0 [(ngModel)]="enteredQuantity" />
         </div>
-        <div class="error-msg" *ngIf="enteredQuantity * stockPrice.c > moneyInWallet">
+        <div class="error-msg" *ngIf="enteredQuantity * stockPrice.c > moneyInWallet" style="color :red">
             Not enough money in wallet!
         </div>
     </div>
-    <div class="modal-footer d-flex">
+    <div class="modal-footer d-flex justify-content-between align-items-center">
         <div class="total" *ngIf="enteredQuantity > 0">
             Total : {{stockPrice.c * enteredQuantity | number:'1.2-2'}}
         </div>
@@ -409,11 +413,11 @@
             <div class="quantity mb-0 mr-2">Quantity </div>
             <input class="form-control" id="quantity-value" type="number" value=0 [(ngModel)]="enteredQuantitySell" />
         </div>
-        <div class="error-msg" *ngIf="enteredQuantitySell > stockLeft">
+        <div class="error-msg" *ngIf="enteredQuantitySell > stockLeft" style="color:red">
             You cannot sell the stocks that you don't have!
         </div>
     </div>
-    <div class="modal-footer d-flex">
+    <div class="modal-footer d-flex justify-content-between align-items-center">
         <div class="total" *ngIf="enteredQuantitySell > 0">
             Total : {{stockPrice.c * enteredQuantitySell | number:'1.2-2'}}
         </div>

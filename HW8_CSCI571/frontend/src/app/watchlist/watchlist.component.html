@@ -1,48 +1,50 @@
-<p>watchlist works!</p>
 <div class="watchlist-main col-md-12 d-flex justify-content-center">
-    <div class="watchlist-heading col-12 col-md-8 pt-4">
-        My Watchlist
-    </div>
+    <div class="watchlist-heading col-12 col-md-8 pb-2">My Watchlist</div>
 </div>
 <div class="watchlist-main col-md-12 d-flex justify-content-center">
-
     <div class="main-div col-12 col-md-8 pt-4" *ngIf="alertWatchlist">
         <ngb-alert [dismissible]="false" class="text-center">
             Currently you don't have any stock in the watchlist
         </ngb-alert>
     </div>
     <div class="main-div col-12 col-md-8 pt-4" *ngIf="alertWatchlist === false" id="main-div">
-        <div class="content" *ngFor="let item of watchlistVal">
-            <div class="card mb-3 d-flex flex-row col-md-12">
-                <div class="comp-details col-md-6" (click)="loadData(item)">
-                    <div class="comp-ticker">{{item.ticker}}</div>
-                    <div class="comp-name">{{item.name}}</div>
+        <div class="content border mb-3" *ngFor="let item of watchlistVal">
+            <div class="cancel-button">
+                <i class="bi bi-x" (click)="cancelButtonClicked(item)"></i>
+            </div>
+            <div class="card d-flex flex-row justify-content-between align-items-center col-md-12 border-0 pb-2">
+                <div class="comp-details" (click)="loadData(item)">
+                    <div class="comp-ticker mb-1">{{ item.ticker }}</div>
+                    <div class="comp-name">{{ item.name }}</div>
                 </div>
-                <div class="latest-price-details col-md-6">
-                    <div class="prices col-md-11">
-                        <div class="stock-positive" *ngIf="item.flag === 1">
-                            <div class="latest-price">{{item.c | number:'1.2-2'}}</div>
-                            <div class="change-price"><i class="bi bi-caret-up-fill"></i>{{item.d | number:'1.2-2'}}
-                                ({{item.dp | number:'1.2-2'}}%)</div>
+                <div class="latest-price-details d-flex justify-content-end">
+                    <div class="prices">
+                        <div class="stock-positive d-flex flex-column justify-content-center align-items-end"
+                            *ngIf="item.flag === 1" style="color:green">
+                            <div class="latest-price">{{ item.c | number: "1.2-2" }}</div>
+                            <div class="change-price">
+                                <i class="bi bi-caret-up-fill"></i>{{ item.d | number: "1.2-2" }} ({{
+                                item.dp | number: "1.2-2"
+                                }}%)
+                            </div>
                         </div>
-                        <div class="stock-negative" *ngIf="item.flag === 2">
-                            <div class="latest-price">{{item.c | number:'1.2-2'}}</div>
-                            <div class="change-price"><i class="bi bi-caret-down-fill"></i>{{item.d |
-                                number:'1.2-2'}}({{item.dp | number:'1.2-2'}}%)</div>
+                        <div class="stock-positive d-flex flex-column justify-content-center align-items-end"
+                            *ngIf="item.flag === 2" style="color:red">
+                            <div class="latest-price">{{ item.c | number: "1.2-2" }}</div>
+                            <div class="change-price">
+                                <i class="bi bi-caret-down-fill"></i>{{ item.d | number: "1.2-2" }}({{
+                                item.dp | number: "1.2-2"
+                                }}%)
+                            </div>
                         </div>
                         <div class="stock-noChange" *ngIf="item.flag === 3">
-                            <div class="latest-price">{{item.c | number:'1.2-2'}}</div>
-                            <div class="change-price">{{item.d | number:'1.2-2'}}({{item.dp | number:'1.2-2'}}%)</div>
+                            <div class="latest-price">{{ item.c | number: "1.2-2" }}</div>
+                            <div class="change-price">
+                                {{ item.d | number: "1.2-2" }}({{ item.dp | number: "1.2-2" }}%)
+                            </div>
                         </div>
                     </div>
-                    <div class="cancel-button col-md-1">
-                        <button type="button" div class="cancel" (click)="cancelButtonClicked(item)">
-                            <i class="bi bi-x"></i>
-                        </button>
-                    </div>
                 </div>
-
-
             </div>
         </div>
     </div>
