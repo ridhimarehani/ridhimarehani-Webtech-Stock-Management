@@ -29,10 +29,11 @@ app.get('/historicalData', function (req, res) {
     let unix_curr = Math.floor(date_today / 1000);
     let backdate_2_years = date_today.setFullYear(date_today.getFullYear() - 2);
     let unix_backdate_2_years = Math.floor(backdate_2_years / 1000);
-    console.log(unix_backdate_2_years);
-    console.log(unix_curr);
+    
+    // console.log(unix_backdate_2_years);
+    // console.log(unix_curr);
     //Lolly
-    axios.get(`https://finnhub.io/api/v1/stock/candle?symbol=${req.query.ticker}&resolution=D&from=${backdate_2_years}&to=${unix_curr}&token=${api_token}`)
+    axios.get(`https://finnhub.io/api/v1/stock/candle?symbol=${req.query.ticker}&resolution=D&from=${unix_backdate_2_years}&to=${unix_curr}&token=${api_token}`)
         .then(response => {
             res.send(response.data);
         })
@@ -43,15 +44,6 @@ app.get('/historicalData', function (req, res) {
 
 
 app.get('/historicalDataSummary', function (req, res) {
-    //Lolly
-    let date_today = new Date();
-    let unix_curr = Math.floor(date_today / 1000);
-    let backdate_2_years = date_today.setFullYear(date_today.getFullYear() - 2);
-    let unix_backdate_2_years = Math.floor(backdate_2_years / 1000);
-    console.log(unix_backdate_2_years);
-    console.log(unix_curr);
-    console.log('Lollyy>' + req.query.fromDate + '  ' + req.query.toDate)
-    //Lolly
     axios.get(`https://finnhub.io/api/v1/stock/candle?symbol=${req.query.ticker}&resolution=5&from=${req.query.fromDate}&to=${req.query.toDate}&token=${api_token}`)
         .then(response => {
             res.send(response.data);
@@ -74,10 +66,8 @@ app.get('/stockPrice', function (req, res) {
 });
 
 app.get('/autoComplete', function (req, res) {
-    console.log('sgsgsg');
     axios.get(`https://finnhub.io/api/v1/search?q=${req.query.queryVal}&token=${api_token}`)
         .then(response => {
-            console.log('query param> ' + req.query.queryVal);
             res.send(response.data);
         })
         .catch(error => {
@@ -119,8 +109,6 @@ app.get('/companyNews', function (req, res) {
 app.get('/recommendation', function (req, res) {
     axios.get(`https://finnhub.io/api/v1/stock/recommendation?symbol=${req.query.ticker}&token=${api_token}`)
         .then(response => {
-            // console.log(response)
-            // console.log(response.data);
             res.send(response.data);
         })
         .catch(error => {
@@ -131,9 +119,6 @@ app.get('/recommendation', function (req, res) {
 app.get('/socialSentiment', function (req, res) {
     axios.get(`https://finnhub.io/api/v1/stock/social-sentiment?symbol=${req.query.ticker}&from=2022-01-01&token=${api_token}`)
         .then(response => {
-            // console.log(response)
-            // console.log('socail Sentiment'+JSON.stringify(response.data));
-            // console.log('----------');
             res.send(response.data);
         })
         .catch(error => {
@@ -144,8 +129,6 @@ app.get('/socialSentiment', function (req, res) {
 app.get('/companyPeers', function (req, res) {
     axios.get(`https://finnhub.io/api/v1/stock/peers?symbol=${req.query.ticker}&token=${api_token}`)
         .then(response => {
-            // console.log(response)
-            // console.log(response.data);
             res.send(response.data);
         })
         .catch(error => {
@@ -156,40 +139,11 @@ app.get('/companyPeers', function (req, res) {
 app.get('/companyEarnings', function (req, res) {
     axios.get(`https://finnhub.io/api/v1/stock/earnings?symbol=${req.query.ticker}&token=${api_token}`)
         .then(response => {
-            // console.log(response)
-            // console.log(response.data);
             res.send(response.data);
         })
         .catch(error => {
             console.log(error);
         });
 });
-
-
-// app.get('/route1', function (req, res) {
-//     // request('https://finnhub.io/api/v1/search?q=TSLA&token='+api_token, { json: true }, (err, res, body) => {
-//     axios.get(`https://finnhub.io/api/v1/search?q=${ticker}&token=${req.query.ticker}`)
-//         .then(response => {
-//             // console.log(response)
-//             // console.log(response.data);
-//             res.send(response.data);
-//         })
-//         .catch(error => {
-//             console.log(error);
-//         });
-// });
-
-// app.get('/route2', function (req, res) {
-//     // request('https://finnhub.io/api/v1/search?q=TSLA&token='+api_token, { json: true }, (err, res, body) => {
-//     axios.get(`https://finnhub.io/api/v1/stock/profile2?symbol=TSLA&token=${req.query.ticker}`)
-//         .then(response => {
-//             // console.log(response)
-//             // console.log(response.data);
-//             res.send(response.data);
-//         })
-//         .catch(error => {
-//             console.log(error);
-//         });
-// });
 
 app.listen(port, () => console.log(`Hello world app listening on port ${port}!`))

@@ -1,0 +1,35 @@
+.content {
+    background-color: white;
+  }
+  
+  .watchlist-heading {
+    font-size: 20px;
+    font-weight: 500;
+  }
+  
+  .comp-ticker {
+    font-size: 18px;
+    font-weight: 500;
+  }
+  
+  .comp-name {
+    font-size: 12px;
+    font-weight: 500;
+  }
+  
+  .cancel-button {
+    float: right;
+    color: #6d767d;
+    z-index: 2;
+    line-height: 1;
+  }
+  
+  .latest-price {
+    font-size: 18px;
+    font-weight: 500;
+  }
+  
+  .change-price {
+    font-size: 12px;
+    font-weight: 500;
+  }
