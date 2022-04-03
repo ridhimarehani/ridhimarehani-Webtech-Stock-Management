@@ -23,6 +23,7 @@ export class PortfolioComponent implements OnInit {
   currentStockModalData = '';
   stockPriceC: any;
   cName: any;
+  changeInPort = 0;
 
   //Lolly
   private _buySuccess = new Subject<string>();
@@ -49,24 +50,6 @@ export class PortfolioComponent implements OnInit {
   constructor(private modalService: NgbModal, private httpService: HttpService) { }
 
   ngOnInit(): void {
-    // this.moneyInWallet = "25000.00";
-    // this.alertPortfolio = true;
-    // localStorage.setItem('moneyInWallet', this.moneyInWallet);
-    // let am1 = 4000;
-    // let localList1 = {"ticker" : "TSLA", "qty" : 4, "amount" : am1};
-    // let localList2 = '{"ticker" : "AAPL", "qty" : 3, "amount" : 1500}';
-
-
-    // localStorage.setItem('TSLA-Port', JSON.parse({"ticker" : "TSLA", "qty" : 4}));
-    // localStorage.setItem('TSLA-Port', JSON.stringify(localList1));
-    // localStorage.setItem('AAPL-Port', localList2);
-    // let temp : any = localStorage.getItem('TSLA-Port');
-    // console.log('itreme> ' + temp + ' ' + JSON.parse(temp).ticker);
-    // parse(text: string, reviver?: ((this: any, key: string, value: any) => any) | undefined): any
-
-    // console.log('portfolioStockData>> '+JSON.stringify(this.portfolioStockData));
-
-    // this.httpService.getData('stockPrice', this.tickerSymbol).subscribe(res => this.stockPrice = res);
 
     if (localStorage.getItem('moneyInWallet')) {
       let money: any = localStorage.getItem('moneyInWallet')
@@ -77,25 +60,17 @@ export class PortfolioComponent implements OnInit {
       this.moneyInWallet = localStorage.getItem('moneyInWallet')
     }
 
-    this.loadPortfolioStockData();
-
-    // Object.keys(localStorage).forEach(data => {
-
-
-    //   if (data.includes("-Portfolio")) {
-    //     this.countItem += 1;
-
-    //     let stockValJson: any = localStorage.getItem(data);
-    //     console.log(stockValJson)
-    //     this.stockPrice = JSON.parse(stockValJson);
-
-    //     this.loadPortfolioStockData();
-    //     // console.log(this.portfolioVal);
-    //   }
-
-    // });
+    // this.loadPortfolioStockData();
 
     this.loadPortfolioStockData();
+    this.showAlerts();
+
+
+
+  }
+
+  showAlerts() {
+
     if (this.countItem === 0) {
       this.alertPortfolio = true;
     }
@@ -113,10 +88,6 @@ export class PortfolioComponent implements OnInit {
     this._sellSuccess
       .pipe(debounceTime(5000))
       .subscribe(() => (this.sellMessage = ''));
-
-
-
-
   }
 
   loadPortfolioStockData() {
@@ -137,12 +108,15 @@ export class PortfolioComponent implements OnInit {
             this.stockPrice = res;
             this.stockPriceC = this.stockPrice.c;
             this.cName = this.companyDescription.name;
+            this.changeInPort = Math.round(((this.stockPriceC - amt / quantity) + Number.EPSILON) * 100) / 100;
+
             this.portfolioStockDataMap.set(tickerVal, {
               tickerVal: tickerVal,
               companyName: this.cName,
               currentPrice: this.stockPriceC,
               quantity: quantity,
-              totalCost: amt
+              totalCost: amt,
+              changeInPort: this.changeInPort
 
             });
             // console.log('portfolioStockData>> '+JSON.stringify(this.portfolioStockData));
@@ -158,8 +132,8 @@ export class PortfolioComponent implements OnInit {
 
 
   openPortfolioBuy(portfolioModalBuy: any, stockDeal: any, val_port: any) {
-    console.log('stockDeal> '+stockDeal);
-    console.log('val_port> '+val_port);
+    console.log('stockDeal> ' + stockDeal);
+    console.log('val_port> ' + val_port);
     this.enteredQuantity = 0
     if (stockDeal === 'buy') {
       this.stockBuy = true;
@@ -193,7 +167,7 @@ export class PortfolioComponent implements OnInit {
     this.moneyInWallet = parseFloat(money);
     let stockValJson: any = localStorage.getItem(this.tickerSymbol + "-Portfolio");
     let stockVal = JSON.parse(stockValJson);
-    this.stockLeft = stockVal.quantity;
+    this.stockLeft = stockVal.qty;
 
     this.modalService.open(portfolioModalSell, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeModal = `Closed with: ${result}`;
@@ -236,45 +210,25 @@ export class PortfolioComponent implements OnInit {
         total = total + stockVal.amount;
         console.log(this.enteredQuantity);
         console.log(total);
-        console.log('lolly> '+total+'stockVal>   '+JSON.stringify(stockVal));
+        console.log('lolly> ' + total + 'stockVal>   ' + JSON.stringify(stockVal));
         localStorage.setItem(this.tickerSymbol + "-Portfolio", JSON.stringify({ "ticker": this.tickerSymbol, "qty": quantity, "amount": total }))
+        // this.changeInPort = this.stockPriceC-total/quantity;
+        this.changeInPort = Math.round(((this.stockPriceC - total / quantity) + Number.EPSILON) * 100) / 100;
         this.portfolioStockDataMap.set(stockVal.ticker, {
           tickerVal: this.tickerSymbol,
           companyName: this.cName,
           currentPrice: this.stockPriceC,
           quantity: quantity,
-          totalCost: total
+          totalCost: total,
+          changeInPort: this.changeInPort
         })
-        console.log('portfolioStockDataMap>' +this.portfolioStockDataMap);
+        console.log('portfolioStockDataMap>' + this.portfolioStockDataMap);
       }
-      // else {
-      //   localStorage.setItem(this.tickerSymbol + "-Portfolio", JSON.stringify({ "ticker": this.tickerSymbol, "quantity": this.enteredQuantity, "totalPrice": total }))
-      // }
-
-      // console.log(localStorage.getItem(this.inputEnteredTicker+"-Portfolio"));
-      //To update the cards
-
-      // this.fetchPortfolio(stockVal);
-      // this.portfolioVal[stockVal.ticker][]
-      //   this.portfolioVal.set( stockVal.ticker, {
-      //     ticker : this.selectedTicker,
-      //     totalPrice : stockVal.total,
-      //     quantity : stockVal.quantity,
-      //     name: name, 
-      //     currPrice : this.latestPrice.c,
-
-
-
-      // }
-      // if(stockVal.quantity > 0){
-      //   this.sell_button = true;
-      //   console.log(this.sell_button)
-      // }
-
-      // this.modal.close();
     }
     let money: any = localStorage.getItem('moneyInWallet')
     this.moneyInWallet = parseFloat(money);
+
+    this.modalService.dismissAll();
 
   }
 
@@ -292,20 +246,23 @@ export class PortfolioComponent implements OnInit {
       let stockValJson: any = localStorage.getItem(this.tickerSymbol + "-Portfolio");
       let stockVal = JSON.parse(stockValJson);
       // let quantity = this.enteredQuantitySell + stockVal.quantity;
-      let stockQ = stockVal.qty - this.enteredQuantitySell;
+      let quantity = stockVal.qty - this.enteredQuantitySell;
       total = stockVal.amount - total
-      localStorage.setItem(this.tickerSymbol + "-Portfolio", JSON.stringify({ "ticker": this.tickerSymbol, "qty": stockQ, "amount": total }))
+      localStorage.setItem(this.tickerSymbol + "-Portfolio", JSON.stringify({ "ticker": this.tickerSymbol, "qty": quantity, "amount": total }))
       //To update the cards
       stockValJson = localStorage.getItem(this.tickerSymbol + "-Portfolio");
       stockVal = JSON.parse(stockValJson);
+      // this.changeInPort = this.stockPriceC-total/stockQ;
+      this.changeInPort = Math.round(((this.stockPriceC - total / quantity) + Number.EPSILON) * 100) / 100;
       // this.fetchPortfolio(stockVal);
-      if (stockQ > 0) {
+      if (quantity > 0) {
         this.portfolioStockDataMap.set(stockVal.ticker, {
           tickerVal: this.tickerSymbol,
           companyName: this.cName,
           currentPrice: this.stockPriceC,
-          quantity: stockQ,
-          totalCost: total
+          quantity: quantity,
+          totalCost: total,
+          changeInPort: this.changeInPort
         })
       }
       else {
@@ -322,6 +279,7 @@ export class PortfolioComponent implements OnInit {
       let money: any = localStorage.getItem('moneyInWallet')
       this.moneyInWallet = parseFloat(money);
     }
+    this.modalService.dismissAll();
   }
 
 

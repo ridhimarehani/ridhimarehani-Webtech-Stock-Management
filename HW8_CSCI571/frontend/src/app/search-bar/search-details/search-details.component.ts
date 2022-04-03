@@ -1,13 +1,13 @@
 import { Component, Input, OnInit, Output, EventEmitter, OnChanges } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HttpService } from 'src/app/shared/http.service';
-import { from, retry, Subject, timer } from 'rxjs';
+import { Subject, timer } from 'rxjs';
 import { MatTabsModule } from '@angular/material/tabs';
 import { HighchartsChartModule } from 'highcharts-angular';
 import * as Highcharts from 'highcharts';
 import { NgbModal, ModalDismissReasons, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { faTwitter, faFacebookSquare } from '@fortawesome/free-brands-svg-icons';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, combineLatest } from 'rxjs/operators';
 //Lolly
 import { Router } from '@angular/router';
 import IndicatorCore from 'highcharts/indicators/indicators';
@@ -124,9 +124,6 @@ export class SearchDetailsComponent implements OnInit {
 
 
   constructor(private http: HttpClient, private httpService: HttpService, private modalService: NgbModal, private router: Router) { }
-  // openModal(){
-  //   this.newsModal.open();
-  // }
   open(content: any, newsData: any) {
 
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
@@ -155,25 +152,21 @@ export class SearchDetailsComponent implements OnInit {
       this.tickerSymbol = v;
       this.fetchAPI();
       this.getWatchlist();
+      this.enableSellButton();
     });
     this.fetchAPI();
     this.getWatchlist();
 
     this.alertMessageDisplay();
+    this.setWalletMoney();
+    this.enableSellButton();
+  }
 
-
+  setWalletMoney(){
     this.moneyInWallet = localStorage.getItem('moneyInWallet')//parseFloat(money);
     if (!this.moneyInWallet) {
       localStorage.setItem('moneyInWallet', "25000.00")
     }
-
-    let qtyStocks :any = JSON.parse(localStorage.getItem(this.tickerSymbol + "-Portfolio")!);
-    console.log('qtyStocks> '+qtyStocks+" "+qtyStocks.qty);
-    if(qtyStocks.qty > 0){
-      console.log('sss');
-      this.sell_button = true;
-    }
-
   }
 
   alertMessageDisplay() {
@@ -209,6 +202,60 @@ export class SearchDetailsComponent implements OnInit {
     let money: any = localStorage.getItem('moneyInWallet')
     this.moneyInWallet = localStorage.getItem('moneyInWallet')//parseFloat(money);
     //Lolly
+  }
+
+  fetchAPICombined(){
+    let companyDescription = this.httpService.getData('companyDescription', this.tickerSymbol);
+    let latestStockPrice = this.httpService.getData('stockPrice', this.tickerSymbol);
+    let companyPeers = this.httpService.getData('companyPeers', this.tickerSymbol);
+
+    this.timeManipulation();
+    let historicData = this.httpService.getDataHistoric('historicalDataSummary', this.tickerSymbol, this.unix_date_6, this.unix_date);
+
+    let newsData = this.httpService.getData('companyNews', this.tickerSymbol);
+    let companyRecomm = this.httpService.getData('recommendation', this.tickerSymbol);
+    let comanySocial = this.httpService.getData('socialSentiment', this.tickerSymbol);
+    let earnings = this.httpService.getData('companyEarnings', this.tickerSymbol);
+    this.spinner = true;
+
+  
+    // combineLatest(comp_desc, latest_stock_p, comp_peer, hist_chart, news_data, comp_recomm, comp_social, comp_earn).subscribe(([res1, res2, res3, res4, res5, res6, res7, res8]: [any, any, any, any, any, any, any, any]) => {
+    //   this.companyDescription = res1;
+    //   // this.display_star = true;
+    //   this.buy_button = true;
+
+    //   this.latestStockPrice = res2;
+    //   this.Current_Price = this.latestStockPrice.c;
+
+    //   this.timeManipulation();
+    //   this.statusService.getHistoricalSummary(this.inputEnteredTicker, this.unix_date_6, this.unix_date).subscribe(res => {
+    //     this.historicalSummary = res;
+    //     console.log(this.historicalSummary);
+    //     this.historySummaryCharts();
+    //   });
+
+    //   this.companyPeers = res3;
+
+    //   this.historicalCharts = res4;
+    //   this.historyMainCharts();
+
+    //   this.companyNews = res5;
+    //   this.loadNews();
+    //   this.isNews = true;
+
+    //   this.companyRecommendation = res6;
+    //   this.recommendationData()
+    //   this.isRecommChartLoaded = true
+    //   this.recommendationCharts()
+
+    //   this.companySocialSentiments = res7;
+    //   this.addSociaSentiments();
+
+    //   this.companyEarnings = res8;
+    //   this.historicalEPSData();
+    //   this.isHistoricalEpsChart = true;
+    //   this.historicalEpsChart();)
+
   }
 
   fetchAPI() {
@@ -350,7 +397,7 @@ export class SearchDetailsComponent implements OnInit {
       // console.log(localStorage.getItem(this.inputEnteredTicker+"-Portfolio"));
       let stockValJson: any = localStorage.getItem(this.tickerSymbol + "-Portfolio");
       let stockVal = JSON.parse(stockValJson);
-      console.log('stockVal>'+stockVal);
+      console.log('stockVal>' + stockVal);
       if (stockVal.qty > 0) {
         this.sell_button = true;
         console.log(this.sell_button)
@@ -396,7 +443,7 @@ export class SearchDetailsComponent implements OnInit {
     if (localStorage.getItem(this.tickerSymbol + "-Portfolio")) {
       let stockValJson: any = localStorage.getItem(this.tickerSymbol + "-Portfolio");
       let stockVal = JSON.parse(stockValJson);
-      let stockQ = stockVal.quantity;
+      let stockQ = stockVal.qty;
       if (stockQ > 0) {
         this.sell_button = true;
       }
@@ -675,13 +722,28 @@ export class SearchDetailsComponent implements OnInit {
 
   loadDataForHistoricalEPS(dataHistoric: any) {
     // epsSurpriseDataX
+    this.epsSurpriseDataX = [];
+    console.log('dataHistoric> ' + JSON.stringify(dataHistoric));
     let actualData = [];
     let estimateData = [];
+    // for (let i = 0; i < dataHistoric.length; i++) {
+    //   this.epsSurpriseDataX.push(`"${dataHistoric[i].period} Surprise: ${dataHistoric[i].surprise}"`);
+    //   actualData.push(dataHistoric[i].actual);
+    //   estimateData.push(dataHistoric[i].estimate);
+    // }
+
     for (let i = 0; i < dataHistoric.length; i++) {
-      this.epsSurpriseDataX.push(`"${dataHistoric[i].period} Surprise: ${dataHistoric[i].surprise}"`);
-      actualData.push(dataHistoric[i].actual);
-      estimateData.push(dataHistoric[i].estimate);
+      let list1 = [dataHistoric[i].period + ' Surprise:' + dataHistoric[i].surprise, dataHistoric[i].actual]
+      let list2 = [dataHistoric[i].period + ' Surprise:' + dataHistoric[i].surprise, dataHistoric[i].estimate]
+      this.epsSurpriseDataX.push(dataHistoric[i].period + ' Surprise:' + dataHistoric[i].surprise);
+      // actualData.push(this.companyEarnings[i].actual);
+      actualData.push(list1);
+      estimateData.push(list2);
+      // estimateData.push(this.companyEarnings[i].estimate);
     }
+
+
+
     console.log('this.epsSurpriseDataX> ' + this.epsSurpriseDataX);
 
     this.epsSurpriseDataY = [actualData, estimateData];
@@ -709,7 +771,29 @@ export class SearchDetailsComponent implements OnInit {
       //     rangeDescription: this.epsSurpriseDataX
       //   }
       // },
-      xAxis: { categories: this.epsSurpriseDataX },
+
+      xAxis: {
+        type: 'category',
+        categories: this.epsSurpriseDataX,
+
+        labels: {
+          rotation: 0,
+          useHTML: true,
+          allowOverlap: true,
+          style: {
+            // width: '10px',
+            fontSize: '10px',
+            wordBreak: 'break-all',
+            textAlign: 'center',
+            textOverflow: 'allow',
+          }
+        }
+
+      },
+
+      // xAxis: { 
+      //   type: 'category',
+      //   categories: this.epsSurpriseDataX },
 
       legend: {
         layout: 'vertical',
@@ -1039,6 +1123,10 @@ export class SearchDetailsComponent implements OnInit {
 
   }
   //Lolly
+
+  ngOnDestroy() {
+    this.fetchSubscribe.unsubscribe();
+  }
 }
 //'Range: 2010 to 2017' : TBD
 

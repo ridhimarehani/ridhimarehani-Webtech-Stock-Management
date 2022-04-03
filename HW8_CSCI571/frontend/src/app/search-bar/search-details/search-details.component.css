@@ -26,10 +26,14 @@ body {
   line-height: 0.6;
 }
 
-.company-ticker {
-  font-size: 32px;
-  font-weight: 500;
-  margin-bottom: 5px;
+.latest-price {
+    flex: 0;
+  }
+
+.company-ticker{
+    font-size: 32px;
+    font-weight: 500;
+    margin-bottom: 5px;
 }
 .company-ticker i {
   font-size: 18px;
@@ -68,8 +72,14 @@ body {
 }
 
 .card-news {
-  cursor: pointer;
-}
+    cursor: pointer;
+    height: 40px;
+  }
+  
+.card-img {
+    width: 60px;
+    height: 40px;
+ }
 
 .social-sent-heading {
   display: flex;
@@ -85,10 +95,10 @@ body {
     font-size: 15px; */
   /* margin: 0 30px */
 }
-.social-tab-row {
-  border-top: 1px solid rgb(142, 144, 148);
-  border-bottom: 1px solid rgb(142, 144, 148);
-  height: 36px;
+.social-tab-row{
+    border-top: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;
+    height: 36px;
 }
 .social-color-grey {
   background-color: rgb(224, 225, 228);

@@ -61,7 +61,7 @@ export class SearchBarComponent implements OnInit {
           // console.log('URL HIT> '+ JSON.stringify(this.service.getDataAutoComplete('autoComplete', value)));
           typedVal = value;
           return this.service.getDataAutoComplete('autoComplete', value)
-            // .pipe(finalize(() => (this.isLoading = false)));
+            .pipe(finalize(() => (this.isLoading = false)));
         }
         )
       ).subscribe(res => {
@@ -69,6 +69,7 @@ export class SearchBarComponent implements OnInit {
         this.autoSuggestionsArray = [];
         if (typedVal === undefined || typedVal === '') {
           this.autoSuggestionsArray = [];
+          this.isLoading = false;
         }
         else {
           for (let data of this.autoSuggestions.result) {
@@ -86,6 +87,7 @@ export class SearchBarComponent implements OnInit {
 
   loadStockDetails(tickerData: any) {
     console.log('ticketData: ', tickerData);
+    console.log('ticketData: ', this.autoSuggestionsArray);
     this.autoSuggestionsArray = [];
     if (tickerData.displaySymbol) {
       this.tickerSymbol = tickerData.displaySymbol;
@@ -104,7 +106,7 @@ export class SearchBarComponent implements OnInit {
     this.router.navigate(['/search/home'], {});
   }
 
-  // displayFn(company: any) {
+  // displaydisplayFn(company: any) {
   //   if (company) {
   //     return company.result.displaySymbol;
   //   }
