@@ -15,3 +15,11 @@
 .transaction-close{
     float: right;
 }
+
+.color-red{
+    color: red;
+}
+
+.color-green{
+    color: green;
+}
