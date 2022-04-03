@@ -1,0 +1,17 @@
+/* .navbar{
+    background-color: #2224ab !important;
+} */
+
+nav {
+    background: #2224ab;
+}
+
+.active {
+    border-color: white;
+    border: 2px solid white;
+    border-radius: 10px;
+}
+
+.nav-item {
+    text-align: right;
+} 

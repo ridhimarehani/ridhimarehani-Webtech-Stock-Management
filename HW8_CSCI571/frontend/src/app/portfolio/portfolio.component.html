@@ -1,4 +1,89 @@
-<ng-template #portfolioModal let-modal class="modal-backdrop">
+<ng-template #portfolioModalBuy let-modal id="modal-backdrop" class="modal-backdrop">
+    <div class="modal-header d-flex">
+        <div class="modal-title" id="modal-basic-title">
+            {{tickerSymbol}}
+        </div>
+        <div class="cancel-button">
+            <button type="button" div class="close" (click)="this.modal.close()">
+                <i class="bi bi-x"></i>
+            </button>
+        </div>
+    </div>
+    <div class="modal-body ml-3">
+        <div class="current-price">
+            Current Price: {{stockPrice.c}}
+        </div>
+        <div class="wallet-money">
+            Money in Wallet: ${{moneyInWallet | number:'1.2-2'}}
+        </div>
+        <div class="quantity-input d-flex">
+            <div class="quantity mb-0 mr-2">Quantity </div>
+            <input class="form-control" id="quantity-value" type="number" value=0 [(ngModel)]="enteredQuantity" />
+        </div>
+        <div class="error-msg" *ngIf="enteredQuantity * stockPrice.c > moneyInWallet">
+            Not enough money in wallet!
+        </div>
+    </div>
+    <div class="modal-footer d-flex">
+        <div class="total" *ngIf="enteredQuantity > 0">
+            Total : {{stockPrice.c * enteredQuantity | number:'1.2-2'}}
+        </div>
+        <div class="total" *ngIf="enteredQuantity === 0">
+            Total : 0.00
+        </div>
+        <div class="button-deal">
+            <button type="button" class="btn btn-success mt-2" *ngIf="stockBuy" [disabled]="enteredQuantity === 0"
+                (click)="buyStock(tickerSymbol)">Buy</button>
+        </div>
+
+    </div>
+</ng-template>
+
+<ng-template #portfolioModalSell let-modal id="modal-backdrop" class="modal-backdrop">
+    <div class="modal-header d-flex">
+        <div class="modal-title" id="modal-basic-title">
+            {{tickerSymbol}}
+        </div>
+        <div class="cancel-button">
+            <button type="button" id="btnModeClose" class="close" (click)="this.modal.close()">
+                <i class="bi bi-x"></i>
+            </button>
+        </div>
+    </div>
+    <div class="modal-body ml-3">
+        <div class="current-price">
+            Current Price: {{stockPrice.c}}
+        </div>
+        <div class="wallet-money">
+            Money in Wallet: ${{moneyInWallet | number:'1.2-2'}}
+        </div>
+        <div class="quantity-input d-flex">
+            <div class="quantity mb-0 mr-2">Quantity </div>
+            <input class="form-control" id="quantity-value" type="number" value=0  [(ngModel)]="enteredQuantitySell" />
+        </div>
+        <div class="error-msg" *ngIf="enteredQuantitySell > stockLeft">
+            You cannot sell the stocks that you don't have!
+        </div>
+    </div>
+    <div class="modal-footer d-flex">
+        <div class="total" *ngIf="enteredQuantitySell > 0">
+            Total : {{stockPrice.c * enteredQuantitySell | number:'1.2-2'}}
+        </div>
+        <div class="total" *ngIf="enteredQuantitySell === 0">
+            Total : 0.00
+        </div>
+        <div class="button-deal">
+
+            <button type="button" class="btn btn-success mt-2" *ngIf="stockBuy === false"
+                [disabled]="enteredQuantitySell === 0" (click)="sellStock(tickerSymbol)">Sell</button>
+        </div>
+
+    </div>
+</ng-template>
+
+
+
+<!-- <ng-template #portfolioModal let-modal class="modal-backdrop">
     <div class="modal-header">
         <div class="modal-title" id="modal-basic-title">
             {{currentStockModal}}<span><button type="button" class="transaction-close" aria-label="Close"
@@ -6,16 +91,16 @@
         </div>
     </div>
     <div class="modal-body">
-        Current Price : stock.c
-        Money in wallet : {{moneyInWallet}}
-        Quantity : Input Qty number
+        <div>Current Price : {{stockPrice.c}}</div>
+        <div>Money in wallet : {{moneyInWallet}}</div>
+        <div>Quantity : <input type="number"></div> 
     </div>
     <div class="modal-footer">
         Total : Qty * Current Price //Change when qty is entered
         <button type="button" class="btn btn-success" *ngIf="isBuyStock">Buy</button>
         <button type="button" class="btn btn-success" *ngIf="!isBuyStock">Sell</button>
     </div>
-</ng-template>
+</ng-template> -->
 
 <div class="portfolio-main d-flex col-md-12">
     <div class="empty col-md-2"> </div>
@@ -58,11 +143,11 @@
             <div class="port-items-right col-md-6">
                 <div *ngIf='(portItem.value.totalCost/portItem.value.quantity-portItem.value.currentPrice) >= 0'>
                     <div class="d-flex justify-content-between"><span>Change Green:</span>
-                        <span>{{portItem.value.totalCost/portItem.value.quantity-portItem.value.currentPrice | number:'1.2-2'}}</span></div>
+                        <span>{{portItem.value.currentPrice-portItem.value.totalCost/portItem.value.quantity | number:'1.2-2'}}</span></div>
                     <div class="d-flex justify-content-between"><span>Current Price:
                         </span><span>{{portItem.value.currentPrice | number:'1.2-2'}}</span></div>
                     <div class="d-flex justify-content-between"><span>Market Value:
-                        </span><span>{{portItem.value.quantity * portItem.value.currentPrice  | number:'1.2-2'}}</span></div>
+                        </span><span>{{portItem.value.currentPrice-portItem.value.totalCost/portItem.value.quantity  | number:'1.2-2'}}</span></div>
                 </div>
                 <div *ngIf='(portItem.value.totalCost/portItem.value.quantity-portItem.value.currentPrice) < 0'>
                     <div class="d-flex justify-content-between"><span>Change Red:</span>
@@ -76,9 +161,9 @@
         </div>
         <div class="card-footer d-flex flex-row-reverse">
             <button type="button" class="btn btn-danger"
-                (click)="openPortfolioBuy(portfolioModal,'sellStock',portItem.key)">Sell</button>
+                (click)="openPortfolioSell(portfolioModalSell,'sell',portItem.key)">Sell</button>
             <button type="button" class="btn btn-primary mr-3"
-                (click)="openPortfolioBuy(portfolioModal,'buyStock',portItem.key)">Buy</button>
+                (click)="openPortfolioBuy(portfolioModalBuy,'buy',portItem.key)">Buy</button>
         </div>
     </div>
 </div>

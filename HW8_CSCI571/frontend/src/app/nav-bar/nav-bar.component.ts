@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { StatePreserveService } from '../state-preserve.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -6,10 +7,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./nav-bar.component.css']
 })
 export class NavBarComponent implements OnInit {
-
-  constructor() { }
+  public data: string = '';
+  // is
+  constructor(private statePreseve: StatePreserveService) { }
 
   ngOnInit(): void {
-  }
 
+    this.statePreseve.tickerSymbolSubject.subscribe(res => {
+      this.data = res;
+      console.log('state>> ',res);
+    }
+    )
+  }
 }

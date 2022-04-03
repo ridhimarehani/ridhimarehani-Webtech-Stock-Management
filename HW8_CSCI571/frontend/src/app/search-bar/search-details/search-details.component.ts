@@ -1,12 +1,13 @@
 import { Component, Input, OnInit, Output, EventEmitter, OnChanges } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HttpService } from 'src/app/shared/http.service';
-import { from, retry, Subject } from 'rxjs';
+import { from, retry, Subject, timer } from 'rxjs';
 import { MatTabsModule } from '@angular/material/tabs';
 import { HighchartsChartModule } from 'highcharts-angular';
 import * as Highcharts from 'highcharts';
 import { NgbModal, ModalDismissReasons, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { faTwitter, faFacebookSquare } from '@fortawesome/free-brands-svg-icons';
+import { debounceTime } from 'rxjs/operators';
 //Lolly
 import { Router } from '@angular/router';
 import IndicatorCore from 'highcharts/indicators/indicators';
@@ -35,7 +36,7 @@ export class SearchDetailsComponent implements OnInit {
   faTwitter = faTwitter;
   faFacebook = faFacebookSquare;
 
- // Lolly
+  // Lolly
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options = {};
   chartOptionsHistorical: Highcharts.Options = {};
@@ -47,6 +48,18 @@ export class SearchDetailsComponent implements OnInit {
   wishlist_remove = false;
   display_filled_star = false;
   display_star = false;
+  addMessage = '';
+  removeMessage = '';
+  buyMessage = '';
+  sellMessage = '';
+  invalidTicker = false;
+  enteredQuantity: number = 0;
+  enteredQuantitySell: number = 0;
+  totalPrice: string = "0.00";
+  Current_Price: any;
+  buy_button = false;
+  sell_button = false;
+  fetchSubscribe: any;
   // latestStockPrice = false;
 
   //lolly
@@ -86,6 +99,7 @@ export class SearchDetailsComponent implements OnInit {
   public closeResult: string = '';
   public currentNews: any;
   public historicalCharts: any;
+  moneyInWallet: any;
 
   //Lolly
   public showMainChart = false;
@@ -98,6 +112,14 @@ export class SearchDetailsComponent implements OnInit {
   curr_date: any;
   timestamp: any;
   showChart = false;
+  private _watchlistAdd = new Subject<string>();
+  private _watchlistRemove = new Subject<string>();
+  private _buySuccess = new Subject<string>();
+  private _sellSuccess = new Subject<string>();
+  closeModal = '';
+  stockBuy = false;
+  stockLeft: any;
+  spinner = false;
   //Lolly
 
 
@@ -127,76 +149,262 @@ export class SearchDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     console.log("ngOnInit");
-    // this.currentNews = newsData;
-    // console.log(this.route.snapshot.paramMap.get("tickerVal"));
-    // this.route.paramMap.subscribe(params => {
-    //   console.log(params.get("tickerVal"))
-    // })
     // localStorage.clear();
     this.changing.subscribe(v => {
       console.log('value is changing', v);
+      this.tickerSymbol = v;
       this.fetchAPI();
       this.getWatchlist();
     });
     this.fetchAPI();
     this.getWatchlist();
 
+    this.alertMessageDisplay();
 
+
+    this.moneyInWallet = localStorage.getItem('moneyInWallet')//parseFloat(money);
+    if (!this.moneyInWallet) {
+      localStorage.setItem('moneyInWallet', "25000.00")
+    }
+
+    let qtyStocks :any = JSON.parse(localStorage.getItem(this.tickerSymbol + "-Portfolio")!);
+    console.log('qtyStocks> '+qtyStocks+" "+qtyStocks.qty);
+    if(qtyStocks.qty > 0){
+      console.log('sss');
+      this.sell_button = true;
+    }
+
+  }
+
+  alertMessageDisplay() {
+    //Lolly
+    this._buySuccess.subscribe(
+      (message) => (this.buyMessage = message)
+    );
+    this._buySuccess
+      .pipe(debounceTime(5000))
+      .subscribe(() => (this.buyMessage = ''));
+
+    this._sellSuccess.subscribe(
+      (message) => (this.sellMessage = message)
+    );
+    this._sellSuccess
+      .pipe(debounceTime(5000))
+      .subscribe(() => (this.sellMessage = ''));
+
+    this._watchlistAdd.subscribe(
+      (message) => (this.addMessage = message)
+    );
+    this._watchlistAdd
+      .pipe(debounceTime(5000))
+      .subscribe(() => (this.addMessage = ''));
+
+    this._watchlistRemove.subscribe(
+      (message) => (this.removeMessage = message)
+    );
+    this._watchlistRemove
+      .pipe(debounceTime(5000))
+      .subscribe(() => (this.removeMessage = ''));
+
+    let money: any = localStorage.getItem('moneyInWallet')
+    this.moneyInWallet = localStorage.getItem('moneyInWallet')//parseFloat(money);
+    //Lolly
   }
 
   fetchAPI() {
     console.log('fetchAPI method starts');
+    this.spinner = true;
 
-    this.httpService.getData('companyDescription', this.tickerSymbol).subscribe(res => this.companyDescription = res);
-    this.httpService.getData('historicalData', this.tickerSymbol).subscribe(res => {
-      // console.log('historicalData> ' + JSON.stringify(res));
-      this.historicalCharts = res;
-      this.showMainChart = true;
-      this.historyMainCharts()
+    this.httpService.getData('companyDescription', this.tickerSymbol).subscribe(res => {
+      this.companyDescription = res;
+      console.log('companyDescription> ' + JSON.stringify(res));
+      this.spinner = false;
+      if (Object.keys(this.companyDescription).length === 0) {
+        this.invalidTicker = true;
+      }
+      else {
+        this.invalidTicker = false;
+        this.buy_button = true;
+      }
+
     });
+    if (!this.invalidTicker) {
+      this.httpService.getData('historicalData', this.tickerSymbol).subscribe(res => {
+        // console.log('historicalData> ' + JSON.stringify(res));
+        this.historicalCharts = res;
+        this.showMainChart = true;
+        console.log('companyDescription> ');
+        this.historyMainCharts();
 
-    
 
-    // this.httpService.getData('stockPrice', this.tickerSymbol).subscribe(res => console.log(JSON.stringify(res)));
-    this.httpService.getData('stockPrice', this.tickerSymbol).subscribe(res => {
-      this.stockPrice = res;
-      //Lolly
-      this.timeManipulation();
-      console.log('unixDatess>> '+this.unix_date_6+'  '+this.unix_date);
-      this.httpService.getDataHistoric('historicalDataSummary', this.tickerSymbol,this.unix_date_6,this.unix_date).subscribe(res => {
-        console.log('historicalData> ' + JSON.stringify(res));
-        this.historicDataSummary = res;
-        this.historySummaryCharts();
-        this.showChart = true;
       });
-      //Lolly
-    });
-    // this.httpService.getData('autoComplete', this.tickerSymbol).subscribe(res => { this.autoComplete = res; console.log('bbb') });
-    this.httpService.getData('companyNews', this.tickerSymbol).subscribe(res => {
-      this.companyNews = res;
-      this.loadDataForNews(this.companyNews);
-      this.isNewsLoaded = true;
+
+
+
+      // this.httpService.getData('stockPrice', this.tickerSymbol).subscribe(res => console.log(JSON.stringify(res)));
+      this.httpService.getData('stockPrice', this.tickerSymbol).subscribe(res => {
+        this.stockPrice = res;
+        this.Current_Price = this.stockPrice.c;
+
+
+        //Lolly
+        this.timeManipulation();
+        console.log('unixDatess>> ' + this.unix_date_6 + '  ' + this.unix_date);
+        this.httpService.getDataHistoric('historicalDataSummary', this.tickerSymbol, this.unix_date_6, this.unix_date).subscribe(res => {
+
+          this.historicDataSummary = res;
+          this.historySummaryCharts();
+          this.showChart = true;
+
+        });
+        //Lolly
+      });
+      // this.httpService.getData('autoComplete', this.tickerSymbol).subscribe(res => { this.autoComplete = res; console.log('bbb') });
+      this.httpService.getData('companyNews', this.tickerSymbol).subscribe(res => {
+        this.companyNews = res;
+        this.loadDataForNews(this.companyNews);
+        this.isNewsLoaded = true;
+
+      });
+
+      this.httpService.getData('recommendation', this.tickerSymbol).subscribe(res => {
+        this.recommendation = res;
+        this.loadDataForRecomChart(this.recommendation);
+        this.isChartLoaded = true;
+        this.chartForRecommendation();
+
+      });
+      this.httpService.getData('socialSentiment', this.tickerSymbol).subscribe(res => {
+        this.socialSentiment = res;
+        this.loadValuesForSocial(this.socialSentiment)
+
+      });
+      this.httpService.getData('companyPeers', this.tickerSymbol).subscribe(res => {
+        this.companyPeers = res;
+
+      });
+
+      this.httpService.getData('companyEarnings', this.tickerSymbol).subscribe(res => {
+
+        this.companyEarnings = res;
+        this.loadDataForHistoricalEPS(this.companyEarnings);
+        this.isChartLoadedHistorical = true;
+        this.chartForHistorical();
+
+      });
+
+    }
+
+    this.fetchSubscribe = timer(0, 15000).subscribe(() => {
+      this.httpService.getData('companyDescription', this.tickerSymbol).subscribe(res => {
+        this.companyDescription = res;
+
+      });
+      // this.display_star = true;
+      // this.buy_button = true;
+      this.httpService.getData('stockPrice', this.tickerSymbol).subscribe(res => {
+        this.stockPrice = res;
+        this.Current_Price = this.stockPrice.c;
+        //Lolly
+        this.timeManipulation();
+        this.httpService.getDataHistoric('historicalDataSummary', this.tickerSymbol, this.unix_date_6, this.unix_date).subscribe(res => {
+
+          this.historicDataSummary = res;
+          this.historySummaryCharts();
+          this.showChart = true;
+
+        });
+        //Lolly
+      });
     });
 
-    this.httpService.getData('recommendation', this.tickerSymbol).subscribe(res => {
-      this.recommendation = res;
-      this.loadDataForRecomChart(this.recommendation);
-      this.isChartLoaded = true;
-      this.chartForRecommendation();
-    });
-    this.httpService.getData('socialSentiment', this.tickerSymbol).subscribe(res => {
-      this.socialSentiment = res;
-      this.loadValuesForSocial(this.socialSentiment)
-    });
-    this.httpService.getData('companyPeers', this.tickerSymbol).subscribe(res => this.companyPeers = res);
+  }
 
-    this.httpService.getData('companyEarnings', this.tickerSymbol).subscribe(res => {
-      this.companyEarnings = res;
-      this.loadDataForHistoricalEPS(this.companyEarnings);
-      this.isChartLoadedHistorical = true;
-      this.chartForHistorical();
-    });
+  buyStock() {
+    this._buySuccess.next('Message successfully changed.');
+    // this.portfolio_add = true;
+    // this.portfolio_remove = false;
+    if (this.enteredQuantity > 0) {
+      let total = this.Current_Price * this.enteredQuantity;
+      console.log(total);
+      let val: any = localStorage.getItem('moneyInWallet')
+      let wallet: any = parseFloat(val);
+      wallet = wallet - total;
+      console.log(wallet);
+      localStorage.setItem('moneyInWallet', wallet.toFixed(2).toString());
+      // console.log(wallet);
+      // if((localStorage.getItem(this.inputEnteredTicker+"-Portfolio"))){
+      // {"ticker" : "TSLA", "qty" : 4, "amount" : am1};
+      if (localStorage.getItem(this.tickerSymbol + "-Portfolio")) {
+        let stockValJson: any = localStorage.getItem(this.tickerSymbol + "-Portfolio");
+        let stockVal = JSON.parse(stockValJson);
+        let quantity = this.enteredQuantity + stockVal.quantity;
+        total = total + stockVal.totalPrice;
+        localStorage.setItem(this.tickerSymbol + "-Portfolio", JSON.stringify({ "ticker": this.tickerSymbol, "qty": quantity, "amount": total }))
 
+      }
+      else {
+        localStorage.setItem(this.tickerSymbol + "-Portfolio", JSON.stringify({ "ticker": this.tickerSymbol, "qty": this.enteredQuantity, "amount": total }))
+      }
+
+      // console.log(localStorage.getItem(this.inputEnteredTicker+"-Portfolio"));
+      let stockValJson: any = localStorage.getItem(this.tickerSymbol + "-Portfolio");
+      let stockVal = JSON.parse(stockValJson);
+      console.log('stockVal>'+stockVal);
+      if (stockVal.qty > 0) {
+        this.sell_button = true;
+        console.log(this.sell_button)
+      }
+
+      // this.modal.close();
+    }
+
+    this.modalService.dismissAll();
+
+
+  }
+
+  sellStock() {
+    this._sellSuccess.next('Message successfully changed.');
+    // this.portfolio_remove = true;
+    // this.portfolio_add = false;
+    if (this.enteredQuantitySell > 0) {
+      let total = this.Current_Price * this.enteredQuantitySell;
+      console.log(total);
+      let val: any = localStorage.getItem('moneyInWallet')
+      let wallet: any = parseFloat(val);
+      wallet = wallet + total;
+      localStorage.setItem('moneyInWallet', wallet.toFixed(2).toString());
+      let stockValJson: any = localStorage.getItem(this.tickerSymbol + "-Portfolio");
+      let stockVal = JSON.parse(stockValJson);
+      let stockQ = stockVal.quantity - this.enteredQuantitySell
+        ;
+      total = stockVal.totalPrice - total;
+      localStorage.setItem(this.tickerSymbol + "-Portfolio", JSON.stringify({ "ticker": this.tickerSymbol, "qty": stockQ, "amount": total }))
+      if (stockQ > 0) {
+        this.sell_button = true;
+        // console.log(this.sell_button)
+      }
+      else {
+        this.sell_button = false;
+        localStorage.removeItem(this.tickerSymbol + "-Portfolio")
+      }
+    }
+    this.modalService.dismissAll();
+  }
+  enableSellButton() {
+    if (localStorage.getItem(this.tickerSymbol + "-Portfolio")) {
+      let stockValJson: any = localStorage.getItem(this.tickerSymbol + "-Portfolio");
+      let stockVal = JSON.parse(stockValJson);
+      let stockQ = stockVal.quantity;
+      if (stockQ > 0) {
+        this.sell_button = true;
+      }
+      else {
+        this.sell_button = false;
+        // localStorage.removeItem(this.inputEnteredTicker+"-Portfolio")
+      }
+    }
 
   }
 
@@ -338,6 +546,47 @@ export class SearchDetailsComponent implements OnInit {
 
   }
 
+  //Lolly
+  openPortfolioBuy(portfolioModalBuy: any, stockDeal: any) {
+    if (stockDeal === 'buy') {
+      this.stockBuy = true;
+    }
+    else {
+      this.stockBuy = false;
+    }
+    let money: any = localStorage.getItem('moneyInWallet')
+    this.moneyInWallet = parseFloat(money);
+
+    this.modalService.open(portfolioModalBuy, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeModal = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeModal = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  openPortfolioSell(portfolioModalSell: any, stockDeal: any) {
+    if (stockDeal === 'buy') {
+      this.stockBuy = true;
+    }
+    else {
+      this.stockBuy = false;
+    }
+
+    let money: any = localStorage.getItem('moneyInWallet')
+    this.moneyInWallet = parseFloat(money);
+    let stockValJson: any = localStorage.getItem(this.tickerSymbol + "-Portfolio");
+    let stockVal = JSON.parse(stockValJson);
+
+    this.stockLeft = stockVal.quantity;
+
+    this.modalService.open(portfolioModalSell, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeModal = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeModal = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  //Lolly 
+
   chartForRecommendation() {
     //TBD: legend in 1line, remove total , date in straight way
     console.log('recom pe>' + this.periodForRecomm);
@@ -367,9 +616,9 @@ export class SearchDetailsComponent implements OnInit {
       },
       legend: {
         align: 'center',
-        x: -30,
+        x: -24,
         // verticalAlign: 'bottom',
-        y: 25,
+        y: 0,
         // floating: true,
         backgroundColor: Highcharts.defaultOptions.legend?.backgroundColor || 'white',
         // borderColor: '#CCC',
@@ -704,12 +953,12 @@ export class SearchDetailsComponent implements OnInit {
   historySummaryCharts() {
     var list1 = [];
 
-    console.log('historicDataSummary>>'+JSON.stringify(this.historicDataSummary));
+
     for (var i = 0; i < this.historicDataSummary['c'].length; i++) {
       var tempList1 = [(this.historicDataSummary['t'][i] * 1000), this.historicDataSummary['c'][i]];
       list1[i] = tempList1;
     }
-    console.log('kssl>'+list1);
+
     Highcharts.setOptions({
       time: {
         timezoneOffset: 7 * 60
@@ -754,21 +1003,21 @@ export class SearchDetailsComponent implements OnInit {
   //Lolly
 
   //Lolly
-  getWatchlist(){
+  getWatchlist() {
     // console.log(this.inputEnteredTicker); 
     // console.log(localStorage.getItem(this.inputEnteredTicker));
-    if (this.tickerSymbol === localStorage.getItem(this.tickerSymbol)){
+    if (this.tickerSymbol === localStorage.getItem(this.tickerSymbol + "-Watchlist")) {
       // console.log('yes');
       this.display_filled_star = true;
       this.display_star = false;
     }
-    else{
+    else {
       this.display_filled_star = false;
       this.display_star = true;
     }
     // this.buyStock();
 
-    
+
   }
 
   addToWatchlist() {
@@ -787,7 +1036,7 @@ export class SearchDetailsComponent implements OnInit {
       localStorage.removeItem(this.tickerSymbol + "-Watchlist");
 
     }
-  
+
   }
   //Lolly
 }

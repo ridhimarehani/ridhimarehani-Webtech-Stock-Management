@@ -11,7 +11,7 @@
 body{
     background-image: linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)), url("../../../assets/background-graph.jpg");
     width: 100%;
-    height: 1000px;
+    /* height: 1000px; */
     background-repeat: no-repeat;
     background-position: center;
     background-blend-mode: lighten !important;
@@ -21,6 +21,25 @@ body{
     display: block;
     line-height: 0.6;
 }
+
+.company-ticker{
+    font-size: 32px;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+.company-ticker i {
+    font-size: 18px;
+}
+
+.company-name{
+    font-size: 22px;
+    color: #6d767d;
+}
+
+.company-exchange{
+    color: #6d767d;
+}
+
 .news-close{
     float: right;
 }
@@ -75,31 +94,5 @@ body{
     background-color: rgb(224, 225, 228);
     font-weight: 500;
 }
-.social-col1{
-    /* width: 200px; */
-    margin-top: 60px;
-}
-.social-col2{
-    /* width: 120px; */
-}
-.insights-charts{
-    /* display: flex;
-    justify-content: center; */
-    margin-top: 20px;
-}
-.recomm-trends{
-    /* width: 50%; */
-    /* height: 350px; */
-    /* margin-right: 10px; */
-}
-/* .historic-eps{
-    width: 50%;
-    margin-left: 10px;
-} */
 
-/* .modal {
-    z-index: 1100 !important;
-}
-.modal-backdrop.show {
-    z-index: 1040 !important;
-  } */
+
