@@ -675,6 +675,8 @@ export class SearchDetailsComponent implements OnInit {
 
   loadDataForHistoricalEPS(dataHistoric: any) {
     // epsSurpriseDataX
+    this.epsSurpriseDataX = [];
+    console.log('dataHistoric> '+JSON.stringify(dataHistoric));
     let actualData = [];
     let estimateData = [];
     for (let i = 0; i < dataHistoric.length; i++) {
@@ -709,7 +711,9 @@ export class SearchDetailsComponent implements OnInit {
       //     rangeDescription: this.epsSurpriseDataX
       //   }
       // },
-      xAxis: { categories: this.epsSurpriseDataX },
+      xAxis: { 
+        type: 'category',
+        categories: this.epsSurpriseDataX },
 
       legend: {
         layout: 'vertical',
