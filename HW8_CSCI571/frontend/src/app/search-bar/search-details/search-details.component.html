@@ -1,4 +1,4 @@
-<div class="alerts_main mt-5 col-8 mx-auto">
+<div class="alerts_main mt-4 col-8 mx-auto">
   <div class="alert-wishlist" *ngIf="invalidTicker">
     <ngb-alert class="text-center" type="danger" [dismissible]="false">No data found. Please enter a valid Ticker
     </ngb-alert>
@@ -15,22 +15,37 @@
   <div class="main-container row justify-content-center mx-0" *ngIf="!spinner">
     <div class="alerts_main d-flex justify-content-center col-md-12 row">
       <div class="alert-wishlist col-12 col-md-8" *ngIf="addMessage" (close)="addMessage = ''">
-        <ngb-alert class="text-center" type="success">{{companyDescription.ticker}} added to
-          Watchlist</ngb-alert>
+        <ngb-alert #alert class="text-center" type="success" [dismissible]="false">{{companyDescription.ticker}} added
+          to
+          Watchlist<i class="bi bi-x" style="float:right; color: #155724; font-size: 20px;"
+            (click)="addMessage = ''"></i></ngb-alert>
       </div>
       <div class="alert-wishlist col-12 col-md-8" *ngIf="removeMessage" (close)="removeMessage = ''">
-        <ngb-alert class="text-center" type="danger">{{companyDescription.ticker}} removed to
-          Watchlist</ngb-alert>
+        <ngb-alert #alert class="text-center" type="danger" [dismissible]="false">{{companyDescription.ticker}} removed
+          to
+          Watchlist<i class="bi bi-x" style="float:right; color: #721c24; font-size: 20px;"
+            (click)="removeMessage = ''"></i></ngb-alert>
       </div>
       <div class="alert-wishlist col-12 col-md-8" *ngIf="buyMessage" (close)="buyMessage = ''">
-        <ngb-alert class="text-center" type="success">{{companyDescription.ticker}} bought
-          successfully</ngb-alert>
+        <ngb-alert #alert class="text-center" type="success" [dismissible]="false">{{companyDescription.ticker}} bought
+          successfully<i class="bi bi-x" style="float:right; color: #155724; font-size: 20px;"
+            (click)="buyMessage = ''"></i></ngb-alert>
       </div>
       <div class="alert-wishlist col-12 col-md-8" *ngIf="sellMessage" (close)="sellMessage = ''">
-        <ngb-alert class="text-center" type="danger">{{companyDescription.ticker}} sold
-          successfully</ngb-alert>
+        <ngb-alert #alert class="text-center" type="danger" [dismissible]="false">{{companyDescription.ticker}} sold
+          successfully<i class="bi bi-x" style="float:right; color: #721c24; font-size: 20px;"
+            (click)="sellMessage = ''"></i></ngb-alert>
       </div>
     </div>
+
+    <!-- <button type="button" aria-label="Close" class="btn-close ng-star-inserted" ></button> -->
+    <!-- <ngb-alert #alert type="danger">
+      <h4 class="alert-heading">Invalid entry!
+        <button type="button" class="close" aria-label="Close" (click)="sellMessage = ''">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </h4>
+    </ngb-alert> -->
 
 
     <!-- Ticker Symbol : {{tickerSymbol}}
