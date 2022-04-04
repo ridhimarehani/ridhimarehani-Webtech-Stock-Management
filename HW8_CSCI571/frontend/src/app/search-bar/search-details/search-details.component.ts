@@ -100,6 +100,7 @@ export class SearchDetailsComponent implements OnInit {
   public currentNews: any;
   public historicalCharts: any;
   moneyInWallet: any;
+  marketMessage = 'Market is Closed';
 
   //Lolly
   public showMainChart = false;
@@ -147,9 +148,10 @@ export class SearchDetailsComponent implements OnInit {
   ngOnInit(): void {
     console.log("ngOnInit");
     // localStorage.clear();
+    this.tickerSymbol = this.tickerSymbol.toUpperCase();
     this.changing.subscribe(v => {
       console.log('value is changing', v);
-      this.tickerSymbol = v;
+      this.tickerSymbol = v.toUpperCase();
       this.fetchAPI();
       this.getWatchlist();
       this.enableSellButton();
@@ -424,7 +426,7 @@ export class SearchDetailsComponent implements OnInit {
       localStorage.setItem('moneyInWallet', wallet.toFixed(2).toString());
       let stockValJson: any = localStorage.getItem(this.tickerSymbol + "-Portfolio");
       let stockVal = JSON.parse(stockValJson);
-      let stockQ = stockVal.quantity - this.enteredQuantitySell
+      let stockQ = stockVal.qty - this.enteredQuantitySell
         ;
       total = stockVal.totalPrice - total;
       localStorage.setItem(this.tickerSymbol + "-Portfolio", JSON.stringify({ "ticker": this.tickerSymbol, "qty": stockQ, "amount": total }))
@@ -478,13 +480,14 @@ export class SearchDetailsComponent implements OnInit {
     //   this.display_star = true;
 
     // }
-    if (this.stockPrice.dp > 0) {
+    if (this.stockPrice.dp >= 0) {
       this.change_percent = true;
     }
 
     this.market_open = this.curr_time > (this.curr_date - (5 * 60 * 1000));
 
     if (this.market_open) {
+      this.marketMessage = 'Market is Open';
       this.unix_date = Math.floor(Date.now() / 1000)
       this.date_today_6 = this.curr_date.setHours(this.curr_date.getHours() - 6)
       this.unix_date_6 = Math.floor(this.date_today_6 / 1000)
@@ -623,7 +626,7 @@ export class SearchDetailsComponent implements OnInit {
     let stockValJson: any = localStorage.getItem(this.tickerSymbol + "-Portfolio");
     let stockVal = JSON.parse(stockValJson);
 
-    this.stockLeft = stockVal.quantity;
+    this.stockLeft = stockVal.qty;
 
     this.modalService.open(portfolioModalSell, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeModal = `Closed with: ${result}`;
