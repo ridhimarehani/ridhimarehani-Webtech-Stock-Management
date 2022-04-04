@@ -107,72 +107,76 @@
     <div class="portfolio-cards justify-content-center col-md-8">
         <!-- <div class="card col-md-7 p-0" *ngFor = "let portItem of portfolioStockDataMap.values()"> -->
         <div class="card w-100 p-0 mb-4" *ngFor="let portItem of portfolioStockDataMap | keyvalue">
-            <div class="card-header"><span style="font-size: 24px; font-weight: 500;">{{portItem.key}} </span> <span style="color: gray; font-size: 18px;">{{portItem.value.companyName}}</span></div>
-            <div class="card-body row">
-                <div class="port-items-left col-md-6">
-                    <div class="d-flex justify-content-between"><span>Quantity:
-                        </span><span>{{portItem.value.quantity}}</span></div>
-                    <div class="d-flex justify-content-between"><span>Avg. Cost/ Share: </span>
-                        <span>{{portItem.value.totalCost / portItem.value.quantity | number:'1.2-2' }}</span>
+            <!-- <div *ngIf = "portItem.value.qty != null && portItem.value.amount != null"> -->
+                <div class="card-header"><span style="font-size: 24px; font-weight: 500;">{{portItem.key}} </span> <span
+                        style="color: gray; font-size: 18px;">{{portItem.value.companyName}}</span></div>
+                <div class="card-body row">
+                    <div class="port-items-left col-md-6">
+                        <div class="d-flex justify-content-between"><span>Quantity:
+                            </span><span>{{portItem.value.quantity}}</span></div>
+                        <div class="d-flex justify-content-between"><span>Avg. Cost/ Share: </span>
+                            <span>{{portItem.value.totalCost / portItem.value.quantity | number:'1.2-2' }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between"><span>Total Cost </span>
+                            <span>{{portItem.value.totalCost | number:'1.2-2' }}</span>
+                        </div>
                     </div>
-                    <div class="d-flex justify-content-between"><span>Total Cost </span>
-                        <span>{{portItem.value.totalCost | number:'1.2-2' }}</span>
+                    <div class="port-items-right col-md-6">
+                        <div *ngIf='(portItem.value.changeInPort) > 0'>
+                            <div class="d-flex justify-content-between"><span>Change:</span>
+                                <span style="color: green;"> <i
+                                        class="bi bi-caret-up-fill"></i>{{portItem.value.currentPrice-portItem.value.totalCost/portItem.value.quantity
+                                    |
+                                    number:'1.2-2'}}</span>
+                            </div>
+                            <div class="d-flex justify-content-between"><span>Current Price:
+                                </span><span style="color: green;">{{portItem.value.currentPrice |
+                                    number:'1.2-2'}}</span>
+                            </div>
+                            <div class="d-flex justify-content-between"><span>Market Value:
+                                </span><span
+                                    style="color: green;">{{portItem.value.currentPrice-portItem.value.totalCost/portItem.value.quantity
+                                    |
+                                    number:'1.2-2'}}</span></div>
+                        </div>
+
+                        <div *ngIf='(portItem.value.changeInPort) == 0'>
+                            <div class="d-flex justify-content-between"><span>Change:</span>
+                                <span>{{portItem.value.totalCost/portItem.value.quantity-portItem.value.currentPrice |
+                                    number:'1.2-2'}}</span>
+                            </div>
+                            <div class="d-flex justify-content-between"><span>Current Price:
+                                </span><span>{{portItem.value.currentPrice | number:'1.2-2'}}</span></div>
+                            <div class="d-flex justify-content-between"><span>Market Value:
+                                </span><span>{{portItem.value.quantity * portItem.value.currentPrice |
+                                    number:'1.2-2'}}</span>
+                            </div>
+                        </div>
+                        <div *ngIf='(portItem.value.changeInPort) < 0'>
+                            <div class="d-flex justify-content-between"><span>Change:</span>
+                                <span style="color: red;"><i
+                                        class="bi bi-caret-down-fill"></i>{{portItem.value.currentPrice-portItem.value.totalCost/portItem.value.quantity
+                                    |
+                                    number:'1.2-2'}}</span>
+                            </div>
+                            <div class="d-flex justify-content-between"><span>Current Price:
+                                </span><span style="color: red;">{{portItem.value.currentPrice | number:'1.2-2'}}</span>
+                            </div>
+                            <div class="d-flex justify-content-between"><span>Market Value:
+                                </span><span
+                                    style="color: red;">{{portItem.value.currentPrice-portItem.value.totalCost/portItem.value.quantity
+                                    |
+                                    number:'1.2-2'}}</span></div>
+                        </div>
                     </div>
                 </div>
-                <div class="port-items-right col-md-6">
-                    <div *ngIf='(portItem.value.changeInPort) > 0'>
-                        <div class="d-flex justify-content-between"><span>Change:</span>
-                            <span
-                                style="color: green;"> <i class="bi bi-caret-up-fill"></i>{{portItem.value.currentPrice-portItem.value.totalCost/portItem.value.quantity
-                                |
-                                number:'1.2-2'}}</span>
-                        </div>
-                        <div class="d-flex justify-content-between"><span>Current Price:
-                            </span><span style="color: green;">{{portItem.value.currentPrice | number:'1.2-2'}}</span>
-                        </div>
-                        <div class="d-flex justify-content-between"><span>Market Value:
-                            </span><span
-                                style="color: green;">{{portItem.value.currentPrice-portItem.value.totalCost/portItem.value.quantity
-                                |
-                                number:'1.2-2'}}</span></div>
-                    </div>
-                    
-                    <div *ngIf='(portItem.value.changeInPort) == 0'>
-                        <div class="d-flex justify-content-between"><span>Change:</span>
-                            <span>{{portItem.value.totalCost/portItem.value.quantity-portItem.value.currentPrice |
-                                number:'1.2-2'}}</span>
-                        </div>
-                        <div class="d-flex justify-content-between"><span>Current Price:
-                            </span><span>{{portItem.value.currentPrice | number:'1.2-2'}}</span></div>
-                        <div class="d-flex justify-content-between"><span>Market Value:
-                            </span><span>{{portItem.value.quantity * portItem.value.currentPrice |
-                                number:'1.2-2'}}</span>
-                        </div>
-                    </div>
-                    <div *ngIf='(portItem.value.changeInPort) < 0'>
-                        <div class="d-flex justify-content-between"><span>Change:</span>
-                            <span
-                                style="color: red;"><i class="bi bi-caret-down-fill"></i>{{portItem.value.currentPrice-portItem.value.totalCost/portItem.value.quantity
-                                |
-                                number:'1.2-2'}}</span>
-                        </div>
-                        <div class="d-flex justify-content-between"><span>Current Price:
-                            </span><span style="color: red;">{{portItem.value.currentPrice | number:'1.2-2'}}</span>
-                        </div>
-                        <div class="d-flex justify-content-between"><span>Market Value:
-                            </span><span
-                                style="color: red;">{{portItem.value.currentPrice-portItem.value.totalCost/portItem.value.quantity
-                                |
-                                number:'1.2-2'}}</span></div>
-                    </div>
+                <div class="card-footer d-flex flex-row-reverse p-2">
+                    <button type="button" class="btn btn-danger btn-sm"
+                        (click)="openPortfolioSell(portfolioModalSell,'sell',portItem.key)">Sell</button>
+                    <button type="button" class="btn btn-primary mr-2 btn-sm"
+                        (click)="openPortfolioBuy(portfolioModalBuy,'buy',portItem.key)">Buy</button>
                 </div>
-            </div>
-            <div class="card-footer d-flex flex-row-reverse p-2">
-                <button type="button" class="btn btn-danger btn-sm"
-                    (click)="openPortfolioSell(portfolioModalSell,'sell',portItem.key)">Sell</button>
-                <button type="button" class="btn btn-primary mr-2 btn-sm"
-                    (click)="openPortfolioBuy(portfolioModalBuy,'buy',portItem.key)">Buy</button>
-            </div>
+            <!-- </div> -->
         </div>
     </div>
 </div>

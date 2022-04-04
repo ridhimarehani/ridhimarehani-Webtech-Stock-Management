@@ -63,6 +63,8 @@ export class PortfolioComponent implements OnInit {
     // this.loadPortfolioStockData();
 
     this.loadPortfolioStockData();
+    console.log('portfolioStockDataMap11>>' + JSON.stringify(this.portfolioStockDataMap));
+
     this.showAlerts();
 
 
@@ -93,38 +95,50 @@ export class PortfolioComponent implements OnInit {
   loadPortfolioStockData() {
     Object.keys(localStorage).forEach(data => {
       if (data.includes('-Portfolio')) {
-        this.companyDescription = [];
+        // this.companyDescription = [];
         this.stockPrice = [];
         this.countItem += 1;
         let item: any = localStorage.getItem(data);
         // let portData = item;
-        this.httpService.getData('companyDescription', JSON.parse(item).ticker).subscribe(res => {
-          this.companyDescription = res;
-          // console.log('this.companyDescription>'+JSON.stringify(this.companyDescription));
-          this.httpService.getData('stockPrice', JSON.parse(item).ticker).subscribe(res => {
-            let tickerVal = JSON.parse(item).ticker;
-            let quantity = JSON.parse(item).qty;
-            let amt = JSON.parse(item).amount;
-            this.stockPrice = res;
-            this.stockPriceC = this.stockPrice.c;
+        let itemParsed = JSON.parse(item);
+        console.log('itemmm> ', itemParsed.qty != null && itemParsed.amount != null);
+        if (itemParsed.qty != null && itemParsed.amount != null) {
+          console.log('ssssssss');
+          console.log('JSON.parse(item).ticker>' + JSON.parse(item).ticker);
+          this.httpService.getData('companyDescription', itemParsed.ticker).subscribe(res => {
+            this.companyDescription = res;
+            console.log('resMe> '+JSON.stringify(res));
             this.cName = this.companyDescription.name;
-            this.changeInPort = Math.round(((this.stockPriceC - amt / quantity) + Number.EPSILON) * 100) / 100;
+            console.log('resMe> '+this.companyDescription.name);
 
-            this.portfolioStockDataMap.set(tickerVal, {
-              tickerVal: tickerVal,
-              companyName: this.cName,
-              currentPrice: this.stockPriceC,
-              quantity: quantity,
-              totalCost: amt,
-              changeInPort: this.changeInPort
+            console.log('this.companyDescriptionMap>' + JSON.stringify(this.companyDescription));
+            this.httpService.getData('stockPrice', JSON.parse(item).ticker).subscribe(res => {
+              console.log('resYouu> '+this.companyDescription.name);
+              let tickerVal = itemParsed.ticker;
+              let quantity = itemParsed.qty;
+              let amt = itemParsed.amount;
+              this.stockPrice = res;
+              this.stockPriceC = this.stockPrice.c;
+              this.cName = this.companyDescription.name;
+              this.changeInPort = Math.round(((this.stockPriceC - amt / quantity) + Number.EPSILON) * 100) / 100;
+              console.log('this.companyDescriptionMapMEE>' + this.cName);
+              this.portfolioStockDataMap.set(tickerVal, {
+                tickerVal: tickerVal,
+                companyName: this.cName,
+                currentPrice: this.stockPriceC,
+                quantity: quantity,
+                totalCost: amt,
+                changeInPort: this.changeInPort
 
+              });
+
+              console.log('portfolioStockDataMapAA>>' + (JSON.stringify(this.portfolioStockDataMap.get(tickerVal))));
+              // console.log('portfolioStockDataMapAA>>' + (JSON.stringify(this.portfolioStockDataMap.get('TSLA'))));
             });
-            // console.log('portfolioStockData>> '+JSON.stringify(this.portfolioStockData));
-            // console.log('portfolioStockDataMap>> '+(this.portfolioStockDataMap));
-            // console.log('portfolioStockDataMap>> '+(JSON.stringify(this.portfolioStockDataMap.get('TSLA'))));
-            // console.log('portfolioStockDataMap>> '+(JSON.stringify(this.portfolioStockDataMap.get('AAPL'))));
           });
-        });
+
+        }
+
 
       }
     });
@@ -214,7 +228,9 @@ export class PortfolioComponent implements OnInit {
         localStorage.setItem(this.tickerSymbol + "-Portfolio", JSON.stringify({ "ticker": this.tickerSymbol, "qty": quantity, "amount": total }))
         // this.changeInPort = this.stockPriceC-total/quantity;
         this.changeInPort = Math.round(((this.stockPriceC - total / quantity) + Number.EPSILON) * 100) / 100;
-        this.portfolioStockDataMap.set(stockVal.ticker, {
+        let portfolData = this.portfolioStockDataMap.get(this.tickerSymbol);
+        this.cName = portfolData.companyName;
+        this.portfolioStockDataMap.set(this.tickerSymbol, {
           tickerVal: this.tickerSymbol,
           companyName: this.cName,
           currentPrice: this.stockPriceC,
@@ -255,8 +271,11 @@ export class PortfolioComponent implements OnInit {
       // this.changeInPort = this.stockPriceC-total/stockQ;
       this.changeInPort = Math.round(((this.stockPriceC - total / quantity) + Number.EPSILON) * 100) / 100;
       // this.fetchPortfolio(stockVal);
+
       if (quantity > 0) {
-        this.portfolioStockDataMap.set(stockVal.ticker, {
+        let portfolData = this.portfolioStockDataMap.get(this.tickerSymbol);
+        this.cName = portfolData.companyName;
+        this.portfolioStockDataMap.set(this.tickerSymbol, {
           tickerVal: this.tickerSymbol,
           companyName: this.cName,
           currentPrice: this.stockPriceC,
