@@ -7,14 +7,15 @@
     font-weight: 500;
   }
   
-  .comp-ticker {
-    font-size: 18px;
+  .company-ticker {
+    font-size: 22px;
     font-weight: 500;
   }
   
-  .comp-name {
-    font-size: 12px;
-    font-weight: 500;
+  .company-name {
+    font-size: 16px;
+    /* font-weight: 500; */
+    margin-top: 8px;
   }
   
   .cancel-button {
@@ -25,11 +26,13 @@
   }
   
   .latest-price {
-    font-size: 18px;
+    font-size: 22px;
     font-weight: 500;
+    border-bottom: 10px;
   }
   
   .change-price {
-    font-size: 12px;
-    font-weight: 500;
+    font-size: 16px;
+    margin-top: 8px;
+    /* font-weight: 500; */
   }

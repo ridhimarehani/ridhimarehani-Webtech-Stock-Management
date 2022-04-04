@@ -82,6 +82,17 @@
     </div>
 </ng-template>
 
+<div class="alerts_main d-flex justify-content-center col-md-12 row">
+    <div class="alert-wishlist col-12 col-md-8" *ngIf="buyMessage" (close)="buyMessage = ''">
+        <ngb-alert class="text-center" type="success">{{companyDescription.ticker}} bought
+            successfully</ngb-alert>
+    </div>
+    <div class="alert-wishlist col-12 col-md-8" *ngIf="sellMessage" (close)="sellMessage = ''">
+        <ngb-alert class="text-center" type="danger">{{companyDescription.ticker}} sold
+            successfully</ngb-alert>
+    </div>
+</div>
+
 
 <div class="portfolio-main col-md-12 d-flex flex-column align-items-center">
     <div class="portfolio-heading col-12 col-md-8">

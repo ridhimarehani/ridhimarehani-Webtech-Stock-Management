@@ -6,8 +6,8 @@ import { HttpClient } from '@angular/common/http'; //R
   providedIn: 'root'
 })
 export class HttpService {
-  // private baseUrl = 'http://localhost:8080/'; 
-  private baseUrl = 'https://csci571hw8-backend-346006.wl.r.appspot.com/';
+  private baseUrl = 'http://localhost:8080/'; 
+  // private baseUrl = 'https://csci571hw8-backend-346006.wl.r.appspot.com/';
   urlPath = ''
   constructor(private http: HttpClient) { }
 

@@ -8,6 +8,7 @@ import { StatePreserveService } from '../state-preserve.service';
 })
 export class NavBarComponent implements OnInit {
   public data: string = '';
+  public isCollapsed = false;
   // is
   constructor(private statePreseve: StatePreserveService) { }
 
