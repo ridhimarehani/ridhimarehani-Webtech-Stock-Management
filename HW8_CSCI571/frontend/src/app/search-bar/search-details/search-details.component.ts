@@ -195,24 +195,24 @@ export class SearchDetailsComponent implements OnInit {
     //Lolly
     this._buySuccess.subscribe((message) => (this.buyMessage = message));
     this._buySuccess
-      .pipe(debounceTime(50000))
+      .pipe(debounceTime(5000))
       .subscribe(() => (this.buyMessage = ''));
 
     this._sellSuccess.subscribe((message) => (this.sellMessage = message));
     this._sellSuccess
-      .pipe(debounceTime(50000))
+      .pipe(debounceTime(5000))
       .subscribe(() => (this.sellMessage = ''));
 
     this._watchlistAdd.subscribe((message) => (this.addMessage = message));
     this._watchlistAdd
-      .pipe(debounceTime(50000))
+      .pipe(debounceTime(5000))
       .subscribe(() => (this.addMessage = ''));
 
     this._watchlistRemove.subscribe(
       (message) => (this.removeMessage = message)
     );
     this._watchlistRemove
-      .pipe(debounceTime(50000))
+      .pipe(debounceTime(5000))
       .subscribe(() => (this.removeMessage = ''));
 
     let money: any = localStorage.getItem('moneyInWallet');
