@@ -8,11 +8,11 @@
 
 
 <div class="valid-data" *ngIf="!invalidTicker">
-  <div class="spinner-container d-flex justify-content-center" *ngIf="spinner">
+  <div class="spinner-container d-flex justify-content-center" *ngIf="showspinner">
     <mat-progress-spinner class="mat-spinner" [diameter]="50" color="primary" mode="indeterminate">
     </mat-progress-spinner>
   </div>
-  <div class="main-container row justify-content-center mx-0" *ngIf="!spinner">
+  <div class="main-container row justify-content-center mx-0" *ngIf="!showspinner">
     <div class="alerts_main d-flex justify-content-center col-md-12 row">
       <div class="alert-wishlist col-12 col-md-8" *ngIf="addMessage" (close)="addMessage = ''">
         <ngb-alert #alert class="text-center" type="success" [dismissible]="false">{{companyDescription.ticker}} added

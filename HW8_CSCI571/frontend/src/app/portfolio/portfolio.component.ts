@@ -26,8 +26,8 @@ export class PortfolioComponent implements OnInit {
   changeInPort = 0;
 
   //Lolly
-  private _buySuccess = new Subject<string>();
-  private _sellSuccess = new Subject<string>();
+  private buySuccessMessage = new Subject<string>();
+  private sellSuccessMessage = new Subject<string>();
   buyMessage = '';
   sellMessage = '';
   // moneyLeft: any;
@@ -77,17 +77,20 @@ export class PortfolioComponent implements OnInit {
       this.alertPortfolio = true;
     }
 
-    this._buySuccess.subscribe(
+    this.buySuccessMessage.subscribe(
       (message) => (this.buyMessage = message)
     );
-    this._buySuccess
+
+    this.sellSuccessMessage.subscribe(
+      (message) => (this.sellMessage = message)
+    );
+
+    this.buySuccessMessage
       .pipe(debounceTime(5000))
       .subscribe(() => (this.buyMessage = ''));
 
-    this._sellSuccess.subscribe(
-      (message) => (this.sellMessage = message)
-    );
-    this._sellSuccess
+
+    this.sellSuccessMessage
       .pipe(debounceTime(5000))
       .subscribe(() => (this.sellMessage = ''));
   }
@@ -101,19 +104,19 @@ export class PortfolioComponent implements OnInit {
         let item: any = localStorage.getItem(data);
         // let portData = item;
         let itemParsed = JSON.parse(item);
-        console.log('itemmm> ', itemParsed.qty != null && itemParsed.amount != null);
+        // console.log('itemmm> ', itemParsed.qty != null && itemParsed.amount != null);
         if (itemParsed.qty != null && itemParsed.amount != null) {
-          console.log('ssssssss');
-          console.log('JSON.parse(item).ticker>' + JSON.parse(item).ticker);
+          // console.log('ssssssss');
+          // console.log('JSON.parse(item).ticker>' + JSON.parse(item).ticker);
           this.httpService.getData('companyDescription', itemParsed.ticker).subscribe(res => {
             this.companyDescription = res;
-            console.log('resMe> '+JSON.stringify(res));
+            // console.log('resMe> ' + JSON.stringify(res));
             this.cName = this.companyDescription.name;
-            console.log('resMe> '+this.companyDescription.name);
+            // console.log('resMe> ' + this.companyDescription.name);
 
-            console.log('this.companyDescriptionMap>' + JSON.stringify(this.companyDescription));
+            // console.log('this.companyDescriptionMap>' + JSON.stringify(this.companyDescription));
             this.httpService.getData('stockPrice', JSON.parse(item).ticker).subscribe(res => {
-              console.log('resYouu> '+this.companyDescription.name);
+              // console.log('resYouu> ' + this.companyDescription.name);
               let tickerVal = itemParsed.ticker;
               let quantity = itemParsed.qty;
               let amt = itemParsed.amount;
@@ -121,7 +124,7 @@ export class PortfolioComponent implements OnInit {
               this.stockPriceC = this.stockPrice.c;
               this.cName = this.companyDescription.name;
               this.changeInPort = Math.round(((this.stockPriceC - amt / quantity) + Number.EPSILON) * 100) / 100;
-              console.log('this.companyDescriptionMapMEE>' + this.cName);
+              // console.log('this.companyDescriptionMapMEE>' + this.cName);
               this.portfolioStockDataMap.set(tickerVal, {
                 tickerVal: tickerVal,
                 companyName: this.cName,
@@ -132,7 +135,7 @@ export class PortfolioComponent implements OnInit {
 
               });
 
-              console.log('portfolioStockDataMapAA>>' + (JSON.stringify(this.portfolioStockDataMap.get(tickerVal))));
+              // console.log('portfolioStockDataMapAA>>' + (JSON.stringify(this.portfolioStockDataMap.get(tickerVal))));
               // console.log('portfolioStockDataMapAA>>' + (JSON.stringify(this.portfolioStockDataMap.get('TSLA'))));
             });
           });
@@ -146,8 +149,8 @@ export class PortfolioComponent implements OnInit {
 
 
   openPortfolioBuy(portfolioModalBuy: any, stockDeal: any, val_port: any) {
-    console.log('stockDeal> ' + stockDeal);
-    console.log('val_port> ' + val_port);
+    // console.log('stockDeal> ' + stockDeal);
+    // console.log('val_port> ' + val_port);
     this.enteredQuantity = 0
     if (stockDeal === 'buy') {
       this.stockBuy = true;
@@ -203,7 +206,7 @@ export class PortfolioComponent implements OnInit {
 
   buyStock(tickerSymbol: any) {
     // this.modal.close(this.portfolioModal)
-    this._buySuccess.next('Message successfully changed.');
+    this.buySuccessMessage.next('Message successfully changed.');
     this.portfolio_add = true;
     this.tickerSymbol = tickerSymbol;
     if (this.enteredQuantity > 0) {
@@ -249,7 +252,7 @@ export class PortfolioComponent implements OnInit {
   }
 
   sellStock(tickerSymbol: any) {
-    this._sellSuccess.next('Message successfully changed.');
+    this.sellSuccessMessage.next('Message successfully changed.');
     this.portfolio_remove = true;
     this.tickerSymbol = tickerSymbol;
     if (this.enteredQuantitySell > 0) {
