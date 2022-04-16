@@ -11,9 +11,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -21,8 +23,11 @@ public class MainActivity extends AppCompatActivity {
     List<HomeSections> homeSectionList = new ArrayList<>();
     RecyclerView homeRecView;
     RecyclerView portfolioRecView;
-    PortfolioRecyclerAdapter portRecAdaptor;
+//    PortfolioRecyclerAdapter portRecAdaptor;
     List<List<String>> portfolioItems;
+    List<List<String>> favoriteItems;
+//    SectionedRecyclerViewAdapter sectionAdapter = new SectionedRecyclerViewAdapter();
+    private SectionedRecyclerViewAdapter sectionedAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,38 +35,47 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         System.out.println("Inside onCreate");
         loadData();
-        portfolioRecycle();
-        homeRecycle();
+        setSections();
+
+//        portfolioRecycle();
 
 
     }
 
-    private void homeRecycle(){
-        homeRecView = findViewById(R.id.homeRecycler);
-        Log.i(TAG1, "homeRecycle: "+homeSectionList);
-        HomeRecyclerAdapter homeRecyclerAdapter = new HomeRecyclerAdapter(homeSectionList);
-//        setValsNetWorth();
-        homeRecView.setAdapter(homeRecyclerAdapter);
+    private void setSections(){
+        portfolioItems = new ArrayList<>();
+        portfolioItems = homeSectionList.get(0).getSecItems();
+        favoriteItems = new ArrayList<>();
+        favoriteItems = homeSectionList.get(1).getSecItems();
 
-        homeRecView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
-//        setValsNetWorth();
+        sectionedAdapter = new SectionedRecyclerViewAdapter();
+
+        //Setting Sections Start
+        sectionedAdapter.addSection(new HomeDateSection());
+        sectionedAdapter.addSection(new HomePortfolioSection(portfolioItems));
+        sectionedAdapter.addSection(new HomeFavoriteSection(favoriteItems));
+        //Setting Sections End
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.home_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(sectionedAdapter);
+    }
+    private void setHomeDateSection(){
+
     }
 
-    private void setValsNetWorth(){
-        PortfolioConstraintHeader portConstraintLayout = new PortfolioConstraintHeader(this);
-        setContentView(portConstraintLayout );
-    }
 
     private void portfolioRecycle(){
 
-        portfolioItems = new ArrayList<>();
-        portfolioItems = homeSectionList.get(0).getSecItems();
-        portfolioRecView = findViewById(R.id.portfolioRecyclerView);
-//        portfolioRecView.setVisibility(View.GONE); To hide a view based on a condition
-        portRecAdaptor = new PortfolioRecyclerAdapter(portfolioItems);
-        portfolioRecView.setAdapter(portRecAdaptor);
-        DividerItemDecoration dividerLine = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
-        portfolioRecView.addItemDecoration(dividerLine);
+//        portfolioItems = new ArrayList<>();
+//        portfolioItems = homeSectionList.get(0).getSecItems();
+//
+//        portfolioRecView = findViewById(R.id.portfolioRecyclerView);
+////        portfolioRecView.setVisibility(View.GONE); To hide a view based on a condition
+//        portRecAdaptor = new PortfolioRecyclerAdapter(portfolioItems);
+//        portfolioRecView.setAdapter(portRecAdaptor);
+//        DividerItemDecoration dividerLine = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
+//        portfolioRecView.addItemDecoration(dividerLine);
 
     }
 

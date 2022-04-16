@@ -4,6 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/home_date_section.xml" value="0.15520833333333334" />
+        <entry key="app/src/main/res/layout/home_section_headers.xml" value="0.15885416666666666" />
+        <entry key="app/src/main/res/layout/home_section_port_header.xml" value="0.335" />
         <entry key="app/src/main/res/layout/portfolio_header.xml" value="0.25" />
         <entry key="app/src/main/res/layout/portfolio_row.xml" value="0.15081521739130435" />
         <entry key="app/src/main/res/layout/ticker_item.xml" value="0.375" />

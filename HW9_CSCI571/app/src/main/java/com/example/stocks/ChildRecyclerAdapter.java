@@ -44,8 +44,8 @@ public class ChildRecyclerAdapter extends RecyclerView.Adapter<ChildRecyclerAdap
 
         public ChildViewHolder(@NonNull View itemView) {
             super(itemView);
-            tickerName = itemView.findViewById(R.id.tickerSym);
-            numShares = itemView.findViewById(R.id.numShares);
+            tickerName = itemView.findViewById(R.id.ticker_Sym);
+            numShares = itemView.findViewById(R.id.num_Shares);
         }
     }
 }
