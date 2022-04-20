@@ -36,6 +36,8 @@ public class HomeFavoriteSection extends Section {
         HomeFavoriteSection.HomeFavoriteSectionView portfolioHolder = (HomeFavoriteSection.HomeFavoriteSectionView)holder;
         portfolioHolder.tickerName.setText(favoriteItems.get(position).get(0));
         portfolioHolder.numShares.setText(favoriteItems.get(position).get(1));
+        portfolioHolder.currentPrice.setText("$3279.69");
+        portfolioHolder.priceChange.setText("$0.45 (0.09%)");
 
     }
 
@@ -51,12 +53,14 @@ public class HomeFavoriteSection extends Section {
     }
 
     class HomeFavoriteSectionView extends RecyclerView.ViewHolder{
-        private TextView tickerName,numShares;
+        private TextView tickerName, numShares, currentPrice, priceChange;
 
         public HomeFavoriteSectionView(View itemView){
             super(itemView);
             tickerName = (TextView) itemView.findViewById(R.id.ticker_Sym);
             numShares = (TextView) itemView.findViewById(R.id.num_Shares);
+            currentPrice = (TextView) itemView.findViewById(R.id.current_price);
+            priceChange = (TextView) itemView.findViewById(R.id.change_in_price);
         }
     }
 
