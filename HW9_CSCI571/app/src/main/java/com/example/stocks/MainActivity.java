@@ -4,7 +4,6 @@ package com.example.stocks;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,6 +13,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 //        mainActivityScroll = (NestedScrollView) findViewById(R.id.main_activity_content);
         setContentView(R.layout.activity_main);
-        mainConstraintLayout = findViewById(R.id.main_constraint_layout);
+        mainConstraintLayout = findViewById(R.id.home_section_port_header);
         System.out.println("Inside onCreate");
         writeLocalStorage();
         readLocalStorage();
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Setting Sections Start
         sectionedAdapter.addSection(new HomeDateSection());
-        sectionedAdapter.addSection(new HomePortfolioSection(portfolioItems1,netWorthValue,cashBalance));
+//        sectionedAdapter.addSection(new HomePortfolioSection(portfolioItems1,netWorthValue,cashBalance));
         sectionedAdapter.addSection(new HomeFavoriteSection(favoriteItems1));
         sectionedAdapter.addSection(new HomeFinhubSection());
         //Setting Sections End
@@ -195,16 +195,40 @@ public class MainActivity extends AppCompatActivity {
 //        portfolioItems = new ArrayList<>();
 //
 //        portfolioItems = homeSectionList.get(0).getSecItems();
+        setPortfolioHeadings();
         List<String> portTempList = new ArrayList<>();
         portTempList.add("TSLA");
         portTempList.add("AAPL");
 
+
+
         portfolioRecView = findViewById(R.id.portfolioRecyclerView);
 //        portfolioRecView.setVisibility(View.GONE); To hide a view based on a condition
         portRecAdaptor = new PortfolioRecyclerAdapter(portTempList);
+        ItemTouchHelper.Callback callback =new ItemMoveCallback(portRecAdaptor);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(portfolioRecView);
         portfolioRecView.setAdapter(portRecAdaptor);
         DividerItemDecoration dividerLine = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
         portfolioRecView.addItemDecoration(dividerLine);
+
+    }
+
+    private void setPortfolioHeadings(){
+        String netWorthValue = "$25000.00";
+        String cashBalance = "$12000.00";
+        TextView sectionHeading, netWorthHead, cashBalanceHead, netWorthVal, cashBalanceVal;
+        sectionHeading = findViewById(R.id.portfolio_heading_text);
+        netWorthHead = findViewById(R.id.portfolio_net_worth_head);
+        netWorthVal = findViewById(R.id.portfolio_net_worth_val);
+        cashBalanceHead = findViewById(R.id.portfolio_cash_bal_head);
+        cashBalanceVal = findViewById(R.id.protfolio_cash_bal_val);
+
+        sectionHeading.setText("PORTFOLIO");
+        netWorthHead.setText("Net Worth");
+        netWorthVal.setText(netWorthValue);
+        cashBalanceHead.setText("Cash Balance");
+        cashBalanceVal.setText(cashBalance);
 
     }
     private void enableSwipeToDeleteAndUndo() {

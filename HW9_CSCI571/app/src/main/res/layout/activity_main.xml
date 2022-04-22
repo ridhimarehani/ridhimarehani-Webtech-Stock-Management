@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:id="@+id/main_constraint_layout">
+    android:id="@+id/home_section_port_header">
 
 <!--    <androidx.core.widget.NestedScrollView-->
 <!--        android:id="@+id/main_activity_content"-->
@@ -13,37 +13,184 @@
 <!--        android:layout_height="match_parent"-->
 <!--        context=".MainActivity">-->
 
+    <!--    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--        xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--        xmlns:tools="http://schemas.android.com/tools"-->
+<!--        android:layout_below = "@+id/home_recycler_view"-->
+<!--        android:id="@+id/home_section_port_header"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        >-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/portfolio_heading_text"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="29dp"-->
+<!--            android:background="#dcdee0"-->
+<!--            android:paddingLeft="18dp"-->
+<!--            android:textAppearance="@style/TextAppearance.AppCompat.Medium"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textStyle="bold" />-->
+
+<!--        <GridLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_below="@+id/portfolio_heading_text"-->
+<!--            android:columnCount="2"-->
+<!--            android:paddingLeft="18dp"-->
+<!--            android:rowCount="2">-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/portfolio_net_worth_head"-->
+<!--                android:layout_width="226dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_rowWeight="1"-->
+<!--                android:layout_columnWeight="1"-->
+<!--                android:textAppearance="@style/TextAppearance.AppCompat.Large"-->
+<!--                android:textColor="#707070"-->
+<!--                android:textStyle="bold" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/protfolio_cash_bal_head"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_rowWeight="1"-->
+<!--                android:layout_columnWeight="1"-->
+<!--                android:textAppearance="@style/TextAppearance.AppCompat.Large"-->
+<!--                android:textColor="#707070"-->
+<!--                android:textStyle="bold" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/portfolio_net_worth_val"-->
+<!--                android:layout_width="171dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_rowWeight="1"-->
+<!--                android:layout_columnWeight="1"-->
+<!--                android:text="TextView"-->
+<!--                android:textAppearance="@style/TextAppearance.AppCompat.Large"-->
+<!--                android:textColor="#707070"-->
+<!--                android:textStyle="bold" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/protfolio_cash_bal_val"-->
+<!--                android:layout_width="151dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_rowWeight="1"-->
+<!--                android:layout_columnWeight="1"-->
+<!--                android:text="TextView"-->
+<!--                android:textAppearance="@style/TextAppearance.AppCompat.Large"-->
+<!--                android:textColor="#707070"-->
+<!--                android:textStyle="bold" />-->
+
+
+<!--        </GridLayout>-->
+<!--    </RelativeLayout>-->
+
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/home_recycler_view"
+        android:layout_width="413dp"
+        android:layout_height="204dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/portfolio_heading_text"
+        android:layout_width="match_parent"
+        android:layout_height="29dp"
+        android:layout_marginTop="10dp"
+        android:background="#dcdee0"
+        android:paddingLeft="18dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/home_recycler_view"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <GridLayout
+        android:id="@+id/gridLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:paddingLeft="18dp"
+        android:rowCount="2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/portfolio_heading_text">
+
+        <TextView
+            android:id="@+id/portfolio_net_worth_head"
+            android:layout_width="163dp"
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_rowWeight="1"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#707070"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/portfolio_cash_bal_head"
+            android:layout_width="117dp"
+            android:layout_height="wrap_content"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:text="Cash"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#707070"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/portfolio_net_worth_val"
+            android:layout_width="182dp"
+            android:layout_height="20dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:text="TextView"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#707070"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/protfolio_cash_bal_val"
+            android:layout_width="151dp"
+            android:layout_height="wrap_content"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:text="TextView"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#707070"
+            android:textStyle="bold" />
+
+
+    </GridLayout>
+
+
+
+
+    <!--    </androidx.core.widget.NestedScrollView>-->
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="31dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintTop_toBottomOf="@+id/gridLayout"
+        tools:layout_editor_absoluteX="2dp" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/portfolioRecyclerView"
         android:layout_width="410dp"
-        android:layout_height="180dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/home_recycler_view"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/homeRecycler"
-        android:layout_width="408dp"
-        android:layout_height="2dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="722dp" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/home_recycler_view"
-        android:layout_width="413dp"
-        android:layout_height="539dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-<!--    </androidx.core.widget.NestedScrollView>-->
+        app:layout_constraintTop_toBottomOf="@+id/gridLayout"
+        app:layout_constraintVertical_bias="0.265" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

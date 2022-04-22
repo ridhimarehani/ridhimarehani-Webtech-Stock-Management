@@ -12,7 +12,7 @@ public class HomeHeadingsViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         sectionHeading = itemView.findViewById(R.id.portfolio_heading_text);
         netWorthHead = itemView.findViewById(R.id.portfolio_net_worth_head);
-        cashBalanceHead = itemView.findViewById(R.id.protfolio_cash_bal_head);
+        cashBalanceHead = itemView.findViewById(R.id.portfolio_cash_bal_head);
         netWorthVal = itemView.findViewById(R.id.portfolio_net_worth_val);
         cashBalanceVal = itemView.findViewById(R.id.protfolio_cash_bal_val);
     }

@@ -9,11 +9,11 @@ import androidx.recyclerview.widget.RecyclerView;
 //import android.support.v7.widget.RecyclerView;
 //import android.support.v7.widget.helper.ItemTouchHelper;
 
-public class HomeStockMovement extends ItemTouchHelper.Callback {
+public class ItemMoveCallback extends ItemTouchHelper.Callback{
 
     private final ItemTouchHelperContract mAdapter;
 
-    public HomeStockMovement(ItemTouchHelperContract adapter) {
+    public ItemMoveCallback(ItemTouchHelperContract adapter) {
         mAdapter = adapter;
     }
 
@@ -68,9 +68,9 @@ public class HomeStockMovement extends ItemTouchHelper.Callback {
                           RecyclerView.ViewHolder viewHolder) {
         super.clearView(recyclerView, viewHolder);
 
-        if (viewHolder instanceof RecyclerViewAdapter.MyViewHolder) {
-            RecyclerViewAdapter.MyViewHolder myViewHolder=
-                    (RecyclerViewAdapter.MyViewHolder) viewHolder;
+        if (viewHolder instanceof PortfolioRecyclerAdapter.PortfolioViewHolder) {
+            PortfolioRecyclerAdapter.PortfolioViewHolder myViewHolder=
+                    (PortfolioRecyclerAdapter.PortfolioViewHolder) viewHolder;
             mAdapter.onRowClear(myViewHolder);
         }
     }
@@ -78,8 +78,8 @@ public class HomeStockMovement extends ItemTouchHelper.Callback {
     public interface ItemTouchHelperContract {
 
         void onRowMoved(int fromPosition, int toPosition);
-        void onRowSelected(RecyclerViewAdapter.MyViewHolder myViewHolder);
-        void onRowClear(RecyclerViewAdapter.MyViewHolder myViewHolder);
+        void onRowSelected(PortfolioRecyclerAdapter.PortfolioViewHolder myViewHolder);
+        void onRowClear(PortfolioRecyclerAdapter.PortfolioViewHolder myViewHolder);
 
     }
 
