@@ -16,12 +16,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 public class PortfolioRecyclerAdapter extends RecyclerView.Adapter<PortfolioRecyclerAdapter.PortfolioViewHolder> implements ItemMoveCallback.ItemTouchHelperContract{
-    List<String> portItems;
+    public List<List<String >> portfolioItems;
     private static final String TAG = "PortfolioRecyclerAdapter";
 
-    public PortfolioRecyclerAdapter(List<String> portItems) {
-        this.portItems = portItems;
+    public PortfolioRecyclerAdapter(List<List<String>> portfolioItems) {
+        this.portfolioItems = portfolioItems;
     }
+//    public PortfolioRecyclerAdapter(List<List<String>> portItems, String netWorth, String cashBalance) {
+//        this.portItems = portItems;
+//    }
 
     @NonNull
     @Override
@@ -43,7 +46,10 @@ public class PortfolioRecyclerAdapter extends RecyclerView.Adapter<PortfolioRecy
 //        holder.portShareCount.setText(portItems.get(position).get(1));
         Log.i(TAG, "onBindViewHolder: ");
         //Binding values for Portfolio Row
-        holder.portTickerText.setText(portItems.get(position)); // 0  for ticker Symbol, 1 for share count
+        holder.portTickerText.setText(portfolioItems.get(position).get(0)); // 0  for ticker Symbol, 1 for share count
+        holder.numShares.setText(portfolioItems.get(position).get(1));
+        holder.currentPrice.setText("$3279.69");
+        holder.priceChange.setText("$0.45 (0.09%)");
 
         //Binding Values for Header
 //        holder.sectionHeading.setText("PORTFOLIO");
@@ -56,30 +62,30 @@ public class PortfolioRecyclerAdapter extends RecyclerView.Adapter<PortfolioRecy
 
     @Override
     public int getItemCount() {
-        return portItems.size();
+        return portfolioItems.size();
     }
 
-    public int getItemViewType(int position){
-        if (position == 0){
-            return 0;
-        }
-        else {
-            return 1;
-        }
-    }
+//    public int getItemViewType(int position){
+//        if (position == 0){
+//            return 0;
+//        }
+//        else {
+//            return 1;
+//        }
+//    }
 
     //Methods for Swipe to Delete Start
-    public List<String> getData() {
-        return portItems;
+    public List<List<String>> getData() {
+        return portfolioItems;
     }
 
     public void removeItem(int position) {
-        portItems.remove(position);
+        portfolioItems.remove(position);
         notifyItemRemoved(position);
     }
 
-    public void restoreItem(String item, int position) {
-        portItems.add(position, item);
+    public void restoreItem(List<String> item, int position) {
+        portfolioItems.add(position, item);
         notifyItemInserted(position);
     }
     //Methods for Swipe to Delete End
@@ -91,11 +97,11 @@ public class PortfolioRecyclerAdapter extends RecyclerView.Adapter<PortfolioRecy
     public void onRowMoved(int fromPosition, int toPosition) {
         if (fromPosition < toPosition) {
             for (int i = fromPosition; i < toPosition; i++) {
-                Collections.swap(portItems, i, i + 1);
+                Collections.swap(portfolioItems, i, i + 1);
             }
         } else {
             for (int i = fromPosition; i > toPosition; i--) {
-                Collections.swap(portItems, i, i - 1);
+                Collections.swap(portfolioItems, i, i - 1);
             }
         }
         notifyItemMoved(fromPosition, toPosition);
@@ -111,11 +117,10 @@ public class PortfolioRecyclerAdapter extends RecyclerView.Adapter<PortfolioRecy
     public void onRowClear(PortfolioViewHolder myViewHolder) {
         myViewHolder.rowView.setBackgroundColor(Color.WHITE);
     }
-
     //Methods for Reodering End
 
     class PortfolioViewHolder extends RecyclerView.ViewHolder {
-        TextView portTickerText, portShareCount,sectionHeading, netWorthHead, cashBalanceHead, netWorthVal, cashBalanceVal;
+        TextView portTickerText, numShares, currentPrice, priceChange;
         View rowView;
 
         public PortfolioViewHolder(@NonNull View itemView) {
@@ -128,6 +133,9 @@ public class PortfolioRecyclerAdapter extends RecyclerView.Adapter<PortfolioRecy
             //For portfolio Row
             portTickerText = itemView.findViewById(R.id.ticker_Sym);
 //            portShareCount = itemView.findViewById(R.id.portNumShares);
+            numShares = (TextView) itemView.findViewById(R.id.num_Shares);
+            currentPrice = (TextView) itemView.findViewById(R.id.current_price);
+            priceChange = (TextView) itemView.findViewById(R.id.change_in_price);
 
         }
     }

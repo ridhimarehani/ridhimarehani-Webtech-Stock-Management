@@ -2,111 +2,112 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_section_port_header"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:id="@+id/home_section_port_header">
+    android:layout_height="wrap_content"
+    tools:context=".MainActivity">
 
-<!--    <androidx.core.widget.NestedScrollView-->
-<!--        android:id="@+id/main_activity_content"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        context=".MainActivity">-->
+    <!--    <androidx.core.widget.NestedScrollView-->
+    <!--        android:id="@+id/main_activity_content"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        context=".MainActivity">-->
 
     <!--    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--        xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--        xmlns:tools="http://schemas.android.com/tools"-->
-<!--        android:layout_below = "@+id/home_recycler_view"-->
-<!--        android:id="@+id/home_section_port_header"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        >-->
+    <!--        xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--        xmlns:tools="http://schemas.android.com/tools"-->
+    <!--        android:layout_below = "@+id/home_recycler_view"-->
+    <!--        android:id="@+id/home_section_port_header"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        >-->
 
-<!--        <TextView-->
-<!--            android:id="@+id/portfolio_heading_text"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="29dp"-->
-<!--            android:background="#dcdee0"-->
-<!--            android:paddingLeft="18dp"-->
-<!--            android:textAppearance="@style/TextAppearance.AppCompat.Medium"-->
-<!--            android:textColor="@color/black"-->
-<!--            android:textStyle="bold" />-->
+    <!--        <TextView-->
+    <!--            android:id="@+id/portfolio_heading_text"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="29dp"-->
+    <!--            android:background="#dcdee0"-->
+    <!--            android:paddingLeft="18dp"-->
+    <!--            android:textAppearance="@style/TextAppearance.AppCompat.Medium"-->
+    <!--            android:textColor="@color/black"-->
+    <!--            android:textStyle="bold" />-->
 
-<!--        <GridLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_below="@+id/portfolio_heading_text"-->
-<!--            android:columnCount="2"-->
-<!--            android:paddingLeft="18dp"-->
-<!--            android:rowCount="2">-->
+    <!--        <GridLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_below="@+id/portfolio_heading_text"-->
+    <!--            android:columnCount="2"-->
+    <!--            android:paddingLeft="18dp"-->
+    <!--            android:rowCount="2">-->
 
-<!--            <TextView-->
-<!--                android:id="@+id/portfolio_net_worth_head"-->
-<!--                android:layout_width="226dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_rowWeight="1"-->
-<!--                android:layout_columnWeight="1"-->
-<!--                android:textAppearance="@style/TextAppearance.AppCompat.Large"-->
-<!--                android:textColor="#707070"-->
-<!--                android:textStyle="bold" />-->
+    <!--            <TextView-->
+    <!--                android:id="@+id/portfolio_net_worth_head"-->
+    <!--                android:layout_width="226dp"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_rowWeight="1"-->
+    <!--                android:layout_columnWeight="1"-->
+    <!--                android:textAppearance="@style/TextAppearance.AppCompat.Large"-->
+    <!--                android:textColor="#707070"-->
+    <!--                android:textStyle="bold" />-->
 
-<!--            <TextView-->
-<!--                android:id="@+id/protfolio_cash_bal_head"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_rowWeight="1"-->
-<!--                android:layout_columnWeight="1"-->
-<!--                android:textAppearance="@style/TextAppearance.AppCompat.Large"-->
-<!--                android:textColor="#707070"-->
-<!--                android:textStyle="bold" />-->
+    <!--            <TextView-->
+    <!--                android:id="@+id/protfolio_cash_bal_head"-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_rowWeight="1"-->
+    <!--                android:layout_columnWeight="1"-->
+    <!--                android:textAppearance="@style/TextAppearance.AppCompat.Large"-->
+    <!--                android:textColor="#707070"-->
+    <!--                android:textStyle="bold" />-->
 
-<!--            <TextView-->
-<!--                android:id="@+id/portfolio_net_worth_val"-->
-<!--                android:layout_width="171dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_rowWeight="1"-->
-<!--                android:layout_columnWeight="1"-->
-<!--                android:text="TextView"-->
-<!--                android:textAppearance="@style/TextAppearance.AppCompat.Large"-->
-<!--                android:textColor="#707070"-->
-<!--                android:textStyle="bold" />-->
+    <!--            <TextView-->
+    <!--                android:id="@+id/portfolio_net_worth_val"-->
+    <!--                android:layout_width="171dp"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_rowWeight="1"-->
+    <!--                android:layout_columnWeight="1"-->
+    <!--                android:text="TextView"-->
+    <!--                android:textAppearance="@style/TextAppearance.AppCompat.Large"-->
+    <!--                android:textColor="#707070"-->
+    <!--                android:textStyle="bold" />-->
 
-<!--            <TextView-->
-<!--                android:id="@+id/protfolio_cash_bal_val"-->
-<!--                android:layout_width="151dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_rowWeight="1"-->
-<!--                android:layout_columnWeight="1"-->
-<!--                android:text="TextView"-->
-<!--                android:textAppearance="@style/TextAppearance.AppCompat.Large"-->
-<!--                android:textColor="#707070"-->
-<!--                android:textStyle="bold" />-->
-
-
-<!--        </GridLayout>-->
-<!--    </RelativeLayout>-->
+    <!--            <TextView-->
+    <!--                android:id="@+id/protfolio_cash_bal_val"-->
+    <!--                android:layout_width="151dp"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_rowWeight="1"-->
+    <!--                android:layout_columnWeight="1"-->
+    <!--                android:text="TextView"-->
+    <!--                android:textAppearance="@style/TextAppearance.AppCompat.Large"-->
+    <!--                android:textColor="#707070"-->
+    <!--                android:textStyle="bold" />-->
 
 
+    <!--        </GridLayout>-->
+    <!--    </RelativeLayout>-->
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/home_recycler_view"
-        android:layout_width="413dp"
-        android:layout_height="204dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/home_date_sec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:padding="10dp"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="bold"
+        android:textColor="#707070"/>
+
 
     <TextView
         android:id="@+id/portfolio_heading_text"
         android:layout_width="match_parent"
-        android:layout_height="29dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
         android:background="#dcdee0"
         android:paddingLeft="18dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/black"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/home_recycler_view"
+        app:layout_constraintTop_toBottomOf="@+id/home_date_sec"
         tools:layout_editor_absoluteX="0dp" />
 
     <GridLayout
@@ -168,29 +169,63 @@
     </GridLayout>
 
 
-
-
     <!--    </androidx.core.widget.NestedScrollView>-->
 
     <View
+        android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="31dp"
+        android:layout_marginTop="12dp"
         android:background="@android:color/darker_gray"
         app:layout_constraintTop_toBottomOf="@+id/gridLayout"
         tools:layout_editor_absoluteX="2dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/portfolioRecyclerView"
-        android:layout_width="410dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gridLayout"
-        app:layout_constraintVertical_bias="0.265" />
+        app:layout_constraintTop_toBottomOf="@+id/gridLayout" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/home_section_fav_header"
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="510dp">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/home_header_fav_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#dcdee0"
+        android:paddingLeft="18dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/portfolioRecyclerView" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/favoriteRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="312dp"
+        app:layout_constraintTop_toBottomOf="@+id/home_header_fav_text"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <TextView
+        android:id="@+id/finhub_link"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.379"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/favoriteRecycler" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

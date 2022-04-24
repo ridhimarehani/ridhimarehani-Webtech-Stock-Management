@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -21,7 +22,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -31,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     List<HomeSections> homeSectionList = new ArrayList<>();
     PortfolioRecyclerAdapter portRecAdaptor;
     RecyclerView portfolioRecView;
+    FavoriteRecyclerAdapter favRecAdapter;
+    RecyclerView favoriteRecView;
 //    NestedScrollView mainActivityScroll;
 
     List<List<String>> portfolioItems;
@@ -50,10 +56,14 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("Inside onCreate");
         writeLocalStorage();
         readLocalStorage();
-        setSections();
-
+//        setSections();
+        setHomeDateSection();
         portfolioRecycle();
+        favoriteRecycle();
+        setHomeFinnhubFooter();
+        enableSwipeToDeleteAndUndoFavorite();
         enableSwipeToDeleteAndUndo();
+
 
 
     }
@@ -66,25 +76,35 @@ public class MainActivity extends AppCompatActivity {
         String netWorthValue = "$25000.00";
         String cashBalance = "$12000.00";
 
-        sectionedAdapter = new SectionedRecyclerViewAdapter();
+        //sectionedAdapter = new SectionedRecyclerViewAdapter();
 
         //Setting Sections Start
-        sectionedAdapter.addSection(new HomeDateSection());
+        //sectionedAdapter.addSection(new HomeDateSection());
 //        sectionedAdapter.addSection(new HomePortfolioSection(portfolioItems1,netWorthValue,cashBalance));
-        sectionedAdapter.addSection(new HomeFavoriteSection(favoriteItems1));
-        sectionedAdapter.addSection(new HomeFinhubSection());
+//        sectionedAdapter.addSection(new HomeFavoriteSection(favoriteItems1));
+        //sectionedAdapter.addSection(new HomeFinhubSection());
         //Setting Sections End
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.home_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(sectionedAdapter);
-        DividerItemDecoration dividerLine = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
-        recyclerView.addItemDecoration(dividerLine);
+//        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.home_recycler_view);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        recyclerView.setAdapter(sectionedAdapter);
+//        DividerItemDecoration dividerLine = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
+//        recyclerView.addItemDecoration(dividerLine);
     }
     private void setHomeDateSection(){
-
+        TextView homeDate;
+        homeDate = findViewById(R.id.home_date_sec);
+        String timeStamp = new SimpleDateFormat("dd MMMM yyyy").format(Calendar.getInstance().getTime());
+        homeDate.setText(timeStamp);
     }
 
+    private void setHomeFinnhubFooter(){
+
+        TextView finhubLink = findViewById(R.id.finhub_link);
+        String value = "<html><a href=\"https://www.finnhub.io\" style=\"color: black;\">Powered by Finnhub</a> </html>";
+        finhubLink.setText(Html.fromHtml(value));
+
+    }
 
     private void writeLocalStorage(){
         SharedPreferences sharedPref = getSharedPreferences("LocalStorageValues",MODE_PRIVATE);
@@ -196,18 +216,20 @@ public class MainActivity extends AppCompatActivity {
 //
 //        portfolioItems = homeSectionList.get(0).getSecItems();
         setPortfolioHeadings();
-        List<String> portTempList = new ArrayList<>();
-        portTempList.add("TSLA");
-        portTempList.add("AAPL");
+//        List<String> portTempList = new ArrayList<>();
+//        portTempList.add("TSLA");
+//        portTempList.add("AAPL");
 
 
 
         portfolioRecView = findViewById(R.id.portfolioRecyclerView);
 //        portfolioRecView.setVisibility(View.GONE); To hide a view based on a condition
-        portRecAdaptor = new PortfolioRecyclerAdapter(portTempList);
+        portRecAdaptor = new PortfolioRecyclerAdapter(portfolioItems1);
         ItemTouchHelper.Callback callback =new ItemMoveCallback(portRecAdaptor);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(portfolioRecView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        portfolioRecView.setLayoutManager(layoutManager);
         portfolioRecView.setAdapter(portRecAdaptor);
         DividerItemDecoration dividerLine = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
         portfolioRecView.addItemDecoration(dividerLine);
@@ -231,6 +253,25 @@ public class MainActivity extends AppCompatActivity {
         cashBalanceVal.setText(cashBalance);
 
     }
+
+    private void favoriteRecycle(){
+        //favoriteRecycler
+        TextView sectionHeadingFav;
+        sectionHeadingFav = findViewById(R.id.home_header_fav_text);
+        sectionHeadingFav.setText("FAVORITE");
+        favoriteRecView = findViewById(R.id.favoriteRecycler);
+//        portfolioRecView.setVisibility(View.GONE); To hide a view based on a condition
+        favRecAdapter = new FavoriteRecyclerAdapter(favoriteItems1);
+        ItemTouchHelper.Callback callback =new ItemMoveCallbackFavorite(favRecAdapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(favoriteRecView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        favoriteRecView.setLayoutManager(layoutManager);
+        favoriteRecView.setAdapter(favRecAdapter);
+        DividerItemDecoration dividerLine = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
+        favoriteRecView.addItemDecoration(dividerLine);
+
+    }
     private void enableSwipeToDeleteAndUndo() {
         Log.i(TAG, "Inside enableSwipeToDeleteAndUndo: ");
         HomeSwipeToDelete swipeToDeleteCallback = new HomeSwipeToDelete(this) {
@@ -239,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                 final int position = viewHolder.getAdapterPosition();
-                final String item = portRecAdaptor.getData().get(position);
+                final List<String> item = portRecAdaptor.getData().get(position);
 
                 portRecAdaptor.removeItem(position);
 
@@ -263,5 +304,39 @@ public class MainActivity extends AppCompatActivity {
 
         ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
         itemTouchhelper.attachToRecyclerView(portfolioRecView);
+    }
+
+    private void enableSwipeToDeleteAndUndoFavorite() {
+        Log.i(TAG, "Inside enableSwipeToDeleteAndUndo: ");
+        HomeSwipeToDelete swipeToDeleteCallback = new HomeSwipeToDelete(this) {
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+
+
+                final int position = viewHolder.getAdapterPosition();
+                final List<String> item = favRecAdapter.getData().get(position);
+
+                favRecAdapter.removeItem(position);
+
+
+                Snackbar snackbar = Snackbar
+                        .make(mainConstraintLayout, "Item was removed from the list.", Snackbar.LENGTH_LONG);
+                snackbar.setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        favRecAdapter.restoreItem(item, position);
+                        favoriteRecView.scrollToPosition(position);
+                    }
+                });
+
+                snackbar.setActionTextColor(Color.YELLOW);
+                snackbar.show();
+
+            }
+        };
+
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
+        itemTouchhelper.attachToRecyclerView(favoriteRecView);
     }
 }
