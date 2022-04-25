@@ -8,19 +8,25 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.window.SplashScreen;
 
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import androidx.appcompat.widget.SearchView;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 
 import java.text.SimpleDateFormat;
@@ -38,17 +44,13 @@ public class MainActivity extends AppCompatActivity {
     FavoriteRecyclerAdapter favRecAdapter;
     RecyclerView favoriteRecView;
 //    NestedScrollView mainActivityScroll;
-
-    List<List<String>> portfolioItems;
     List<List<String>> portfolioItems1;
-    List<List<String>> favoriteItems;
     List<List<String>> favoriteItems1;
-//    SectionedRecyclerViewAdapter sectionAdapter = new SectionedRecyclerViewAdapter();
-    private SectionedRecyclerViewAdapter sectionedAdapter;
     private ConstraintLayout mainConstraintLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Stocks);
         super.onCreate(savedInstanceState);
 //        mainActivityScroll = (NestedScrollView) findViewById(R.id.main_activity_content);
         setContentView(R.layout.activity_main);
@@ -68,29 +70,35 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setSections(){
-//        portfolioItems = new ArrayList<>();
-//        portfolioItems = homeSectionList.get(0).getSecItems();
-//        favoriteItems = new ArrayList<>();
-//        favoriteItems = homeSectionList.get(1).getSecItems();
-        String netWorthValue = "$25000.00";
-        String cashBalance = "$12000.00";
+    //Lolly
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+//        return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.search,menu);
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setQueryHint("Search...");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+//                getInput(query);
+                //Sending data to Info Activity
+                Intent intent = new Intent(getBaseContext(), TradeActivity.class);
+                intent.putExtra("SEARCH_ID", query);
+                startActivity(intent);
 
-        //sectionedAdapter = new SectionedRecyclerViewAdapter();
+                return false;
+            }
 
-        //Setting Sections Start
-        //sectionedAdapter.addSection(new HomeDateSection());
-//        sectionedAdapter.addSection(new HomePortfolioSection(portfolioItems1,netWorthValue,cashBalance));
-//        sectionedAdapter.addSection(new HomeFavoriteSection(favoriteItems1));
-        //sectionedAdapter.addSection(new HomeFinhubSection());
-        //Setting Sections End
-
-//        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.home_recycler_view);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        recyclerView.setAdapter(sectionedAdapter);
-//        DividerItemDecoration dividerLine = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
-//        recyclerView.addItemDecoration(dividerLine);
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
     }
+    //Lolly
+
     private void setHomeDateSection(){
         TextView homeDate;
         homeDate = findViewById(R.id.home_date_sec);
@@ -109,15 +117,13 @@ public class MainActivity extends AppCompatActivity {
     private void writeLocalStorage(){
         SharedPreferences sharedPref = getSharedPreferences("LocalStorageValues",MODE_PRIVATE);
         SharedPreferences.Editor sharedEditor = sharedPref.edit();
-//        sharedEditor.putString("Portfolio","[['AAPL','3'],['TSLA','5']]");
-//        sharedEditor.putString("Favorites","[['MSFT','4'],['GS','7']]");
         sharedEditor.putString("netWorthVal","25000");
         sharedEditor.putString("cashBalanceVal","15000");
 
         //Portfolio
         JSONObject jObj1 = new JSONObject();
-        JSONArray jArr1 = new JSONArray();
         JSONObject jObj2 = new JSONObject();
+        JSONArray jArr1 = new JSONArray();
 
         //Favorites
         JSONObject jObj3 = new JSONObject();
@@ -145,7 +151,8 @@ public class MainActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        Log.i(TAG, "writeLocalStorage: Portfolio>>>"+jArr1);
+        Log.i(TAG, "writeLocalStorage: Favorite>>>"+jArr1);
         sharedEditor.putString("PortfolioJSONArray",jArr1.toString());
         sharedEditor.putString("FavoriteJSONArray",jArr2.toString());
         sharedEditor.commit();
@@ -211,17 +218,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void portfolioRecycle(){
-
-//        portfolioItems = new ArrayList<>();
-//
-//        portfolioItems = homeSectionList.get(0).getSecItems();
         setPortfolioHeadings();
-//        List<String> portTempList = new ArrayList<>();
-//        portTempList.add("TSLA");
-//        portTempList.add("AAPL");
-
-
-
         portfolioRecView = findViewById(R.id.portfolioRecyclerView);
 //        portfolioRecView.setVisibility(View.GONE); To hide a view based on a condition
         portRecAdaptor = new PortfolioRecyclerAdapter(portfolioItems1);

@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.188" />
+        <entry key="app/src/main/res/drawable/launch_screen.xml" value="0.1935" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/finhub_footer.xml" value="0.335" />
         <entry key="app/src/main/res/layout/home_date_section.xml" value="0.15520833333333334" />
@@ -14,6 +15,8 @@
         <entry key="app/src/main/res/layout/portfolio_row.xml" value="0.335" />
         <entry key="app/src/main/res/layout/ticker_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/ticker_section.xml" value="0.24317617866004962" />
+        <entry key="app/src/main/res/menu/search.xml" value="0.24074074074074073" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1755" />
       </map>
     </option>
   </component>
