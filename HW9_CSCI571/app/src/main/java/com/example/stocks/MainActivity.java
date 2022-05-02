@@ -439,7 +439,7 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
         sectionHeadingFav.setText("FAVORITE");
         favoriteRecView = findViewById(R.id.favoriteRecycler);
 //        portfolioRecView.setVisibility(View.GONE); To hide a view based on a condition
-        favRecAdapter = new FavoriteRecyclerAdapter(favoriteItems1, this);
+        favRecAdapter = new FavoriteRecyclerAdapter(favoriteItems1, this,this);
         ItemTouchHelper.Callback callback = new ItemMoveCallbackFavorite(favRecAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(favoriteRecView);
@@ -535,6 +535,9 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
     public void onChevronClick(int position) {
         favoriteItems1.get(position);
         Intent intent = new Intent(this,TradeActivity.class);
+        String searchId = favoriteItems1.get(position).get(0);
+        Log.i(TAG, "onChevronClick: searchId"+searchId);
+        intent.putExtra("SEARCH_ID", searchId);
         startActivity(intent);
     }
 }

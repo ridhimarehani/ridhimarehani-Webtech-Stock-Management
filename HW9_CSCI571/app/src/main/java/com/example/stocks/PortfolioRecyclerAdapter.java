@@ -196,4 +196,5 @@ public class PortfolioRecyclerAdapter extends RecyclerView.Adapter<PortfolioRecy
 
         }
     }
+    
 }

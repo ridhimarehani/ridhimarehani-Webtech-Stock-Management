@@ -28,11 +28,13 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
     private static final String TAG = "FavoriteRecyclerAdapter";
     private static final DecimalFormat df = new DecimalFormat("0.00");
     private Context context;
+    private OnChevronClickListener mChevronClickListener;
 
-    public FavoriteRecyclerAdapter(List<List<String>> favItems, Context context) {
+    public FavoriteRecyclerAdapter(List<List<String>> favItems, Context context, OnChevronClickListener onChevronClickListener) {
         Log.i(TAG, "FavoriteRecyclerAdapter Cons: "+favItems);
         this.favItems = favItems;
         this.context = context;
+        this.mChevronClickListener = onChevronClickListener;
     }
 
     @NonNull
@@ -41,7 +43,7 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         Log.i(TAG, "onCreateViewHolder: ");
         LayoutInflater layInflator = LayoutInflater.from(parent.getContext());
         View favView = layInflator.inflate(R.layout.ticker_item, parent, false);
-        FavoriteRecyclerAdapter.FavoriteViewHolder favViewHolder = new FavoriteRecyclerAdapter.FavoriteViewHolder(favView);
+        FavoriteRecyclerAdapter.FavoriteViewHolder favViewHolder = new FavoriteRecyclerAdapter.FavoriteViewHolder(favView,mChevronClickListener );
         return favViewHolder;
     }
 
@@ -151,10 +153,10 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         ImageButton chevronRight;
         OnChevronClickListener onChevronClickListener;
 
-        public FavoriteViewHolder(@NonNull View itemView) {
+        public FavoriteViewHolder(@NonNull View itemView, OnChevronClickListener onChevronClickListener) {
             super(itemView);
             //Chevron Click
-            //this.onChevronClickListener = onChevronClickListener;
+            this.onChevronClickListener = onChevronClickListener;
             rowView = itemView;
             portTickerText = itemView.findViewById(R.id.ticker_Sym);
             numShares = (TextView) itemView.findViewById(R.id.num_Shares);
