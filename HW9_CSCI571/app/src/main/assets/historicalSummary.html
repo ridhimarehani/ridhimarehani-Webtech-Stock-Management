@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/data.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/drag-panes.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/stock/indicators/indicators.js"></script>
+    <script src="https://code.highcharts.com/stock/indicators/volume-by-price.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<div id="container" style="height: 350px; min-width: 310px"></div>
+</body>
+
+<script>
+let tickerSymbol;
+
+function getHistoricalSummaryChartsData(ticker, url, unix_from, unix_to, dp){
+            tickerSymbol = ticker
+            let change = false;
+            if(dp > 0.00 ){
+            change = true;
+            }
+<!--        console.log(url+tickerSymbol+"/"+unix_from+"/"+unix_to);-->
+<!--        fetch(url+tickerSymbol+"/"+unix_from+"/"+unix_to)-->
+        fetch(url+"?ticker="+tickerSymbol+"&fromDate="+unix_from+"&toDate="+unix_to)
+        .then(
+            response => response.json()
+        )
+        .then(res =>
+        {
+<!--            console.log(res);-->
+            var list1 = [];
+            i = 0;
+            for (i; i < res['c'].length; i++) {
+              var tempList1 = [(res['t'][i] * 1000), res['c'][i]];
+              list1[i] = tempList1;
+            }
+            Highcharts.setOptions({
+              time: {
+                timezoneOffset: 7 * 60
+              }
+            });
+             Highcharts.stockChart('container', {
+                title: {
+                    text: tickerSymbol + " Hourly Price Variation",
+                    style: {
+                      color: '#9e9e9f',
+                      fontSize: '15',
+                    }
+                  },
+                  legend: { enabled: false },
+                  yAxis: [{
+
+                    title: {
+                      text: '',
+                    },
+                    opposite: true
+                  }],
+                  navigator: {
+              enabled: false
+                },
+                rangeSelector : {
+                        selected : 0,
+                        inputEnabled: false,
+                        enabled: false,
+                    },
+                  xAxis: [{
+                    scrollbar: {
+                      enabled: false
+                    },
+
+                    type: 'datetime',
+
+                    title: {
+                      text: '',
+                    }
+                  }],
+                  series: [{
+                    data: list1,
+                    type: 'line',
+                    color: change ? "#28a745" : "#de3345"
+                  }]
+
+            });
+
+        });
+    }
+</script>
+</html>

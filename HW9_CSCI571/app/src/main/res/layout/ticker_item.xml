@@ -11,15 +11,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingHorizontal="15dp"
+        android:paddingVertical="8dp"
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:textColor="@color/black"
         android:textStyle="bold"
-        android:paddingVertical="8dp"/>
-<!--    android:layout_marginStart="4dp"-->
-<!--    android:layout_marginTop="4dp"-->
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <!--    android:layout_marginStart="4dp"-->
+    <!--    android:layout_marginTop="4dp"-->
 
     <TextView
         android:id="@+id/num_Shares"
@@ -60,10 +60,31 @@
         android:id="@+id/change_symbol"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
+        android:layout_marginEnd="28dp"
         android:paddingVertical="5dp"
-        android:text="Text"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintEnd_toStartOf="@+id/imageView"
+        tools:layout_editor_absoluteY="50dp" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toStartOf="@+id/change_in_price"
         app:layout_constraintTop_toBottomOf="@+id/current_price" />
+
+    <ImageButton
+        android:id="@+id/chevron_right_button"
+        android:layout_width="34dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
+        android:background="#FFFFFF"
+        android:tint="#AFB1B3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.666"
+        app:layout_constraintStart_toEndOf="@+id/current_price"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/chevron_right" />
 </androidx.constraintlayout.widget.ConstraintLayout>

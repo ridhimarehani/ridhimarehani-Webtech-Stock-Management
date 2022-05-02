@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/newsdialog">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:id="@+id/newsSource"
+            android:paddingHorizontal="10dp"/>
+
+        <TextView
+            android:id="@+id/newsDatetime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/newsSource"
+            android:paddingHorizontal="10dp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="20dp"
+            android:id="@+id/horizontal_line"
+            android:paddingHorizontal="10dp"
+            android:background="@android:color/darker_gray"
+            android:layout_below="@+id/newsDatetime"/>
+
+        <TextView
+            android:id="@+id/newsHeadline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/horizontal_line"
+            android:layout_marginTop="15dp"
+            android:paddingHorizontal="10dp"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/newsDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/newsHeadline"
+            android:layout_marginTop="15dp"
+            android:paddingHorizontal="10dp"/>
+
+        <GridLayout
+            android:id="@+id/social_media_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/newsDescription"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="15dp"
+            android:columnCount="3"
+            android:orientation="horizontal"
+            android:rowCount="1">
+
+
+            <!--        <LinearLayout-->
+            <!--            android:id="@+id/social_media_buttons"-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="wrap_content"-->
+            <!--            android:textColor="@color/black"-->
+            <!--            android:layout_below="@+id/newsDescription"-->
+            <!--            android:layout_marginTop="20dp"-->
+            <!--            android:layout_marginBottom="15dp"-->
+            <!--            android:orientation="horizontal">-->
+
+            <ImageButton
+                android:id="@+id/chrome_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:background="@color/white"
+
+                android:paddingHorizontal="10dp"
+                android:src="@drawable/icons_chrome" />
+
+            <ImageButton
+                android:id="@+id/twitter_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:background="@color/white"
+                android:src="@drawable/icon_twitter" />
+
+            <ImageButton
+                android:id="@+id/facebook_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:background="@color/white"
+                android:src="@drawable/icon_facebook" />
+
+        </GridLayout>
+<!--        </LinearLayout>-->
+
+    </RelativeLayout>
+
+
+</LinearLayout>

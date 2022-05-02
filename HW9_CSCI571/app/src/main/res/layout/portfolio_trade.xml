@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="40dp"
+        android:paddingHorizontal="20dp"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:gravity="center"
+            android:id="@+id/trade_heading"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:id="@+id/shares_details"
+            android:layout_below="@id/trade_heading">
+            <EditText
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/share_value"/>
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/shares_text"
+                android:text=" shares"/>
+
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/shares_details"
+            android:id="@+id/total_value"
+            android:gravity="right"
+            android:layout_marginTop="20dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:id="@+id/money_left"
+            android:layout_below="@+id/total_value"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/money_left"
+            android:columnCount="2"
+            android:orientation="horizontal"
+            android:rowCount="1"
+            >
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buy_button"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginLeft="30dp"
+                android:textColor="@color/white"
+                android:letterSpacing="0.2"
+                android:background="@drawable/tradebutton"
+                android:text="BUY">
+
+            </androidx.appcompat.widget.AppCompatButton>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/sell_button"
+                android:layout_marginLeft="60dp"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:textColor="@color/white"
+                android:letterSpacing="0.2"
+                android:background="@drawable/tradebutton"
+                android:text="SELL">
+            </androidx.appcompat.widget.AppCompatButton>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

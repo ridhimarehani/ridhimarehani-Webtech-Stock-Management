@@ -3,4 +3,5 @@
     <style name="Theme.Stocks.Launcher">
         <item name="android:windowBackground">@drawable/launch_screen</item>
     </style>
+<!--    <style name="Theme.Stocks.AppBarOverlay" parent="ThemeOverlay.Stocks.Dark.ActionBar"/>-->
 </resources>

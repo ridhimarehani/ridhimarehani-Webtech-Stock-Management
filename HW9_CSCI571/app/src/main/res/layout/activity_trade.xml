@@ -1,9 +1,809 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".TradeActivity">
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/page_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        context=".TradeActivity">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:context=".InfoActivity"
+            tools:ignore="MissingClass">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/comp_info">
+
+                <ImageView
+                    android:id="@+id/company_logo"
+                    android:layout_marginTop="15dp"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"/>
+                <RelativeLayout
+                    android:layout_width="180dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView
+                        android:id="@+id/ticker_symbol"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="5dp"
+                        android:layout_height="30dp"
+                        android:text="TextView"
+                        android:textColor="@color/black"
+                        android:textSize="25dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/company_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ticker_symbol"
+                        android:layout_marginTop="15dp"
+                        android:text="TextView"
+                        android:textColor="@color/black"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="130dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:gravity="right"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView
+                        android:id="@+id/latest_price"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="5dp"
+                        android:text="TextView"
+                        android:textColor="@color/black"
+                        android:textSize="25dp"
+                        android:gravity="right"
+                        android:textAlignment="gravity"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/change_percent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/latest_price"
+                        android:layout_marginTop="15dp"
+                        android:gravity="right"
+                        android:text="TextView"
+                        android:textAlignment="gravity"
+                        android:textColor="@color/black"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/highcharts"
+                android:layout_width="match_parent"
+                android:layout_height="430dp"
+                android:layout_below="@+id/comp_info">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize" />
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/viewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/toolbar"
+                    android:layout_weight="1" />
+
+
+
+
+            </RelativeLayout>
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/highcharts"
+
+                app:tabMode="fixed" />
+
+            <!--    <RelativeLayout-->
+            <!--        android:layout_width="match_parent"-->
+            <!--        android:layout_marginTop="30dp"-->
+            <!--        android:layout_height="350dp"-->
+            <!--        android:id="@+id/highcharts"-->
+            <!--        android:layout_below="@+id/comp_info">-->
+            <!--        <WebView-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="match_parent"-->
+            <!--            android:id="@+id/highcharts_sma_vbp">-->
+
+            <!--        </WebView>-->
+
+            <!--    </RelativeLayout>-->
+            <!--    <RelativeLayout-->
+            <!--        android:layout_width="match_parent"-->
+            <!--        android:layout_marginTop="10dp"-->
+            <!--        android:layout_height="350dp"-->
+            <!--        android:id="@+id/historical_summ"-->
+            <!--        android:layout_below="@+id/highcharts">-->
+            <!--        <WebView-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="match_parent"-->
+            <!--            android:id="@+id/highcharts_historical_summary">-->
+
+            <!--        </WebView>-->
+
+            <!--    </RelativeLayout>-->
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/portfolio"
+                android:layout_below="@+id/tabLayout"
+                android:layout_marginTop="30dp">
+
+                <RelativeLayout
+                    android:id="@+id/port_heading"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp">
+
+                    <TextView
+                        android:id="@+id/portfolio_heading"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/shares_details"
+                    android:layout_width="260dp"
+                    android:layout_height="30dp"
+                    android:layout_below="@+id/port_heading"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/shares"
+
+                            android:layout_width="140dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10dp"
+                            android:textColor="@color/black"
+                            android:textSize="15dp" />
+
+                        <TextView
+                            android:id="@+id/shares_owned"
+
+                            android:layout_width="100dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10dp"
+                            android:textColor="@color/black"
+                            android:text="0"
+                            android:textSize="15dp" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/trade_button"
+                    android:layout_below="@+id/shares_details">
+
+                    <RelativeLayout
+                        android:layout_width="260dp"
+                        android:id="@+id/before_trade_button"
+                        android:layout_height="match_parent">
+
+
+                        <RelativeLayout
+                            android:id="@+id/avg_cost_details"
+                            android:layout_width="260dp"
+                            android:layout_height="30dp"
+                            android:layout_marginLeft="12dp"
+                            android:layout_marginTop="10dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <TextView
+                                    android:id="@+id/avg_cost"
+
+                                    android:layout_width="140dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginLeft="10dp"
+                                    android:textColor="@color/black"
+                                    android:textSize="15dp" />
+
+                                <TextView
+                                    android:id="@+id/avg_cost_value"
+                                    android:text="$0.00"
+                                    android:layout_width="100dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginLeft="10dp"
+                                    android:textColor="@color/black"
+                                    android:textSize="15dp" />
+                            </LinearLayout>
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/total_cost_details"
+                            android:layout_width="260dp"
+                            android:layout_height="30dp"
+                            android:layout_below="@+id/avg_cost_details"
+                            android:layout_marginLeft="12dp"
+                            android:layout_marginTop="10dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <TextView
+                                    android:id="@+id/total_cost"
+
+                                    android:layout_width="140dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginLeft="10dp"
+                                    android:textColor="@color/black"
+                                    android:textSize="15dp" />
+
+                                <TextView
+                                    android:id="@+id/total_cost_value"
+                                    android:text="$0.00"
+                                    android:layout_width="100dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginLeft="10dp"
+                                    android:textColor="@color/black"
+                                    android:textSize="15dp" />
+                            </LinearLayout>
+                        </RelativeLayout>
+
+                    </RelativeLayout>
+                    <LinearLayout
+                        android:layout_width="120dp"
+                        android:layout_height="match_parent"
+                        android:layout_toRightOf="@+id/before_trade_button"
+                        android:layout_marginLeft="20dp">
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_marginTop="20dp"
+                            android:layout_width="100dp"
+                            android:id="@+id/trade_button_value"
+                            android:background="@drawable/tradebutton"
+                            android:letterSpacing="0.2"
+                            android:layout_height="wrap_content"
+
+                            android:textColor="@color/white"
+                            android:text="Trade">
+
+                        </androidx.appcompat.widget.AppCompatButton>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/change_details"
+                    android:layout_width="260dp"
+                    android:layout_height="30dp"
+                    android:layout_below="@+id/trade_button"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/change_heading"
+
+                            android:layout_width="140dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10dp"
+                            android:textColor="@color/black"
+                            android:textSize="15dp" />
+
+                        <TextView
+                            android:id="@+id/change_value"
+                            android:text="$0.00"
+                            android:layout_width="100dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10dp"
+                            android:textColor="@color/black"
+                            android:textSize="15dp" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/market_value_details"
+                    android:layout_width="260dp"
+                    android:layout_height="30dp"
+                    android:layout_below="@+id/change_details"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/market_value_heading"
+
+                            android:layout_width="140dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10dp"
+                            android:textColor="@color/black"
+                            android:textSize="15dp" />
+
+                        <TextView
+                            android:id="@+id/market_value_Val"
+                            android:text="$0.00"
+                            android:layout_width="100dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10dp"
+                            android:textColor="@color/black"
+                            android:textSize="15dp" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/Stats"
+                android:layout_below="@+id/portfolio">
+                <RelativeLayout
+                    android:id="@+id/stats_head"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp">
+
+                    <TextView
+                        android:id="@+id/stats_heading"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/stat_details"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@+id/stats_head"
+                    android:orientation="vertical"
+                    android:columnCount="2"
+                    android:rowCount="2"
+                    android:layout_marginLeft="20dp">
+                    <TextView
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        android:textSize="15dp"
+                        android:text="1"
+                        android:textColor="@color/black"
+                        android:id="@+id/open_price"/>
+                    <TextView
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        android:textSize="15dp"
+                        android:text="2"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/low_price"/>
+                    <TextView
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        android:textSize="15dp"
+                        android:text="3"
+                        android:textColor="@color/black"
+                        android:id="@+id/high_price"/>
+
+                    <TextView
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        android:textSize="15dp"
+                        android:text="4"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/close_price"/>
+
+
+                </GridLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/About"
+                android:layout_marginTop="20dp"
+                android:layout_below="@+id/Stats">
+                <RelativeLayout
+                    android:id="@+id/about_head"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp">
+
+                    <TextView
+                        android:id="@+id/about_heading"
+                        android:text="About"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/about_details"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@+id/about_head"
+                    android:orientation="vertical"
+                    android:columnCount="2"
+                    android:rowCount="4"
+                    android:layout_marginLeft="20dp">
+                    <TextView
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        android:textSize="15dp"
+                        android:text="1"
+                        android:textColor="@color/black"
+                        android:id="@+id/IPO_heading"/>
+                    <TextView
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        android:textSize="15dp"
+                        android:text="2"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/black"
+                        android:id="@+id/Industry_heading"/>
+                    <TextView
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        android:textSize="15dp"
+                        android:text="3"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/black"
+                        android:id="@+id/webpage_heading"/>
+                    <TextView
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        android:textSize="15dp"
+                        android:text="Company Peers"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/black"
+                        android:id="@+id/comp_peers_heading"/>
+
+
+                    <TextView
+                        android:id="@+id/IPO_value"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1"
+                        android:text="5"
+                        android:textColor="@color/black"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        android:textSize="15dp"
+                        android:text="6"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/black"
+                        android:id="@+id/Industry_value"/>
+
+
+                    <TextView
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        android:textSize="15dp"
+                        android:text="7"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/black"
+                        android:id="@+id/webpage_value"/>
+
+
+                    <TextView
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        android:textSize="15dp"
+                        android:text="8"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/black"
+                        android:id="@+id/comp_peers_value"/>
+
+
+                </GridLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/Insights"
+                android:layout_marginTop="20dp"
+                android:layout_below="@+id/About">
+                <RelativeLayout
+                    android:id="@+id/insights_head"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/insights_heading"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:id="@+id/social_sentiments">
+
+                        <TextView
+                            android:id="@+id/social_sentiments_heading"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="25dp"
+                            android:gravity="center"
+                            android:textColor="@color/black"
+                            android:textSize="20dp" />
+                        <TableLayout
+                            android:layout_width="350dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:id="@+id/social_sentiments_table"
+                            android:layout_marginLeft="20dp"
+                            android:layout_below="@+id/social_sentiments_heading">
+                            <TableRow
+                                android:id="@+id/headingRow"
+                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent">
+                                <TextView
+                                    android:id="@+id/company_name_table"
+                                    android:layout_width="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginBottom="1dp"
+                                    android:layout_marginHorizontal="1dp"
+                                    android:background="#e0e3e5"
+                                    android:textColor="#6b6c6d"
+                                    android:textSize="12dp"
+                                    android:textStyle="bold"
+                                    android:padding="8dip"/>
+
+                                <TextView
+                                    android:id="@+id/reddit_heading"
+                                    android:layout_width="wrap_content"
+                                    android:text="Reddit"
+                                    android:layout_weight="1"
+                                    android:layout_marginBottom="1dp"
+                                    android:layout_marginHorizontal="1dp"
+                                    android:background="#e0e3e5"
+                                    android:textColor="#6b6c6d"
+                                    android:textSize="12dp"
+                                    android:padding="8dip"/>
+
+                                <TextView
+                                    android:id="@+id/twitter_heading"
+                                    android:layout_width="wrap_content"
+                                    android:text="Twitter"
+                                    android:layout_weight="1"
+                                    android:layout_marginBottom="1dp"
+                                    android:layout_marginHorizontal="1dp"
+                                    android:background="#e0e3e5"
+                                    android:textColor="#6b6c6d"
+                                    android:textSize="12dp"
+                                    android:padding="8dip"/>
+
+                            </TableRow>
+                            <TableRow
+                                android:id="@+id/totalMentionsRow"
+                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent">
+                                <TextView
+                                    android:id="@+id/Total_mentions_heading"
+                                    android:text="Total Mentions"
+                                    android:layout_width="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginBottom="1dp"
+                                    android:layout_marginHorizontal="1dp"
+                                    android:background="#e0e3e5"
+                                    android:textColor="#6b6c6d"
+                                    android:textSize="12dp"
+                                    android:textStyle="bold"
+                                    android:padding="8dip"/>
+
+                                <TextView
+                                    android:id="@+id/reddit_total_mentions"
+                                    android:layout_width="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginBottom="1dp"
+                                    android:layout_marginHorizontal="1dp"
+                                    android:background="#f4f2f4"
+                                    android:textColor="#6b6c6d"
+                                    android:textSize="12dp"
+                                    android:padding="8dip"/>
+
+                                <TextView
+                                    android:id="@+id/twitter_total_mentions"
+                                    android:layout_width="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginBottom="1dp"
+                                    android:layout_marginHorizontal="1dp"
+                                    android:background="#f4f2f4"
+                                    android:textColor="#6b6c6d"
+                                    android:textSize="12dp"
+                                    android:padding="8dip"/>
+
+                            </TableRow>
+                            <TableRow
+                                android:id="@+id/positiveMentionsRow"
+                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent">
+                                <TextView
+                                    android:id="@+id/Positive_mentions_heading"
+                                    android:text="Positive Mentions"
+                                    android:layout_width="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginBottom="1dp"
+                                    android:layout_marginHorizontal="1dp"
+                                    android:background="#e0e3e5"
+                                    android:textColor="#6b6c6d"
+                                    android:textSize="12dp"
+                                    android:textStyle="bold"
+                                    android:padding="8dip"/>
+
+                                <TextView
+                                    android:id="@+id/reddit_positive_mentions"
+                                    android:layout_width="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginBottom="1dp"
+                                    android:layout_marginHorizontal="1dp"
+                                    android:background="#f4f2f4"
+                                    android:textColor="#6b6c6d"
+                                    android:textSize="12dp"
+                                    android:padding="8dip"/>
+
+                                <TextView
+                                    android:id="@+id/twitter_positive_mentions"
+                                    android:layout_width="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginBottom="1dp"
+                                    android:layout_marginHorizontal="1dp"
+                                    android:background="#f4f2f4"
+                                    android:textColor="#6b6c6d"
+                                    android:textSize="12dp"
+                                    android:padding="8dip"/>
+
+                            </TableRow>
+                            <TableRow
+                                android:id="@+id/negativeMentionsRow"
+                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent">
+                                <TextView
+                                    android:id="@+id/Negative_mentions_heading"
+                                    android:text="Negative Mentions"
+                                    android:layout_width="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginHorizontal="1dp"
+                                    android:background="#e0e3e5"
+                                    android:textColor="#6b6c6d"
+                                    android:textSize="12dp"
+                                    android:textStyle="bold"
+                                    android:padding="8dip"/>
+
+                                <TextView
+                                    android:id="@+id/reddit_negative_mentions"
+                                    android:layout_width="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginHorizontal="1dp"
+                                    android:background="#f4f2f4"
+                                    android:textColor="#6b6c6d"
+                                    android:textSize="12dp"
+                                    android:padding="8dip"/>
+
+                                <TextView
+                                    android:id="@+id/twitter_negative_mentions"
+                                    android:layout_width="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginHorizontal="1dp"
+                                    android:background="#f4f2f4"
+                                    android:textColor="#6b6c6d"
+                                    android:textSize="12dp"
+                                    android:padding="8dip"/>
+
+                            </TableRow>
+                        </TableLayout>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="450dp"
+                        android:layout_marginTop="20dp"
+                        android:id="@+id/recommendation_chart"
+                        android:layout_below="@+id/social_sentiments">
+
+                        <WebView
+                            android:id="@+id/highcharts_recommendation"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                        </WebView>
+
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp"
+                        android:id="@+id/eps_chart"
+                        android:layout_below="@+id/recommendation_chart">
+                        <WebView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/highcharts_eps">
+
+                        </WebView>
+
+                    </RelativeLayout>
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+
+
+            <RelativeLayout
+                android:id="@+id/News"
+                android:layout_below="@+id/Insights"
+                android:layout_width="match_parent"
+                android:layout_marginTop="20dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/news_heading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:text="News"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:nestedScrollingEnabled="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/new_details_recycle_view"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_below="@+id/news_heading"/>
+
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

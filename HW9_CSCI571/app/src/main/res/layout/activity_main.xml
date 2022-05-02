@@ -26,6 +26,7 @@
         android:layout_height="wrap_content"
         android:background="#dcdee0"
         android:paddingLeft="18dp"
+        android:text="PORTFOLIO"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/black"
         android:textStyle="bold"
@@ -98,7 +99,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="12dp"
-        android:background="@android:color/darker_gray"
+        android:background="#dcdee0"
         app:layout_constraintTop_toBottomOf="@+id/gridLayout"
         tools:layout_editor_absoluteX="2dp" />
 
@@ -106,11 +107,12 @@
         android:id="@+id/portfolioRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gridLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/view" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/home_section_fav_header"
@@ -127,6 +129,7 @@
         android:layout_height="wrap_content"
         android:background="#dcdee0"
         android:paddingLeft="18dp"
+        android:text="FAVORITE"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/black"
         android:textStyle="bold"
@@ -135,19 +138,21 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favoriteRecycler"
         android:layout_width="match_parent"
-        android:layout_height="312dp"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/home_header_fav_text"
         tools:layout_editor_absoluteX="0dp" />
 
     <TextView
         android:id="@+id/finhub_link"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:padding="12dp"
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.379"
+        app:layout_constraintHorizontal_bias="0.471"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/favoriteRecycler" />
+        app:layout_constraintTop_toBottomOf="@+id/favoriteRecycler"
+        tools:text="link" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

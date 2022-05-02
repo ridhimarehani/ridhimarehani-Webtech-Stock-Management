@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/data.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/drag-panes.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/stock/indicators/indicators.js"></script>
+    <script src="https://code.highcharts.com/stock/indicators/volume-by-price.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<div id="container" style="height: 400px; min-width: 310px"></div>
+</body>
+
+<script>
+let tickerSymbol;
+let historicalChartsData;
+
+function getRecommendationChartData(ticker, url){
+
+
+<!--        let ticker = "MSFT"-->
+        tickerSymbol = ticker;
+<!--        let url = "https://csci571hw8-backend-346006.wl.r.appspot.com/recommendation"-->
+        fetch(url+"?ticker="+tickerSymbol)
+        .then(
+            response => response.json()
+        )
+        .then(res =>
+        {
+            console.log(res);
+
+
+            let strongBuy = [];
+            let buy = [];
+            let hold = [];
+            let sell = [];
+            let strongSell = [];
+            let recomm_data = [];
+            let recomm_period = [];
+            for (let i = 0; i < res.length; i++) {
+              let temp_str = new String();
+            //   temp_str = res['period'][i];
+            temp_str = res[i].period;
+              recomm_period.push(temp_str);
+
+              strongBuy.push(res[i].strongBuy);
+              buy.push(res[i].buy);
+              hold.push(res[i].hold);
+              sell.push(res[i].sell);
+              strongSell.push(res[i].strongSell);
+            }
+            console.log(recomm_period);
+           recomm_data = [strongBuy, buy, hold, sell, strongSell];
+            Highcharts.stockChart('container', {
+                chart: { type: 'column' },
+              title: {
+                text: 'Recommendation Trends',
+                style: {
+                  fontSize: '20px',
+                  color: '#29363E'
+                }
+              },
+              rangeSelector : {
+                        selected : 0,
+                        inputEnabled: false,
+                        enabled: false,
+                    },
+            scrollbar: {
+                enabled: false },
+            navigator: {
+              enabled: false
+            },
+            // marginBottom : '100px',
+              xAxis: { categories: recomm_period ,
+                type: 'datetime'},
+              yAxis: {
+                min: 0,
+                title: { text: '#Analysis'},
+                opposite: false,
+                inputEnabled: false,
+                allButtonsEnabled: true,
+                stackLabels: {
+                  enabled: true,
+                  style: {
+                    fontWeight: 'bold',
+                    color: ( // theme
+                      Highcharts.defaultOptions.title?.style &&
+                      Highcharts.defaultOptions.title.style.color
+                    ) || 'gray'
+                  }
+                },
+              },
+              legend: {
+                enabled: true,
+                align: 'center',
+                verticalAlign: 'bottom',
+                x: 0,
+                y: 0,
+                backgroundColor: Highcharts.defaultOptions.legend?.backgroundColor || 'white',
+                borderColor: '#CCC',
+                borderWidth: 1,
+                shadow: false,
+                itemStyle: {
+                  fontSize: '10px',
+                },
+                // itemMarginTop: 5,
+              },
+              plotOptions: {
+                column: {
+                  stacking: 'normal',
+                //   dataLabels: {
+                //     enabled: true
+                //   }
+                }
+              },
+              series: [{
+                // groupPadding: 0,
+                // pointPadding: 0.1,
+                name: 'Strong Buy',
+                type: 'column',
+                data: recomm_data[0],
+                color: '#007130',
+                pointWidth: 38
+              }, {
+                name: 'Buy',
+                type: 'column',
+                data: recomm_data[1],
+                color: '#00bc43',
+                pointWidth: 38
+              }, {
+                name: 'Hold',
+                type: 'column',
+                data: recomm_data[2],
+                color: '#c38900',
+                pointWidth: 38
+              }, {
+                name: 'Sell',
+                type: 'column',
+                data: recomm_data[3],
+                color: '#ff4b54',
+                pointWidth: 38
+              }, {
+                name: 'Strong Sell',
+                type: 'column',
+                data: recomm_data[4],
+                color: '#8c2a2e',
+                pointWidth: 38
+              }]
+
+
+        });
+        });
+}
+</script>
+</html>
