@@ -59,7 +59,7 @@ public class PortfolioRecyclerAdapter extends RecyclerView.Adapter<PortfolioRecy
     public void onBindViewHolder(@NonNull PortfolioViewHolder holder, int position) {
 //        holder.portShareCount.setText(portItems.get(position).get(1));
         String numOfShares = portfolioItems.get(position).get(1);
-        Log.i(TAG, "onBindViewHolder: ");
+        Log.i(TAG, "onBindViewHolder: portfolioItems1> "+portfolioItems);
         //Binding values for Portfolio Row
         holder.portTickerText.setText(portfolioItems.get(position).get(0)); // 0  for ticker Symbol, 1 for share count
         holder.numShares.setText(numOfShares);
@@ -139,7 +139,6 @@ public class PortfolioRecyclerAdapter extends RecyclerView.Adapter<PortfolioRecy
 
     public List<List<String>> removeItem(int position) {
         portfolioItems.remove(position);
-        Log.i(TAG, "removeItem: portfolioItems> "+portfolioItems);
         notifyItemRemoved(position);
         return portfolioItems;
     }

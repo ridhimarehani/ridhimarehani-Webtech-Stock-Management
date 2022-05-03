@@ -54,26 +54,31 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
 
         holder.priceChange.setText("$0.45 (0.09%)");
 
-        //Calculations for Portfolio
+        //Calculations for Favorite
         String currentPrice = favItems.get(position).get(2); // 2 for current price //3 for price since last closed
-        String priceSinceLastClose = favItems.get(position).get(3);
         holder.currentPrice.setText(currentPrice);
-        Double currentPriceDouble = Double.parseDouble(currentPrice);
-        Double priceSinceLastCloseDouble = Double.parseDouble(priceSinceLastClose);
-        Double priceChange = currentPriceDouble - priceSinceLastCloseDouble;
-        //String priceChangeString = df.format(priceChange);
-        String priceChangeString = favItems.get(position).get(3);
-//        priceChange = df.format(priceChange);
-        Double priceChangePercentage = (priceChange/priceSinceLastCloseDouble) * 100;
+        String priceSinceLastClose = favItems.get(position).get(3);
+
+//        Double currentPriceDouble = Double.parseDouble(currentPrice);
+//        Double priceSinceLastCloseDouble = Double.parseDouble(priceSinceLastClose);
+//        Double priceChange = currentPriceDouble - priceSinceLastCloseDouble;
+//        String priceChangeString = df.format(priceChange);
+        //priceChange = df.format(priceChange);
+        //Double priceChangePercentage = (priceChange/priceSinceLastCloseDouble) * 100;
         //String priceChangePercentageString = df.format(priceChange);
+
+        String priceChangeString = favItems.get(position).get(3);
+        Double priceChange = Double.parseDouble(priceChangeString);
+        priceChangeString = df.format(priceChange);
         String priceChangePercentageString = favItems.get(position).get(4);
+        Double priceChangePercentage = Double.parseDouble(priceChangePercentageString);
+        priceChangePercentageString = df.format(priceChangePercentage);
         String changeString = "$"+ String.valueOf(priceChangeString)+ " (" + String.valueOf(priceChangePercentageString) + "%)";
         holder.priceChange.setText(changeString);
         //Calculation End
 
         //Trending Symbol
         if(priceChangeString.equals("-0.00")){
-            Log.i(TAG, "onBindViewHolder: inside if ch");
             priceChange = 0.00;
         }
 
