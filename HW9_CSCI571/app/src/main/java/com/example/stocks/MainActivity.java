@@ -53,7 +53,7 @@ import java.util.List;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-public class MainActivity extends AppCompatActivity implements FavoriteRecyclerAdapter.OnChevronClickListener{
+public class MainActivity extends AppCompatActivity implements FavoriteRecyclerAdapter.OnChevronClickListener, PortfolioRecyclerAdapter.OnChevronClickListenerPort{
     private static final String TAG = "MainActivity";
     List<HomeSections> homeSectionList = new ArrayList<>();
 
@@ -67,7 +67,10 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
     private ConstraintLayout mainConstraintLayout;
     private RequestQueue requestQueue;
     String currentStockPrice1;
+    String changeInPriceFav;
+    String getChangeInPriceFavPercentage;
     private int count = 0;
+    private int count1 = 0;
     private String baseUrl = "https://csci571hw8-backend-346006.wl.r.appspot.com/";
     String latestStock_url = baseUrl + "stockPrice?ticker=";
 
@@ -89,23 +92,23 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
         getCurrentStockPriceVals();
 
 //        portfolioRecycle();
-        favoriteRecycle();
+        //favoriteRecycle();
         setHomeFinnhubFooter();
-        enableSwipeToDeleteAndUndoFavorite();
+        //enableSwipeToDeleteAndUndoFavorite();
 
 
     }
 
     @Override
     protected void onResume() {
-        setHomeDateSection();
-//        portfolioRecycle();
-//        favoriteRecycle();
-        setHomeFinnhubFooter();
-//        enableSwipeToDeleteAndUndoFavorite();
-//        enableSwipeToDeleteAndUndo();
-//        readLocalStorage();
         super.onResume();
+        setHomeDateSection();
+        setHomeFinnhubFooter();
+//        readLocalStorage();
+//        count1 = 0;
+//        count = 0;
+//        getCurrentStockPriceVals();
+
     }
     //AddTextChangeListener
     //Adapter.setData
@@ -123,9 +126,11 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
         SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) searchView.findViewById(androidx.appcompat.R.id.search_src_text);
         String dataArr[]  = {"TS.MX | TS.MX", "TSE | TSE", "TSP | TSP", "TSC | TSC", "TSQ | TSQ", "TSN | TSN", "TSLA | TSLA", "TSLA.MI | TSLA.MI", "TSLA.VI | TSLA.VI", "TSLA.SW | TSLA.SW", "TSLA.MX | TSLA.MX", "TRIS3.SA | TRIS3.SA", "0R0X.L | 0R0X.L", "TL0.HM | TL0.HM", "TL0.F | TL0.F", "TSLAUSD.SW | TSLAUSD.SW", "TL0.SG | TL0.SG", "TL0.MU | TL0.MU", "TSLA-RM.ME | TSLA-RM.ME", "TL0.DU | TL0.DU", "TL0.DE | TL0.DE", "TL0.BE | TL0.BE", "T | T", "T.TO | T.TO", "T.NE | T.NE", "T.SN | T.SN", "T.MX | T.MX", "T.BC | T.BC", "TD | TD", "TU | TU", "TH | TH", "TW | TW", "TG | TG", "TR | TR", "TT | TT", "TK | TK", "TA | TA", "4Y5.F | 4Y5.F", "4Y5.MU | 4Y5.MU", "4Y5.SG | 4Y5.SG", "G | G", "G.TO | G.TO", "G.MI | G.MI", "G.NE | G.NE", "GS | GS", "GP | GP", "GT | GT", "GH | GH", "GD | GD", "GB | GB", "GL | GL", "GM | GM", "GO | GO", "GE | GE", "GS.MX | GS.MX", "GS.BC | GS.BC", "GS.VI | GS.VI", "GSV | GSV", "GSM | GSM", "GSL | GSL", "AGESF | AGESF", "AGSN.MX | AGSN.MX", "AGS.SW | AGS.SW", "AGS.BR | AGS.BR", "FO4N.HA | FO4N.HA", "0Q99.L | 0Q99.L", "FO4N.F | FO4N.F", "FO4N.DU | FO4N.DU", "M | M", "M.BK | M.BK", "M.MX | M.MX", "MG | MG", "MD | MD", "MA | MA", "MQ | MQ", "MC | MC", "MS | MS", "MU | MU", "ME | ME", "MO | MO", "MX | MX", "MN | MN", "MP | MP", "ML | ML", "ALMND.PA | ALMND.PA", "MS | MS", "MS.SN | MS.SN", "MS.MX | MS.MX", "MS.SW | MS.SW", "MSN | MSN", "MSM | MSM", "MSI | MSI", "MSP | MSP", "MSA | MSA", "MSF.MU | MSF.MU", "MSF.HM | MSF.HM", "MSF.DU | MSF.DU", "MSF.HA | MSF.HA", "MSF.SG | MSF.SG", "MSF.BE | MSF.BE", "MSF.BR | MSF.BR", "MSF.F | MSF.F", "MSF.DE | MSF.DE", "MSFN | MSFN", "MSFT | MSFT", "MSFT.MI | MSFT.MI", "MSFT.VI | MSFT.VI", "MSFT.SN | MSFT.SN", "MSFT.MX | MSFT.MX", "MSFT.BC | MSFT.BC", "MSFT.SW | MSFT.SW"};
         ArrayAdapter<String> newsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, dataArr);
-        searchAutoComplete.setAdapter(newsAdapter);
+        //ArrayAdapter<String> newsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, dataArr);
         searchAutoComplete.setBackgroundColor(Color.WHITE);
         searchAutoComplete.setTextColor(Color.BLACK);
+        searchAutoComplete.setAdapter(newsAdapter);
+
         //Autocomplete
         // Listen to search view item on click event.
         searchAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -220,11 +225,11 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
             //Favorites Data
             jObj3.put("tickerName", "MSFT");
             jObj3.put("compName", "Microsoft");
-            jObj3.put("latestPrice", "100.00");
+            //jObj3.put("latestPrice", "100.00");
             jArr2.put(jObj3);
             jObj4.put("tickerName", "GS");
             jObj4.put("compName", "Goldman Sachs");
-            jObj4.put("latestPrice", "200.00");
+            //jObj4.put("latestPrice", "200.00");
             jArr2.put(jObj4);
             sharedEditor.putString("Favorite", jArr2.toString());
 
@@ -262,8 +267,8 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
                 org.json.simple.JSONObject tempItem = (org.json.simple.JSONObject) item;
                 tempList.add((String) tempItem.get("tickerName"));
                 tempList.add((String) tempItem.get("compName")); // 1 for current price
-                tempList.add((String) tempItem.get("latestPrice")); // 2 for latest price
-                tempList.add("150.00"); //3 for price since last closed
+//                tempList.add((String) tempItem.get("latestPrice")); // 2 for latest price
+//                tempList.add("150.00"); //3 for price since last closed
                 favoriteItems1.add(tempList);
             }
 
@@ -288,6 +293,7 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
         try {
             org.json.simple.JSONArray jsonArrayPort = (org.json.simple.JSONArray) jParser.parse(portfolioJSONArray);
             org.json.simple.JSONArray jsonArrayFav = (org.json.simple.JSONArray) jParser.parse(favoriteJSONArray);
+            Log.i(TAG, "getCurrentStockPriceVals: jsonArrayFav1122> "+jsonArrayFav);
             int jsonArrayPortLength = jsonArrayPort.size();
             int jsonArrayFavoriteLength = jsonArrayFav.size();
             //Portfolio Values Start
@@ -297,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
             }
             for (Object item : jsonArrayFav) {
 
-                //fetchFavoriteValue((org.json.simple.JSONObject)item, jsonArrayFavoriteLength);
+                fetchFavoriteValue((org.json.simple.JSONObject)item, jsonArrayFavoriteLength);
             }
             //Portfolio Values End
 
@@ -365,20 +371,29 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
     private void fetchFavoriteValue(org.json.simple.JSONObject favoriteObject, int jsonArrayFavoriteLength){
 
         org.json.simple.JSONObject tempItem = favoriteObject;
-        String tickerSymbol = (String) tempItem.get("tickerSymbol");
-        latestStock_url = latestStock_url + tickerSymbol;
+        String tickerSymbol = (String) tempItem.get("tickerName");
+        Log.i(TAG, "fetchFavoriteValue: tickerSymbol> "+tickerSymbol);
+//        latestStock_url = latestStock_url + tickerSymbol;
+        String latestStockUrl1 = "";
+        latestStockUrl1 = latestStock_url + tickerSymbol;
+        Log.i(TAG, "fetchFavoriteValue: latestStock_url> "+latestStock_url);
         List<String> tempList = new ArrayList<>();
-        JsonObjectRequest latestStockPrice = new JsonObjectRequest(Request.Method.GET, latestStock_url, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest latestStockPrice = new JsonObjectRequest(Request.Method.GET, latestStockUrl1, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject latest_stock_response) {
                 try {
-                    Log.i("latest_response", "onResponse123: " + latest_stock_response.toString());
+                    Log.i("latest_response", "onResponse123 Fav: " + latest_stock_response.toString());
+                    Log.i(TAG, "onResponse: count1> "+count1);
                     currentStockPrice1 = latest_stock_response.getString("c");
-                    favoriteItems1.get(count).add(currentStockPrice1);
-                    count += 1;
-                    if (count == jsonArrayFavoriteLength) {
+                    changeInPriceFav = latest_stock_response.getString("d");
+                    getChangeInPriceFavPercentage = latest_stock_response.getString("dp");
+                    favoriteItems1.get(count1).add(currentStockPrice1); //Position 2
+                    favoriteItems1.get(count1).add(changeInPriceFav); //Position 3
+                    favoriteItems1.get(count1).add(getChangeInPriceFavPercentage); //Position 4
+                    count1 += 1;
+                    if (count1 == jsonArrayFavoriteLength) {
                         favoriteRecycle();
-                        enableSwipeToDeleteAndUndo();
+                        enableSwipeToDeleteAndUndoFavorite();
                     }
 
                 } catch (JSONException e) {
@@ -402,7 +417,7 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
         setPortfolioHeadings();
         portfolioRecView = findViewById(R.id.portfolioRecyclerView);
 //        portfolioRecView.setVisibility(View.GONE); To hide a view based on a condition
-        portRecAdaptor = new PortfolioRecyclerAdapter(portfolioItems1, this);
+        portRecAdaptor = new PortfolioRecyclerAdapter(portfolioItems1, this,this);
         ItemTouchHelper.Callback callback = new ItemMoveCallback(portRecAdaptor);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(portfolioRecView);
@@ -451,18 +466,6 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
 
     }
 
-    private void clickChevronRight(){
-        ImageButton chevronButton = findViewById(R.id.chevron_right_button);
-        chevronButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                String p = peer.getText().toString();
-                Intent intent = new Intent(getBaseContext(), TradeActivity.class);
-//                intent.putExtra("SEARCH_ID", p);
-                startActivity(intent);
-            }
-        });
-    }
     private void enableSwipeToDeleteAndUndo() {
         Log.i(TAG, "Inside enableSwipeToDeleteAndUndo: ");
         HomeSwipeToDelete swipeToDeleteCallback = new HomeSwipeToDelete(this) {
@@ -473,7 +476,11 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
                 final int position = viewHolder.getAdapterPosition();
                 final List<String> item = portRecAdaptor.getData().get(position);
 
-                portRecAdaptor.removeItem(position);
+                List<List<String>> updatedPortfolioList = portRecAdaptor.removeItem(position);
+                //Update Local Storage with this new List
+                Log.i(TAG, "onSwiped: updatedPortfolioList> "+updatedPortfolioList);
+                listToJsonPortfolio(updatedPortfolioList);
+
 
 
                 Snackbar snackbar = Snackbar
@@ -482,7 +489,8 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
                     @Override
                     public void onClick(View view) {
 
-                        portRecAdaptor.restoreItem(item, position);
+                        List<List<String>> updatedPortfolio = portRecAdaptor.restoreItem(item, position);
+                        listToJsonPortfolio(updatedPortfolio);
                         portfolioRecView.scrollToPosition(position);
                     }
                 });
@@ -497,8 +505,30 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
         itemTouchhelper.attachToRecyclerView(portfolioRecView);
     }
 
+    public void listToJsonPortfolio(List<List<String>> updatedPortfolioList){
+        SharedPreferences sharedPref = getSharedPreferences("LocalStorageValues", MODE_PRIVATE);
+        SharedPreferences.Editor sharedEditor = sharedPref.edit();
+        JSONArray tempJsonArray = new JSONArray();
+        for(int j=0; j<updatedPortfolioList.size();j++){
+            JSONObject tempObj = new JSONObject();
+            try {
+                tempObj.put("tickerSymbol", updatedPortfolioList.get(j).get(0));
+                tempObj.put("numOfShares", updatedPortfolioList.get(j).get(1));
+                tempObj.put("totalCostStocks", updatedPortfolioList.get(j).get(3));
+
+                tempJsonArray.put(tempObj);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+        sharedEditor.putString("Portfolio",tempJsonArray.toString());
+        sharedEditor.commit();
+        Log.i(TAG, "onSwiped: sharedEditor Portfolio"+sharedPref.getString("Portfolio",""));
+    }
+
     private void enableSwipeToDeleteAndUndoFavorite() {
-        Log.i(TAG, "Inside enableSwipeToDeleteAndUndo: ");
+        Log.i(TAG, "Inside enableSwipeToDeleteAndUndoFavorite: ");
         HomeSwipeToDelete swipeToDeleteCallback = new HomeSwipeToDelete(this) {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
@@ -507,7 +537,15 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
                 final int position = viewHolder.getAdapterPosition();
                 final List<String> item = favRecAdapter.getData().get(position);
 
-                favRecAdapter.removeItem(position);
+                //Update Local Storage with this new List
+                List<List<String>> updatedFavoriteList = favRecAdapter.removeItem(position);
+                listToJsonFavorite(updatedFavoriteList);
+
+
+                Log.i(TAG, "onSwiped: updatedFavoriteList> "+updatedFavoriteList+" "+position);
+                Log.i(TAG, "onSwiped: position> "+updatedFavoriteList.size());
+//                oldFavorite> [{"tickerName":"MSFT","compName":"Microsoft"},{"tickerName":"GS","compName":"Goldman Sachs"}]
+//                updatedFavoriteList> [[MSFT, Microsoft, 284.47, 6.95, 2.5043]]
 
 
                 Snackbar snackbar = Snackbar
@@ -516,7 +554,9 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
                     @Override
                     public void onClick(View view) {
 
-                        favRecAdapter.restoreItem(item, position);
+                        List<List<String>> updateFavorite =  favRecAdapter.restoreItem(item, position);
+                        //Add values back to local storage
+                        listToJsonFavorite(updateFavorite);
                         favoriteRecView.scrollToPosition(position);
                     }
                 });
@@ -531,12 +571,46 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
         itemTouchhelper.attachToRecyclerView(favoriteRecView);
     }
 
+    public void listToJsonFavorite(List<List<String>> updatedFavoriteList){
+        SharedPreferences sharedPref = getSharedPreferences("LocalStorageValues", MODE_PRIVATE);
+        SharedPreferences.Editor sharedEditor = sharedPref.edit();
+        String oldFavorite = sharedPref.getString("Favorite","");
+        Log.i(TAG, "onSwiped: oldFavorite> "+oldFavorite);
+        JSONArray tempJsonArray = new JSONArray();
+        for(int j=0; j<updatedFavoriteList.size();j++){
+            JSONObject tempObj = new JSONObject();
+            try {
+                tempObj.put("tickerName", updatedFavoriteList.get(j).get(0));
+                tempObj.put("compName", updatedFavoriteList.get(j).get(1));
+
+                tempJsonArray.put(tempObj);
+                Log.i(TAG, "onSwiped: tempJsonArray> for1 "+tempJsonArray);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+        Log.i(TAG, "onSwiped: tempJsonArray> "+tempJsonArray);
+        sharedEditor.putString("Favorite",tempJsonArray.toString());
+        sharedEditor.commit();
+        Log.i(TAG, "onSwiped: sharedEditor "+sharedPref.getString("Favorite",""));
+    }
+
     @Override
     public void onChevronClick(int position) {
         favoriteItems1.get(position);
         Intent intent = new Intent(this,TradeActivity.class);
         String searchId = favoriteItems1.get(position).get(0);
         Log.i(TAG, "onChevronClick: searchId"+searchId);
+        intent.putExtra("SEARCH_ID", searchId);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onChevronClickPort(int position) {
+        portfolioItems1.get(position);
+        Intent intent = new Intent(this,TradeActivity.class);
+        String searchId = portfolioItems1.get(position).get(0);
         intent.putExtra("SEARCH_ID", searchId);
         startActivity(intent);
     }

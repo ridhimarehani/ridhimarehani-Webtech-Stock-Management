@@ -61,10 +61,12 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         Double currentPriceDouble = Double.parseDouble(currentPrice);
         Double priceSinceLastCloseDouble = Double.parseDouble(priceSinceLastClose);
         Double priceChange = currentPriceDouble - priceSinceLastCloseDouble;
-        String priceChangeString = df.format(priceChange);
+        //String priceChangeString = df.format(priceChange);
+        String priceChangeString = favItems.get(position).get(3);
 //        priceChange = df.format(priceChange);
         Double priceChangePercentage = (priceChange/priceSinceLastCloseDouble) * 100;
-        String priceChangePercentageString = df.format(priceChange);
+        //String priceChangePercentageString = df.format(priceChange);
+        String priceChangePercentageString = favItems.get(position).get(4);
         String changeString = "$"+ String.valueOf(priceChangeString)+ " (" + String.valueOf(priceChangePercentageString) + "%)";
         holder.priceChange.setText(changeString);
         //Calculation End
@@ -108,14 +110,16 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         return favItems;
     }
 
-    public void removeItem(int position) {
+    public List<List<String>> removeItem(int position) {
         favItems.remove(position);
         notifyItemRemoved(position);
+        return favItems;
     }
 
-    public void restoreItem(List<String> item, int position) {
+    public List<List<String>> restoreItem(List<String> item, int position) {
         favItems.add(position, item);
         notifyItemInserted(position);
+        return favItems;
     }
     //Methods for Swipe to Delete End
 

@@ -4,13 +4,17 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.188" />
-        <entry key="app/src/main/res/drawable/launch_screen.xml" value="0.1935" />
+        <entry key="app/src/main/res/drawable/launch_screen.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/tradebutton.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_info.xml" value="0.11775362318840579" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_trade.xml" value="0.11775362318840579" />
         <entry key="app/src/main/res/layout/all_other_news.xml" value="0.11775362318840579" />
+        <entry key="app/src/main/res/layout/autocomplete_layout.xml" value="0.20652173913043478" />
         <entry key="app/src/main/res/layout/finhub_footer.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/first_news.xml" value="0.20652173913043478" />
+        <entry key="app/src/main/res/layout/historicalchart.xml" value="0.20652173913043478" />
+        <entry key="app/src/main/res/layout/historicalsummary.xml" value="0.20652173913043478" />
         <entry key="app/src/main/res/layout/home_date_section.xml" value="0.15520833333333334" />
         <entry key="app/src/main/res/layout/home_finhub_footer.xml" value="0.17028985507246377" />
         <entry key="app/src/main/res/layout/home_section_headers.xml" value="0.15885416666666666" />
@@ -19,6 +23,8 @@
         <entry key="app/src/main/res/layout/portfolio_header.xml" value="0.25" />
         <entry key="app/src/main/res/layout/portfolio_row.xml" value="0.335" />
         <entry key="app/src/main/res/layout/portfolio_trade.xml" value="0.11775362318840579" />
+        <entry key="app/src/main/res/layout/slpash_screen.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/splash_screen.xml" value="0.20652173913043478" />
         <entry key="app/src/main/res/layout/ticker_item.xml" value="0.45" />
         <entry key="app/src/main/res/layout/ticker_section.xml" value="0.24317617866004962" />
         <entry key="app/src/main/res/menu/search.xml" value="0.24074074074074073" />

@@ -4,8 +4,8 @@
 
     <item>
         <bitmap
-            android:src="@drawable/ic_app_playstore"
-            android:gravity="center"/>
+            android:src="@drawable/final_img"
+            android:gravity="center|bottom|clip_vertical"/>
     </item>
 
 </layer-list>

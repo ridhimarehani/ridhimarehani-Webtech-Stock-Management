@@ -2,6 +2,7 @@
 package com.example.stocks;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,10 +29,12 @@ public class PortfolioRecyclerAdapter extends RecyclerView.Adapter<PortfolioRecy
     private static final DecimalFormat df = new DecimalFormat("0.00");
     private static final String TAG = "PortfolioRecyclerAdapter";
     private Context context;
+    private OnChevronClickListenerPort mOnChevronClickListenerPort;
 
-    public PortfolioRecyclerAdapter(List<List<String>> portfolioItems, Context context) {
+    public PortfolioRecyclerAdapter(List<List<String>> portfolioItems, Context context, OnChevronClickListenerPort onChevronClickListenerPort) {
         this.portfolioItems = portfolioItems;
         this.context = context;
+        this.mOnChevronClickListenerPort = onChevronClickListenerPort;
     }
 //    public PortfolioRecyclerAdapter(List<List<String>> portItems, String netWorth, String cashBalance) {
 //        this.portItems = portItems;
@@ -47,7 +51,7 @@ public class PortfolioRecyclerAdapter extends RecyclerView.Adapter<PortfolioRecy
         Log.i(TAG, "onCreateViewHolder viewType: "+viewType);
 
 
-        PortfolioViewHolder portViewHolder = new PortfolioViewHolder(portView);
+        PortfolioViewHolder portViewHolder = new PortfolioViewHolder(portView, mOnChevronClickListenerPort);
         return portViewHolder;
     }
 
@@ -133,14 +137,17 @@ public class PortfolioRecyclerAdapter extends RecyclerView.Adapter<PortfolioRecy
         return portfolioItems;
     }
 
-    public void removeItem(int position) {
+    public List<List<String>> removeItem(int position) {
         portfolioItems.remove(position);
+        Log.i(TAG, "removeItem: portfolioItems> "+portfolioItems);
         notifyItemRemoved(position);
+        return portfolioItems;
     }
 
-    public void restoreItem(List<String> item, int position) {
+    public List<List<String>> restoreItem(List<String> item, int position) {
         portfolioItems.add(position, item);
         notifyItemInserted(position);
+        return portfolioItems;
     }
     //Methods for Swipe to Delete End
 
@@ -177,13 +184,16 @@ public class PortfolioRecyclerAdapter extends RecyclerView.Adapter<PortfolioRecy
         TextView portTickerText, numShares, currentPrice, priceChange, trendingSymbol;
         View rowView;
         ImageView imageView;
+        ImageButton chevronRight;
+        OnChevronClickListenerPort onChevronClickListenerPort;
 
-        public PortfolioViewHolder(@NonNull View itemView) {
+        public PortfolioViewHolder(@NonNull View itemView, OnChevronClickListenerPort onChevronClickListenerPort) {
             //Keeps track of all the different views that are present in the row
             super(itemView);
             Log.i(TAG, "PortfolioViewHolder: ");
             //For Reordering
             rowView = itemView;
+            this.onChevronClickListenerPort = onChevronClickListenerPort;
 
             //For portfolio Row
             portTickerText = itemView.findViewById(R.id.ticker_Sym);
@@ -193,8 +203,18 @@ public class PortfolioRecyclerAdapter extends RecyclerView.Adapter<PortfolioRecy
             priceChange = (TextView) itemView.findViewById(R.id.change_in_price);
             trendingSymbol = itemView.findViewById(R.id.change_symbol);
             imageView = itemView.findViewById(R.id.imageView);
+            //Chevron Click
+            chevronRight = itemView.findViewById(R.id.chevron_right_button);
+            chevronRight.setOnClickListener(this::onClick);
 
         }
+
+        private void onClick(View view) {
+            onChevronClickListenerPort.onChevronClickPort(getAdapterPosition());
+        }
     }
-    
+    public interface OnChevronClickListenerPort{
+        void onChevronClickPort(int position);
+
+    }
 }
