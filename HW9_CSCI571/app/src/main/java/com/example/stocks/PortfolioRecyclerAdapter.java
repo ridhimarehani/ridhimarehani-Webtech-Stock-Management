@@ -44,11 +44,9 @@ public class PortfolioRecyclerAdapter extends RecyclerView.Adapter<PortfolioRecy
     @Override
     public PortfolioViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //Create the individual rows inside the Recycler container
-        Log.i(TAG, "onCreateViewHolder: ");
         LayoutInflater layInflator = LayoutInflater.from(parent.getContext());
         View portView;
         portView = layInflator.inflate(R.layout.ticker_item, parent, false);
-        Log.i(TAG, "onCreateViewHolder viewType: "+viewType);
 
 
         PortfolioViewHolder portViewHolder = new PortfolioViewHolder(portView, mOnChevronClickListenerPort);
@@ -59,10 +57,9 @@ public class PortfolioRecyclerAdapter extends RecyclerView.Adapter<PortfolioRecy
     public void onBindViewHolder(@NonNull PortfolioViewHolder holder, int position) {
 //        holder.portShareCount.setText(portItems.get(position).get(1));
         String numOfShares = portfolioItems.get(position).get(1);
-        Log.i(TAG, "onBindViewHolder: portfolioItems1> "+portfolioItems);
         //Binding values for Portfolio Row
         holder.portTickerText.setText(portfolioItems.get(position).get(0)); // 0  for ticker Symbol, 1 for share count
-        holder.numShares.setText(numOfShares);
+        holder.numShares.setText(numOfShares+ " shares");
 
         //Calculation Start
         //Calculation for market Value
@@ -71,24 +68,23 @@ public class PortfolioRecyclerAdapter extends RecyclerView.Adapter<PortfolioRecy
         Integer numOfSharesInt = Integer.parseInt(numOfShares);
         Double marketValue = currentPriceDouble * numOfSharesInt;
         String marketValueString = df.format(marketValue);
-        holder.currentPrice.setText(String.valueOf(marketValueString));
+        holder.currentPrice.setText("$"+String.valueOf(marketValueString));
 
         //Calculation for Change and Percentage
-        String totalCostStocks = portfolioItems.get(position).get(3);
+        String totalCostStocks = portfolioItems.get(position).get(3); //3 for money spent on stocks i.e. total cost so far
         Double totalCostStocksDouble = Double.parseDouble(totalCostStocks);
         Double changeInPrice = marketValue - totalCostStocksDouble; // totalCostStocksDouble is the purchase cost
-        Log.i(TAG, "onBindViewHolder: changeInPrice> "+changeInPrice);
         Double changeInPricePercentage = ((changeInPrice/totalCostStocksDouble) * 100);
         String changeInPriceString = df.format(changeInPrice);
 
         String changeInPricePercentageString = df.format(changeInPricePercentage);
         String changeString = "$"+ String.valueOf(changeInPriceString)+ " (" +String.valueOf(changeInPricePercentageString) + "%)";
         holder.priceChange.setText(changeString);
+        String zeroChange = "$0.00 (0.00%)";
         //Calculation End
-        Log.i(TAG, "onBindViewHolder: changeInPriceString> "+changeInPriceString);
-        if(changeInPriceString.equals("-0.00")){
-            Log.i(TAG, "onBindViewHolder: inside if ch");
+        if(changeInPriceString.equals("-0.00") || changeInPriceString.equals("0.00")){
             changeInPrice = 0.00;
+            holder.priceChange.setText(zeroChange);
         }
 
         //Trending Symbol
@@ -96,25 +92,13 @@ public class PortfolioRecyclerAdapter extends RecyclerView.Adapter<PortfolioRecy
             Drawable unwrappedDrawable = ContextCompat.getDrawable(context, R.drawable.trending_up).mutate();
             unwrappedDrawable.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
             holder.imageView.setImageDrawable(unwrappedDrawable);
-//            holder.trendingSymbol.setCompoundDrawablesWithIntrinsicBounds(R.drawable.trending_up,0 , 0, 0);
         }
         else if (changeInPrice < 0){
-            Log.i(TAG, "onBindViewHolder: if changeInPrice> "+changeInPrice);
             Drawable unwrappedDrawable = ContextCompat.getDrawable(context, R.drawable.trending_down).mutate();
             unwrappedDrawable.setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
             holder.imageView.setImageDrawable(unwrappedDrawable);
-//            holder.trendingSymbol.setCompoundDrawablesWithIntrinsicBounds(R.drawable.trending_down,0 , 0, 0);
         }
 
-
-//        holder.priceChange.setText("$0.45 (0.09%)"); // 3 for change, 4 for percent
-
-        //Binding Values for Header
-//        holder.sectionHeading.setText("PORTFOLIO");
-//        holder.netWorthHead.setText("Net Worth");
-//        holder.cashBalanceHead.setText("Cash Balance");
-//        headingHolder.netWorthVal.setText(netWorthVal);
-//        headingHolder.cashBalanceVal.setText(cashBalVal);
 
     }
 
@@ -123,14 +107,6 @@ public class PortfolioRecyclerAdapter extends RecyclerView.Adapter<PortfolioRecy
         return portfolioItems.size();
     }
 
-//    public int getItemViewType(int position){
-//        if (position == 0){
-//            return 0;
-//        }
-//        else {
-//            return 1;
-//        }
-//    }
 
     //Methods for Swipe to Delete Start
     public List<List<String>> getData() {
@@ -150,8 +126,6 @@ public class PortfolioRecyclerAdapter extends RecyclerView.Adapter<PortfolioRecy
     }
     //Methods for Swipe to Delete End
 
-
-
     //Methods for Reodering Start
     @Override
     public void onRowMoved(int fromPosition, int toPosition) {
@@ -170,7 +144,7 @@ public class PortfolioRecyclerAdapter extends RecyclerView.Adapter<PortfolioRecy
 
     @Override
     public void onRowSelected(PortfolioViewHolder myViewHolder) {
-        myViewHolder.rowView.setBackgroundColor(Color.GRAY);
+        //myViewHolder.rowView.setBackgroundColor(Color.GRAY);
     }
 
     @Override
@@ -189,19 +163,18 @@ public class PortfolioRecyclerAdapter extends RecyclerView.Adapter<PortfolioRecy
         public PortfolioViewHolder(@NonNull View itemView, OnChevronClickListenerPort onChevronClickListenerPort) {
             //Keeps track of all the different views that are present in the row
             super(itemView);
-            Log.i(TAG, "PortfolioViewHolder: ");
             //For Reordering
             rowView = itemView;
             this.onChevronClickListenerPort = onChevronClickListenerPort;
 
             //For portfolio Row
             portTickerText = itemView.findViewById(R.id.ticker_Sym);
-//            portShareCount = itemView.findViewById(R.id.portNumShares);
             numShares = (TextView) itemView.findViewById(R.id.num_Shares);
             currentPrice = (TextView) itemView.findViewById(R.id.current_price);
             priceChange = (TextView) itemView.findViewById(R.id.change_in_price);
             trendingSymbol = itemView.findViewById(R.id.change_symbol);
             imageView = itemView.findViewById(R.id.imageView);
+
             //Chevron Click
             chevronRight = itemView.findViewById(R.id.chevron_right_button);
             chevronRight.setOnClickListener(this::onClick);

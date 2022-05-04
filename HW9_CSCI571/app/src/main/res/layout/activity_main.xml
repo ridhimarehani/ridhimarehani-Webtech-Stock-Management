@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
@@ -19,8 +21,6 @@
     </ProgressBar>
 </LinearLayout>
 <androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home_section_port_header"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
 
         <TextView
             android:id="@+id/portfolio_net_worth_head"
-            android:layout_width="163dp"
+            android:layout_width="198dp"
             android:layout_height="wrap_content"
             android:layout_row="0"
             android:layout_rowWeight="1"

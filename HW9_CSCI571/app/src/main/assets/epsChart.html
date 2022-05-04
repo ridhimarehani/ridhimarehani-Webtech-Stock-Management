@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
 
-    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/stock/modules/data.js"></script>
     <script src="https://code.highcharts.com/stock/modules/drag-panes.js"></script>
     <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
@@ -30,20 +30,18 @@ function getEPSChartsData(ticker, url){
             response => response.json()
         )
         .then(res => {
-            console.log(res);
-            console.log(res.length);
             let actualData = [];
             let estimateData = [];
             let labelX = [];
             for (let i = 0; i < res.length; i++) {
-              let list1 = [res[i].period + ' Surprise:' + res[i].surprise, res[i].actual]
-              let list2 = [res[i].period  + ' Surprise:' + res[i].surprise, res[i].estimate]
-              labelX.push(res[i].period   + ' Surprise:' + res[i].surprise);
+              let list1 = [res[i].period + 'Surprise:' + res[i].surprise, res[i].actual]
+              let list2 = [res[i].period  + 'Surprise:' + res[i].surprise, res[i].estimate]
+              labelX.push(res[i].period   + ' Surprise:' + res[i].surprise.toFixed(2));
               actualData.push(list1);
               estimateData.push(list2);
             }
 
-            Highcharts.stockChart('container', {
+            Highcharts.chart('container', {
               title: {
                 text: 'Historical EPS Surprises',
 
@@ -70,7 +68,7 @@ function getEPSChartsData(ticker, url){
                 categories: labelX,
 
                 labels: {
-                  rotation: 0,
+                  rotation: -45,
                   useHTML: true,
                   allowOverlap: true,
                   style: {
@@ -79,6 +77,8 @@ function getEPSChartsData(ticker, url){
                     wordBreak: 'break-all',
                     textAlign: 'center',
                     textOverflow: 'allow',
+                    "width": "60px",
+                    "wordWrap": "break-word"
                   }
                 }
 

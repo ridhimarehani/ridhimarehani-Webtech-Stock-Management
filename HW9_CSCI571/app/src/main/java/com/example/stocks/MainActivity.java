@@ -17,7 +17,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
+import android.text.style.URLSpan;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -83,6 +87,9 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
     ConstraintLayout mainConstraint;
     Handler handler = new Handler();
     int countAutoRefresh = 0;
+    double netWorthDouble = 0;
+    int helloCount = 0;
+    private static final DecimalFormat df = new DecimalFormat("0.00");
 
 
     @Override
@@ -98,17 +105,28 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
         requestQueue = Volley.newRequestQueue(this);
         mainConstraint = (ConstraintLayout) findViewById(R.id.home_section_port_header);  // detail contents
         progressBarArea = (LinearLayout) findViewById(R.id.lProgressBarArea);
-
-
-        if (portfolioItems1 != null && favoriteItems1 !=null){
+        writeLocalStorage();
+        readLocalStorage();
+        Log.i(TAG, "onCreateAAAA: >"+portfolioItems1);
+        Log.i(TAG, "onCreateCCC: >"+favoriteItems1);
+        if (portfolioItems1.size() !=0 || favoriteItems1.size() !=0){
+            Log.i(TAG, "onCreate: Inside If Gone");
             progressBarArea.setVisibility(View.VISIBLE);
             mainConstraint.setVisibility(View.GONE);
         }
+        Log.i(TAG, "onCreate: helloCount");
+//        if (helloCount != 0){
+//            progressBarArea.setVisibility(View.VISIBLE);
+//            mainConstraint.setVisibility(View.GONE);
+//        }
+//        progressBarArea.setVisibility(View.VISIBLE);
+//        mainConstraint.setVisibility(View.GONE);
 
-        writeLocalStorage();
+//        writeLocalStorage();
         setHomeDateSection();
-        setPortfolioHeader();
-        readLocalStorage();
+
+
+        setPortfolioHeadings();
         getCurrentStockPriceVals();
         setHomeFinnhubFooter();
         int totalCount = portfolioItems1.size() + favoriteItems1.size();
@@ -136,8 +154,14 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
     @Override
     protected void onResume() {
         super.onResume();
+//        progressBarArea.setVisibility(View.VISIBLE);
+//        mainConstraint.setVisibility(View.GONE);
         setHomeDateSection();
         setHomeFinnhubFooter();
+        readLocalStorage();
+//        count = 0;
+//        count1 = 0;
+//        getCurrentStockPriceVals();
 //        doTheAutoRefresh();
 //        readLocalStorage();
 
@@ -154,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
                 count1 = 0;
                 countAutoRefresh += 1;
                 getCurrentStockPriceVals();
-                Log.i(TAG, "run: Autorefresh> " + countAutoRefresh);
+//                Log.i(TAG, "run: Autorefresh> " + countAutoRefresh);
                 doTheAutoRefresh();
             }
         }, 15000);
@@ -173,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
 
         //Autocomplete
         SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) searchView.findViewById(androidx.appcompat.R.id.search_src_text);
-        String dataArr[] = {"TS.MX | TENARIS SA", "TSE | TRINSEO PLC", "TSP | TUSIMPLE HOLDINGS INC - A", "TSC | TRISTATE CAPITAL HLDGS INC", "TSQ | TOWNSQUARE MEDIA INC - CL A", "TSN | TYSON FOODS INC-CL A", "TSLA | TESLA INC", "TSLA.MI | TESLA INC", "TSLA.VI | TESLA INC", "TSLA.SW | TESLA INC", "TSLA.MX | TESLA INC", "TRIS3.SA | TRISUL SA", "0R0X.L | TESLA INC", "TL0.HM | TESLA INC", "TL0.F | TESLA INC", "TSLAUSD.SW | TESLA INC", "TL0.SG | TESLA INC", "TL0.MU | TESLA INC", "TSLA-RM.ME | TESLA INC", "TL0.DU | TESLA INC", "TL0.DE | TESLA INC", "TL0.BE | TESLA INC", "T | AT&T INC", "T.TO | TELUS CORP", "T.NE | TELUS CORP", "T.SN | AT&T INC", "T.MX | AT&T INC", "T.BC | AT&T INC", "TD | TORONTO-DOMINION BANK", "TU | TELUS CORP", "TH | TARGET HOSPITALITY CORP", "TW | TRADEWEB MARKETS INC-CLASS A", "TG | TREDEGAR CORP", "TR | TOOTSIE ROLL INDS", "TT | TRANE TECHNOLOGIES PLC", "TK | TEEKAY CORP", "TA | TRAVELCENTERS OF AMERICA INC", "4Y5.F | DBT", "4Y5.MU | DBT", "4Y5.SG | DBT", "G | GENPACT LTD", "G.TO | AUGUSTA GOLD CORP", "G.MI | ASSICURAZIONI GENERALI", "G.NE | AUGUSTA GOLD CORP", "GS | GOLDMAN SACHS GROUP INC", "GP | GREENPOWER MOTOR CO INC", "GT | GOODYEAR TIRE & RUBBER CO", "GH | GUARDANT HEALTH INC", "GD | GENERAL DYNAMICS CORP", "GB | GLOBAL BLUE GROUP HOLDING AG", "GL | GLOBE LIFE INC", "GM | GENERAL MOTORS CO", "GO | GROCERY OUTLET HOLDING CORP", "GE | GENERAL ELECTRIC CO", "GS.MX | GOLDMAN SACHS GROUP INC", "GS.BC | GOLDMAN SACHS GROUP INC", "GS.VI | GOLDMAN SACHS GROUP INC", "GSV | GOLD STANDARD VENTURES CORP", "GSM | FERROGLOBE PLC", "GSL | GLOBAL SHIP LEASE INC-CL A", "AGESF | AGEAS", "AGSN.MX | AGEAS", "AGS.SW | AGEAS", "AGS.BR | AGEAS", "FO4N.HA | AGEAS", "0Q99.L | AGEAS", "FO4N.F | AGEAS", "FO4N.DU | AGEAS", "M | MACY'S INC", "M.BK | MK RESTAURANTS GROUP PCL", "M.MX | MACY'S INC", "MG | MISTRAS GROUP INC", "MD | MEDNAX INC", "MA | MASTERCARD INC - A", "MQ | MARQETA INC-A", "MC | MOELIS & CO - CLASS A", "MS | MORGAN STANLEY", "MU | MICRON TECHNOLOGY INC", "ME | 23ANDME HOLDING CO -CLASS A", "MO | ALTRIA GROUP INC", "MX | MAGNACHIP SEMICONDUCTOR CORP", "MN | MANNING & NAPIER INC", "MP | MP MATERIALS CORP", "ML | MONEYLION INC", "ALMND.PA | MND", "MS | MORGAN STANLEY", "MS.SN | MORGAN STANLEY", "MS.MX | MORGAN STANLEY", "MS.SW | MORGAN STANLEY", "MSN | EMERSON RADIO CORP", "MSM | MSC INDUSTRIAL DIRECT CO-A", "MSI | MOTOROLA SOLUTIONS INC", "MSP | DATTO HOLDING CORP", "MSA | MSA SAFETY INC", "MSF.MU | MICROSOFT CORP", "MSF.HM | MICROSOFT CORP", "MSF.DU | MICROSOFT CORP", "MSF.HA | MICROSOFT CORP", "MSF.SG | MICROSOFT CORP", "MSF.BE | MICROSOFT CORP", "MSF.BR | MICROSOFT CORP", "MSF.F | MICROSOFT CORP", "MSF.DE | MICROSOFT CORP", "MSFN | MAINSTREET FINANCIAL CORP", "MSFT | MICROSOFT CORP", "MSFT.MI | MICROSOFT CORP", "MSFT.VI | MICROSOFT CORP", "MSFT.SN | MICROSOFT CORP", "MSFT.MX | MICROSOFT CORP", "MSFT.BC | MICROSOFT CORP", "MSFT.SW | MICROSOFT CORP"};
+        String dataArr[] = {"TSE | TRINSEO PLC", "TSP | TUSIMPLE HOLDINGS INC - A", "TSC | TRISTATE CAPITAL HLDGS INC", "TSQ | TOWNSQUARE MEDIA INC - CL A", "TSN | TYSON FOODS INC-CL A", "TSLA | TESLA INC", "T | AT&T INC", "TD | TORONTO-DOMINION BANK", "TU | TELUS CORP", "TH | TARGET HOSPITALITY CORP", "TW | TRADEWEB MARKETS INC-CLASS A", "TG | TREDEGAR CORP", "TR | TOOTSIE ROLL INDS", "TT | TRANE TECHNOLOGIES PLC", "TK | TEEKAY CORP", "TA | TRAVELCENTERS OF AMERICA INC", "G | GENPACT LTD", "GS | GOLDMAN SACHS GROUP INC", "GP | GREENPOWER MOTOR CO INC", "GT | GOODYEAR TIRE & RUBBER CO", "GH | GUARDANT HEALTH INC", "GD | GENERAL DYNAMICS CORP", "GB | GLOBAL BLUE GROUP HOLDING AG", "GL | GLOBE LIFE INC", "GM | GENERAL MOTORS CO", "GO | GROCERY OUTLET HOLDING CORP", "GE | GENERAL ELECTRIC CO", "GSV | GOLD STANDARD VENTURES CORP", "GSM | FERROGLOBE PLC", "GSL | GLOBAL SHIP LEASE INC-CL A", "AGESF | AGEAS", "M | MACY'S INC", "MG | MISTRAS GROUP INC", "MD | MEDNAX INC", "MA | MASTERCARD INC - A", "MQ | MARQETA INC-A", "MC | MOELIS & CO - CLASS A", "MS | MORGAN STANLEY", "MU | MICRON TECHNOLOGY INC", "ME | 23ANDME HOLDING CO -CLASS A", "MO | ALTRIA GROUP INC", "MX | MAGNACHIP SEMICONDUCTOR CORP", "MN | MANNING & NAPIER INC", "MP | MP MATERIALS CORP", "ML | MONEYLION INC", "MS | MORGAN STANLEY", "MSN | EMERSON RADIO CORP", "MSM | MSC INDUSTRIAL DIRECT CO-A", "MSI | MOTOROLA SOLUTIONS INC", "MSP | DATTO HOLDING CORP", "MSA | MSA SAFETY INC", "MSFT | MICROSOFT CORP", "MSFN | MAINSTREET FINANCIAL CORP"};
         ArrayAdapter<String> newsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, dataArr);
         //ArrayAdapter<String> newsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, dataArr);
         searchAutoComplete.setBackgroundColor(Color.WHITE);
@@ -187,9 +211,7 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
             public void onItemClick(AdapterView<?> adapterView, View view, int itemIndex, long id) {
                 String queryString = (String) adapterView.getItemAtPosition(itemIndex);
                 String[] queryStringArray = queryString.split(" ");
-                Log.i(TAG, "onItemClick: queryStringArray> " + queryString);
-                Log.i(TAG, "onItemClick: queryStringArray length> " + queryStringArray[0]);
-                searchAutoComplete.setText("" + "TSLA");
+                searchAutoComplete.setText("" + queryStringArray[0]);
 //                Toast.makeText(MainActivity.this, "you clicked " + queryString, Toast.LENGTH_LONG).show();
                 navigateToTradeActivity(queryStringArray[0]);
             }
@@ -221,22 +243,22 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
         startActivity(intent);
     }
 
-    private void setPortfolioHeader() {
-        SharedPreferences sharedPref = getSharedPreferences("LocalStorageValues", MODE_PRIVATE);
-        String netWorth = sharedPref.getString("net_worth", "");
-        String cashBalance = sharedPref.getString("cash_balance", "");
-        TextView net_worth, cash_balance, netWorthHead, cashBalanceHead;
-        netWorthHead = findViewById(R.id.portfolio_net_worth_head);
-        cashBalanceHead = findViewById(R.id.portfolio_cash_bal_head);
-        net_worth = findViewById(R.id.portfolio_net_worth_val);
-        cash_balance = findViewById(R.id.protfolio_cash_bal_val);
-        net_worth.setText(netWorth);
-        cash_balance.setText(cashBalance);
-        netWorthHead.setText("Net Worth");
-        cashBalanceHead.setText("Cash Balance");
-
-
-    }
+//    private void setPortfolioHeader() {
+//        SharedPreferences sharedPref = getSharedPreferences("LocalStorageValues", MODE_PRIVATE);
+//        String netWorth = sharedPref.getString("net_worth", "");
+//        String cashBalance = sharedPref.getString("cash_balance", "");
+//        TextView net_worth, cash_balance, netWorthHead, cashBalanceHead;
+//        netWorthHead = findViewById(R.id.portfolio_net_worth_head);
+//        cashBalanceHead = findViewById(R.id.portfolio_cash_bal_head);
+//        net_worth = findViewById(R.id.portfolio_net_worth_val);
+//        cash_balance = findViewById(R.id.protfolio_cash_bal_val);
+//        net_worth.setText(netWorth);
+//        cash_balance.setText(cashBalance);
+//        netWorthHead.setText("Net Worth");
+//        cashBalanceHead.setText("Cash Balance");
+//
+//
+//    }
 
     private void setHomeDateSection() {
         TextView homeDate;
@@ -246,10 +268,21 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
     }
 
     private void setHomeFinnhubFooter() {
-
-        TextView finhubLink = findViewById(R.id.finhub_link);
         String value = "<html><a class=test href=\"https://www.finnhub.io\" style=\"color: black; text-decoration:none;\">Powered by Finnhub</a> </html>";
-        finhubLink.setText(Html.fromHtml(value));
+        TextView finhubLink = findViewById(R.id.finhub_link);
+        Spannable s = (Spannable) Html.fromHtml(value);
+        for (URLSpan u: s.getSpans(0, s.length(), URLSpan.class)) {
+            s.setSpan(new UnderlineSpan() {
+                public void updateDrawState(TextPaint tp) {
+                    tp.setUnderlineText(false);
+                }
+            }, s.getSpanStart(u), s.getSpanEnd(u), 0);
+        }
+        finhubLink.setText(s);
+
+
+
+//        finhubLink.setText(Html.fromHtml(value));
         finhubLink.setLinkTextColor(Color.parseColor("#a4a4a3"));
         finhubLink.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -261,11 +294,11 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
         String net_worth = sharedPref.getString("net_worth", "");
         String cash_balance = sharedPref.getString("cash_balance", "");
         if (net_worth.isEmpty()) {
-            sharedEditor.putString("net_worth", "25000");
+            sharedEditor.putString("net_worth", "25000.00");
             sharedEditor.commit();
         }
         if (cash_balance.isEmpty()) {
-            sharedEditor.putString("cash_balance", "25000");
+            sharedEditor.putString("cash_balance", "25000.00");
             sharedEditor.commit();
         }
 //        try {
@@ -288,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
 //        } catch (JSONException e) {
 //            e.printStackTrace();
 //        }
-//        sharedEditor.commit();
+        //sharedEditor.commit();
     }
 
     private void readLocalStorage() {
@@ -298,31 +331,43 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
         SharedPreferences.Editor sharedEditor = sharedPref.edit();
         String favoriteJSONArray = sharedPref.getString("Favorite", "");
         String portfolioJSONArray = sharedPref.getString("Portfolio", "");
+        Log.i(TAG, "readLocalStorage: yo> "+favoriteJSONArray);
+        Double tempTotalCost = 0.00;
 
         JSONParser jParser = new JSONParser();
         try {
-            org.json.simple.JSONArray jsonArrayPort = (org.json.simple.JSONArray) jParser.parse(portfolioJSONArray);
-            org.json.simple.JSONArray jsonArrayFav = (org.json.simple.JSONArray) jParser.parse(favoriteJSONArray);
-            Log.i(TAG, "readLocalStorage: jsonArrayPort> " + jsonArrayPort);
-            for (Object item : jsonArrayPort) {
-                List<String> tempList = new ArrayList<>();
-                org.json.simple.JSONObject tempItem = (org.json.simple.JSONObject) item;
-                tempList.add((String) tempItem.get("tickerSymbol")); //0 for ticker
-                tempList.add((String) tempItem.get("numOfShares")); //1 for number of shares
-                portfolioItems1.add(tempList);
+            if(!portfolioJSONArray.isEmpty()){
+                org.json.simple.JSONArray jsonArrayPort = (org.json.simple.JSONArray) jParser.parse(portfolioJSONArray);
+                for (Object item : jsonArrayPort) {
+                    List<String> tempList = new ArrayList<>();
+                    org.json.simple.JSONObject tempItem = (org.json.simple.JSONObject) item;
+                    tempList.add((String) tempItem.get("tickerSymbol")); //0 for ticker
+                    tempList.add((String) tempItem.get("numOfShares")); //1 for number of shares
+                    String totalCostStocks = (String) tempItem.get("totalCostStocks");
+                    Double totalCostStocksDouble = Double.parseDouble(totalCostStocks);
+                    tempTotalCost += totalCostStocksDouble;
+                    portfolioItems1.add(tempList);
+                }
             }
-            Log.i(TAG, "readLocalStorage: portfolioItems1>> " + portfolioItems1);
-            Log.i(TAG, "readLocalStorage: jsonArrayFav>> " + jsonArrayFav);
+            netWorthDouble = tempTotalCost;
 
-            for (Object item : jsonArrayFav) {
-                List<String> tempList = new ArrayList<>();
-                org.json.simple.JSONObject tempItem = (org.json.simple.JSONObject) item;
-                tempList.add((String) tempItem.get("tickerName"));
-                tempList.add((String) tempItem.get("compName")); // 1 for current price
-//                tempList.add((String) tempItem.get("latestPrice")); // 2 for latest price
-//                tempList.add("150.00"); //3 for price since last closed
-                favoriteItems1.add(tempList);
+
+
+            Log.i(TAG, "readLocalStorage: portfolioItems1>> " + portfolioItems1);
+
+
+            if(!favoriteJSONArray.isEmpty()){
+                org.json.simple.JSONArray jsonArrayFav = (org.json.simple.JSONArray) jParser.parse(favoriteJSONArray);
+                for (Object item : jsonArrayFav) {
+                    List<String> tempList = new ArrayList<>();
+                    org.json.simple.JSONObject tempItem = (org.json.simple.JSONObject) item;
+                    tempList.add((String) tempItem.get("tickerSymbol"));
+                    tempList.add((String) tempItem.get("compName")); // 1 for current price
+                    favoriteItems1.add(tempList);
+                }
+                Log.i(TAG, "readLocalStorage: jsonArrayFav>> " + jsonArrayFav);
             }
+
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -333,30 +378,41 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
 
     private void getCurrentStockPriceVals() {
         Log.i(TAG, "Inside getCurrentStockPriceVals: ");
-        int count1 = 0;
+//        int count1 = 0;
 
         JSONParser jParser = new JSONParser();
         SharedPreferences sharedPref = getSharedPreferences("LocalStorageValues", MODE_PRIVATE);
         String favoriteJSONArray = sharedPref.getString("Favorite", "");
         String portfolioJSONArray = sharedPref.getString("Portfolio", "");
         Log.i(TAG, "getCurrentStockPriceVals: portfolioJSONArray" + portfolioJSONArray);
-        Log.i(TAG, "getCurrentStockPriceVals: favoriteJSONArray" + favoriteJSONArray);
+        Log.i(TAG, "getCurrentStockPriceVals: favoriteJSONArray11" + favoriteJSONArray);
 
         try {
-            org.json.simple.JSONArray jsonArrayPort = (org.json.simple.JSONArray) jParser.parse(portfolioJSONArray);
-            org.json.simple.JSONArray jsonArrayFav = (org.json.simple.JSONArray) jParser.parse(favoriteJSONArray);
+            org.json.simple.JSONArray jsonArrayPort = null;
+            org.json.simple.JSONArray jsonArrayFav = null;
+            if(!portfolioJSONArray.isEmpty()){
+                jsonArrayPort = (org.json.simple.JSONArray) jParser.parse(portfolioJSONArray);
+                int jsonArrayPortLength = jsonArrayPort.size();
+                for (Object item : jsonArrayPort) {
+                    fetchPortfolioValue((org.json.simple.JSONObject) item, jsonArrayPortLength);
+                }
+            }
+            if(!favoriteJSONArray.isEmpty()){
+                jsonArrayFav = (org.json.simple.JSONArray) jParser.parse(favoriteJSONArray);
+                Log.i(TAG, "getCurrentStockPriceVals: jsonArrayFav1234> "+jsonArrayFav);
+                int jsonArrayFavoriteLength = jsonArrayFav.size();
+                for (Object item : jsonArrayFav) {
+                    fetchFavoriteValue((org.json.simple.JSONObject) item, jsonArrayFavoriteLength);
+                }
+            }
+
             Log.i(TAG, "getCurrentStockPriceVals: jsonArrayFav1122> " + jsonArrayFav);
-            int jsonArrayPortLength = jsonArrayPort.size();
-            int jsonArrayFavoriteLength = jsonArrayFav.size();
+
+
             //Portfolio Values Start
 //            int count = 0;
-            for (Object item : jsonArrayPort) {
-                fetchPortfolioValue((org.json.simple.JSONObject) item, jsonArrayPortLength);
-            }
-            for (Object item : jsonArrayFav) {
 
-                fetchFavoriteValue((org.json.simple.JSONObject) item, jsonArrayFavoriteLength);
-            }
+
             //Portfolio Values End
 
             //Favorite Values End
@@ -430,7 +486,7 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
     private void fetchFavoriteValue(org.json.simple.JSONObject favoriteObject, int jsonArrayFavoriteLength) {
 
         org.json.simple.JSONObject tempItem = favoriteObject;
-        String tickerSymbol = (String) tempItem.get("tickerName");
+        String tickerSymbol = (String) tempItem.get("tickerSymbol");
         Log.i(TAG, "fetchFavoriteValue: tickerSymbol> " + tickerSymbol);
 //        latestStock_url = latestStock_url + tickerSymbol;
         String latestStockUrl1 = "";
@@ -484,7 +540,7 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
 
 
     private void portfolioRecycle() {
-        setPortfolioHeadings();
+        //setPortfolioHeadings();
         portfolioRecView = findViewById(R.id.portfolioRecyclerView);
 //        portfolioRecView.setVisibility(View.GONE); To hide a view based on a condition
         portRecAdaptor = new PortfolioRecyclerAdapter(portfolioItems1, this, this);
@@ -503,18 +559,25 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
         SharedPreferences sharedPref = getSharedPreferences("LocalStorageValues", MODE_PRIVATE);
         String netWorthValue = sharedPref.getString("net_worth", "");
         String cashBalance = sharedPref.getString("cash_balance", "");
+
+        //Calculate Net Worth
+        Double cashBalanceFloat = Double.parseDouble(cashBalance);
+        Double netWorthFinal = cashBalanceFloat + netWorthDouble;
+        String netWorthFinalString = df.format(netWorthFinal);
+
         TextView sectionHeading, netWorthHead, cashBalanceHead, netWorthVal, cashBalanceVal;
         sectionHeading = findViewById(R.id.portfolio_heading_text);
         netWorthHead = findViewById(R.id.portfolio_net_worth_head);
         netWorthVal = findViewById(R.id.portfolio_net_worth_val);
         cashBalanceHead = findViewById(R.id.portfolio_cash_bal_head);
         cashBalanceVal = findViewById(R.id.protfolio_cash_bal_val);
+        Log.i(TAG, "setPortfolioHeadings: netWorthFinalString> "+netWorthFinalString);
 
         sectionHeading.setText("PORTFOLIO");
         netWorthHead.setText("Net Worth");
-        netWorthVal.setText(netWorthValue);
+        netWorthVal.setText("$"+netWorthFinalString);
         cashBalanceHead.setText("Cash Balance");
-        cashBalanceVal.setText(cashBalance);
+        cashBalanceVal.setText("$"+cashBalance);
 
     }
 
@@ -525,6 +588,7 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
         sectionHeadingFav.setText("FAVORITE");
         favoriteRecView = findViewById(R.id.favoriteRecycler);
 //        portfolioRecView.setVisibility(View.GONE); To hide a view based on a condition
+        Log.i(TAG, "favoriteRecycle: favoriteItems1>> "+favoriteItems1);
         favRecAdapter = new FavoriteRecyclerAdapter(favoriteItems1, this, this);
         ItemTouchHelper.Callback callback = new ItemMoveCallbackFavorite(favRecAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
@@ -546,7 +610,7 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
 
                 List<List<String>> updatedPortfolioList = portRecAdaptor.removeItem(position);
                 //Update Local Storage with this new List
-                listToJsonPortfolio(updatedPortfolioList);
+                listToJsonPortfolio(updatedPortfolioList, true);
                 Snackbar snackbar = Snackbar
                         .make(mainConstraintLayout, "Item was removed from the list.", Snackbar.LENGTH_LONG);
                 snackbar.setAction("UNDO", new View.OnClickListener() {
@@ -554,7 +618,7 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
                     public void onClick(View view) {
 
                         List<List<String>> updatedPortfolio = portRecAdaptor.restoreItem(item, position);
-                        listToJsonPortfolio(updatedPortfolio);
+                        listToJsonPortfolio(updatedPortfolio, false);
                         portfolioRecView.scrollToPosition(position);
                     }
                 });
@@ -569,22 +633,38 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
         itemTouchhelper.attachToRecyclerView(portfolioRecView);
     }
 
-    public void listToJsonPortfolio(List<List<String>> updatedPortfolioList) {
+    public void listToJsonPortfolio(List<List<String>> updatedPortfolioList, Boolean isDelete) {
         SharedPreferences sharedPref = getSharedPreferences("LocalStorageValues", MODE_PRIVATE);
         SharedPreferences.Editor sharedEditor = sharedPref.edit();
         JSONArray tempJsonArray = new JSONArray();
+        String costOfItem = "";
+        String oldCashBalance = sharedPref.getString("cash_balance","");
+        Double newCashBalance = 0.00;
+        String newCashBalanceString = "";
         for (int j = 0; j < updatedPortfolioList.size(); j++) {
             JSONObject tempObj = new JSONObject();
             try {
                 tempObj.put("tickerSymbol", updatedPortfolioList.get(j).get(0));
                 tempObj.put("numOfShares", updatedPortfolioList.get(j).get(1));
                 tempObj.put("totalCostStocks", updatedPortfolioList.get(j).get(3));
+                costOfItem = updatedPortfolioList.get(j).get(3);
 
                 tempJsonArray.put(tempObj);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+        Double costOfItemDouble = Double.parseDouble(costOfItem);
 
+        if(isDelete == true){
+            newCashBalance = Double.parseDouble(oldCashBalance) + costOfItemDouble;
+            newCashBalanceString = df.format(newCashBalance);
+            sharedEditor.putString("cash_balance", newCashBalanceString);
+        }
+        else {
+            newCashBalance = Double.parseDouble(oldCashBalance) - costOfItemDouble;
+            newCashBalanceString = df.format(newCashBalance);
+            sharedEditor.putString("cash_balance", newCashBalanceString);
         }
         sharedEditor.putString("Portfolio", tempJsonArray.toString());
         sharedEditor.commit();
@@ -632,7 +712,7 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
         for (int j = 0; j < updatedFavoriteList.size(); j++) {
             JSONObject tempObj = new JSONObject();
             try {
-                tempObj.put("tickerName", updatedFavoriteList.get(j).get(0));
+                tempObj.put("tickerSymbol", updatedFavoriteList.get(j).get(0));
                 tempObj.put("compName", updatedFavoriteList.get(j).get(1));
 
                 tempJsonArray.put(tempObj);
@@ -648,18 +728,14 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
     @Override
     public void onChevronClick(int position) {
         favoriteItems1.get(position);
-        Intent intent = new Intent(this, TradeActivity.class);
         String searchId = favoriteItems1.get(position).get(0);
-        intent.putExtra("SEARCH_ID", searchId);
-        startActivity(intent);
+        navigateToTradeActivity(searchId);
     }
 
     @Override
     public void onChevronClickPort(int position) {
         portfolioItems1.get(position);
-        Intent intent = new Intent(this, TradeActivity.class);
         String searchId = portfolioItems1.get(position).get(0);
-        intent.putExtra("SEARCH_ID", searchId);
-        startActivity(intent);
+        navigateToTradeActivity(searchId);
     }
 }

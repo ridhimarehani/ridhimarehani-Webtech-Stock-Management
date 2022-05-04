@@ -1,5 +1,7 @@
 package com.example.stocks;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
@@ -22,19 +24,30 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.text.util.Linkify;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,17 +80,19 @@ import com.highsoft.highcharts.common.hichartsclasses.*;
 import com.highsoft.highcharts.common.HIColor;
 import com.highsoft.highcharts.core.HIChartView;
 import java.time.LocalDateTime;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class TradeActivity extends AppCompatActivity {
+    private Menu menu;
     private String search_id;
     private RequestQueue requestQueue;
-//    private String baseUrl = "http://192.168.1.108:8080/";
+    //    private String baseUrl = "http://10.0.2.2:8080/";
     private String baseUrl = "https://csci571hw8-backend-346006.wl.r.appspot.com/";
     private DecimalFormat df = new DecimalFormat("0.00");
     private List<String> companyDescription = new ArrayList<String>();
     private List<String> historySummary = new ArrayList<String>();
     private List<String> historyCharts = new ArrayList<String>();
-    private List<String> companyPeers = new ArrayList<String>();
+    //    private List<String> companyPeers = new ArrayList<String>();
     //    private List<JSONObject> companyNews = new ArrayList<JSONObject>();
     JSONArray companyNews = new JSONArray();
     private List<JSONObject> companyRecommendation = new ArrayList<JSONObject>();
@@ -89,64 +104,285 @@ public class TradeActivity extends AppCompatActivity {
     private static boolean initializedPicasso = false;
     private NestedScrollView page_content;
     private Context context;
-    private String comp_name;
+    String comp_name;
     NewsAdapter newsAdapter;
     RecyclerView newsRecycleView;
 
     ViewPager ViewPager;
     TabLayout TabLayout;
     Toolbar toolbar;
+    MenuItem starred;
+    String latest_price_main;
+    public boolean isFavorite;
+    private LinearLayout progressBarArea;
+    private NestedScrollView nestedScrollView;
+    AtomicInteger requestsCounter;
+
     private static final String TAG = "TradeActivity";
+    private final Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_Stocks);
-
         context = this;
         page_content = (NestedScrollView) findViewById(R.id.page_content);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trade);
-//        context = getApplicationContext();
+        ActionBar actionBar;
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        search_id = getIntent().getStringExtra("SEARCH_ID");
+        actionBar.setTitle(Html.fromHtml("<font color='#000000'>"+search_id+"</font>"));
+
         if (!initializedPicasso) {
             //Defining Picasso
             Picasso.setSingletonInstance(new Picasso.Builder(this).build());
             initializedPicasso = true;
         }
+        nestedScrollView = (NestedScrollView) findViewById(R.id.page_content);  // detail contents
+        progressBarArea = (LinearLayout) findViewById(R.id.lProgressBarArea);   // progress bar area
+        // show progress bar area
+        requestsCounter = new AtomicInteger(5);
+        progressBarArea.setVisibility(View.VISIBLE);
+        nestedScrollView.setVisibility(View.GONE);
 
-        //  ViewPageAdapter adapter = new ViewPageAdapter(getSupportFragmentManager());
-
-        search_id = getIntent().getStringExtra("SEARCH_ID");
-
-//        TextView ticker = (TextView) findViewById(R.id.ticker_symbol);
-//        ticker.setText(search_id);
         requestQueue = Volley.newRequestQueue(this);
+
+//        requestsCounter = new AtomicInteger(3);
         getCompanyDescription();
         getLatestStockPrice();
-//        getCompanyPeers();
+        getCompanyPeers();
         newsRecycleView = findViewById(R.id.new_details_recycle_view);
         newsRecycleView.setLayoutManager(new LinearLayoutManager(this));
         getCompanyNews();
-        //       getCompanyRecommendations();
         setValuesForCompanyRecommendation();
-//        getCompanyEarnings();
         setValuesForEPSCharts();
         getCompanySocialSentiments();
-//
+//        progressBarArea.setVisibility(View.GONE);
+//        setProgressBarIndeterminateVisibility(false);
+//        doTheAutoRefresh();
+
+        requestQueue.addRequestFinishedListener(req -> {
+            requestsCounter.decrementAndGet();
+            Log.i(TAG, "onCreate: ");
+            Log.d(String.valueOf(requestsCounter.get()),"-----------i am called on on resume------");
+            if (requestsCounter.get() == 0) {
+//                getCompanyDescription();
+                Log.d(String.valueOf(requestsCounter.get()),"-----------i loadin p in resume------");
+
+                // set visibility GONE for progress bar, show nestedScrollView
+                progressBarArea.setVisibility(View.GONE);
+                nestedScrollView.setVisibility(View.VISIBLE);
+            }
+        });
 
 
+
+
+
+    }
+//    private void doTheAutoRefresh() {
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                // Write code for your refresh logic
+//                doTheAutoRefresh();
+//            }
+//        }, 15000);
+//    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //Favourite color setting
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.favorite, menu);
+        this.menu = menu;
+        starred = this.menu.findItem(R.id.action_favorite);
+        addRemoveFavorite();
+
+        return true;
+
+//        return super.onCreateOptionsMenu(menu);
+    }
+
+    public boolean addRemoveFavorite(){
+
+        SharedPreferences sharedPref = getSharedPreferences("LocalStorageValues", MODE_PRIVATE);
+        SharedPreferences.Editor sharedEditor = sharedPref.edit();
+        String favourite= sharedPref.getString("Favorite","");
+//        Log.i(TAG, "addRemoveFavorite: "+favourite);
+        if(!favourite.isEmpty()){
+//            Log.i(TAG, "addRemoveFavorite: ");
+            JSONParser Parser = new JSONParser();
+            try {
+                org.json.simple.JSONArray Favourite = (org.json.simple.JSONArray) Parser.parse(favourite);
+                Log.i(TAG, "addRemoveFavorite: "+Favourite);
+                for (Object fav_item : Favourite) {
+
+                    org.json.simple.JSONObject fav = (org.json.simple.JSONObject) fav_item;
+                    Log.i(TAG, "addRemoveFavoriteidddd: "+fav.get("tickerSymbol")+" "+search_id);
+                    if (search_id.equals(fav.get("tickerSymbol"))) {
+
+                        Log.i(TAG, "addRemoveFavoritecondition: ");
+                        isFavorite = true;
+                        changeStar();
+                        break;
+
+
+
+                    }
+//                    else{
+//                        isFavorite = false;
+//                        changeStar();
+//                        return isFavorite;
+//                    }
+                }
+                if(!isFavorite){
+                    isFavorite = false;
+                    changeStar();
+                }
+            }catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        if(favourite.isEmpty()){
+            isFavorite = false;
+            changeStar();
+
+
+        }
+        return isFavorite;
+    }
+
+    private  void changeStar(){
+        if(isFavorite){
+            Drawable unwrappedDrawable = AppCompatResources.getDrawable(context, R.drawable.star);
+            Drawable wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable);
+            DrawableCompat.setTint(wrappedDrawable, Color.RED);
+            starred.setIcon(ContextCompat.getDrawable(this, R.drawable.star));
+
+        }
+        else{
+            Drawable unwrappedDrawable = AppCompatResources.getDrawable(context, R.drawable.star_outline);
+            Drawable wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable);
+            DrawableCompat.setTint(wrappedDrawable, Color.RED);
+            starred.setIcon(ContextCompat.getDrawable(this, R.drawable.star_outline));
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+//        if(item.getItemId() == R.id.action_favorite){
+//                Log.i(TAG, "onOptionsItemSelected: ");
+//                changeFavorite();
+//        }
+//        else if (item.getItemId() == android.R.id.home) {
+//            onBackPressed();
+////            return true;
+//        }
+//        return true;
+        switch (item.getItemId()) {
+            case R.id.action_favorite:
+                changeFavorite();
+                break;
+            case android.R.id.home:
+                // app icon in action bar clicked; goto parent activity.
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+    public void changeFavorite() {
+        Log.i(TAG, "before fav: "+isFavorite);
+        isFavorite = !isFavorite;
+        changeStar();
+        Log.i(TAG, "after fav: "+isFavorite);
+        if(isFavorite){
+            JSONObject fav = new JSONObject();
+            Double lp = Double.parseDouble(latest_price_main);
+            try {
+                fav.put("tickerSymbol", search_id);
+                fav.put("compName", comp_name);
+                fav.put("latestPrice", df.format(lp));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            SharedPreferences sharedPref = getSharedPreferences("LocalStorageValues", MODE_PRIVATE);
+            SharedPreferences.Editor sharedEditor = sharedPref.edit();
+            String favourite= sharedPref.getString("Favorite","");
+            Log.i(TAG, "isFav fav: "+favourite);
+            if(favourite.isEmpty()){
+                JSONArray Favourite_Array = new JSONArray();
+
+                Favourite_Array.put(fav);
+                sharedEditor.putString("Favorite",Favourite_Array.toString());
+                sharedEditor.commit();
+                Log.i(TAG, "newFav: "+Favourite_Array.toString());
+            }
+            else if(!favourite.isEmpty()){
+                JSONParser Parser = new JSONParser();
+                try {
+                    org.json.simple.JSONArray Favourite_Array = (org.json.simple.JSONArray) Parser.parse(favourite);
+//                    Log.i(TAG, "changeFavorite: "+Favourite_Array);
+                    for (Object fav_item : Favourite_Array) {
+                        org.json.simple.JSONObject favjson = (org.json.simple.JSONObject) fav_item;
+                        if (search_id.equals(favjson.get("tickerSymbol"))) {
+                            Favourite_Array.remove(favjson);
+                            break;
+                        }
+
+                    }
+                    Favourite_Array.add(fav);
+                    sharedEditor.putString("Favorite",Favourite_Array.toString());
+                    sharedEditor.commit();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            Toast.makeText(context, search_id+" is added to favorites", Toast.LENGTH_LONG).show();
+
+
+        }
+        else{
+            SharedPreferences sharedPref = getSharedPreferences("LocalStorageValues", MODE_PRIVATE);
+            SharedPreferences.Editor sharedEditor = sharedPref.edit();
+            String favourite= sharedPref.getString("Favorite","");
+            Log.i(TAG, "!isFav fav: "+favourite);
+            JSONParser Parser = new JSONParser();
+            try {
+                org.json.simple.JSONArray Favourite_Array = (org.json.simple.JSONArray) Parser.parse(favourite);
+                for (Object fav_item : Favourite_Array) {
+                    org.json.simple.JSONObject favjson = (org.json.simple.JSONObject) fav_item;
+                    if (search_id.equals(favjson.get("tickerSymbol"))) {
+                        Favourite_Array.remove(favjson);
+                        sharedEditor.putString("Favorite",Favourite_Array.toString());
+                        sharedEditor.commit();
+                        break;
+                    }
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
+            Toast.makeText(context, search_id+" is removed to favorites", Toast.LENGTH_LONG).show();
+        }
     }
 
     // Fetching Company Description
     private void getCompanyDescription() {
-//http://10.0.2.2:8080/companyDescription?ticker=TSLA
-//        String comp_url = baseUrl + "companyDescription/" + search_id;
+
         String comp_url = baseUrl + "companyDescription?ticker=" + search_id;
         Log.i("url", "onCreate123: " + comp_url);
         JsonObjectRequest compDesc = new JsonObjectRequest(Request.Method.GET, comp_url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject compD_response) {
                 try {
-                            Log.i("response", "onResponse: "+compD_response.toString());
+//                            Log.i("response", "onResponse: "+compD_response.toString());
                     String x = compD_response.getString("ticker");
                     comp_name = compD_response.getString("name");
 //                            Log.i("ticker", "onResponse: "+x);
@@ -186,23 +422,19 @@ public class TradeActivity extends AppCompatActivity {
             Picasso.get().load(comp_logo).into(logo);
 
             // For About
-            TextView IPO_heading = (TextView) findViewById(R.id.IPO_heading);
-            IPO_heading.setText("IPO Start Date");
             String ipo = compD_response.getString("ipo");
             String ipo_date = ipo.substring(5) + "-" + ipo.substring(0, 4);
             TextView IPO_value = (TextView) findViewById(R.id.IPO_value);
             IPO_value.setText(ipo_date);
-            TextView industry_heading = (TextView) findViewById(R.id.Industry_heading);
-            industry_heading.setText("Industry");
             String industry = compD_response.getString("finnhubIndustry");
             TextView industry_value = (TextView) findViewById(R.id.Industry_value);
             industry_value.setText(industry);
-            TextView webpage_heading = (TextView) findViewById(R.id.webpage_heading);
-            webpage_heading.setText("Webpage");
             String webpage = compD_response.getString("weburl");
             TextView webpage_value = (TextView) findViewById(R.id.webpage_value);
             webpage_value.setText(webpage);
+//            webpage_value.setText(Html.fromHtml("<font color=#2525ff><u>"+webpage+"</u></font>"));
             Linkify.addLinks(webpage_value, Linkify.WEB_URLS);
+            webpage_value.setLinkTextColor(Color.parseColor("#2525ff"));
 
 
         } catch (JSONException e) {
@@ -228,6 +460,8 @@ public class TradeActivity extends AppCompatActivity {
 
                     double dp = Double.parseDouble(latest_stock_response.getString("dp"));
                     toolbar = (Toolbar) findViewById(R.id.toolbar);
+                    latest_price_main = latest_stock_response.getString("c");
+
 //        setSupportActionBar(toolbar);
                     ViewPager = (androidx.viewpager.widget.ViewPager) findViewById(R.id.viewPager);
                     ViewPageAdapter adapter = new ViewPageAdapter(getSupportFragmentManager());
@@ -240,6 +474,9 @@ public class TradeActivity extends AppCompatActivity {
 
                     TabLayout = (TabLayout) findViewById(R.id.tabLayout);
                     TabLayout.setupWithViewPager(ViewPager);
+
+                    TabLayout.setSelectedTabIndicatorColor(Color.parseColor("#6200EE"));
+                    TabLayout.setTabTextColors(Color.parseColor("#000000"), Color.parseColor("#6200EE"));
                     TabLayout.getTabAt(0).setIcon(R.drawable.chart_line);
                     TabLayout.getTabAt(1).setIcon(R.drawable.clock_time_three);
                     portfolioDetails(latest_stock_response);
@@ -279,9 +516,9 @@ public class TradeActivity extends AppCompatActivity {
 //            Log.i("latest_stock+percent", "setValuesForLatestStockPrice: "+df.format(cpercent));
             changePercent = cpercent + "";
             TextView latest_price = (TextView) findViewById(R.id.latest_price);
-            latest_price.setText(df.format(lp));
+            latest_price.setText("$"+df.format(lp));
             TextView change_percent = (TextView) findViewById(R.id.change_percent);
-            change_percent.setText(df.format(cp) + " (" + df.format(cpercent) + "%)");
+            change_percent.setText("$"+df.format(cp) + " (" + df.format(cpercent) + "%)");
             if (cpercent > 0) {
                 Drawable unwrappedDrawable = AppCompatResources.getDrawable(context, R.drawable.trending_up);
                 Drawable wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable);
@@ -357,6 +594,7 @@ public class TradeActivity extends AppCompatActivity {
     }
 
 
+
     // Fetch Company Peers
     private void getCompanyPeers() {
 
@@ -366,11 +604,12 @@ public class TradeActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONArray comp_peers_response) {
                 try {
+                    List<String> peerrr = new ArrayList<String>();
 //
                     for (int i = 0; i < comp_peers_response.length(); i++) {
-                        companyPeers.add(comp_peers_response.getString(i));
+                        peerrr.add(comp_peers_response.getString(i));
                     }
-                    setValuesForCompanyPeers(companyPeers);
+                    setValuesForCompanyPeers(comp_peers_response);
 //                    Log.i("peers", "Peers: "+companyPeers);
 
 //
@@ -394,12 +633,105 @@ public class TradeActivity extends AppCompatActivity {
     }
 
     //Set Valued for Company Peers
-    private void setValuesForCompanyPeers(List companyPeers) {
+    private void setValuesForCompanyPeers(JSONArray companyPeers) {
 
-        TextView comp_peers_heading = (TextView) findViewById(R.id.comp_peers_heading);
-        comp_peers_heading.setText("Company Peers");
+        LinearLayout comp_peer = (LinearLayout) findViewById(R.id.company_peers_value);
+        for(int i = 0; i<companyPeers.length();i++){
+            String peers = "";
+
+            TextView peer = new TextView(context);
+
+            if(peer.getParent() != null) {
+                ((ViewGroup)peer.getParent()).removeView(peer); // <- fix
+            }
+            if(i==0){
+                try {
+                    peers = companyPeers.getString(i);
+//                    peer.setText(peers);
+                    peer.setText(Html.fromHtml("<font color=#2525ff><u>"+peers+"</u></font>"));
+                    peer.setClickable(true);//make your TextView Clickable
+                    peer.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String p = peer.getText().toString();
+                            Intent intent = new Intent(getBaseContext(), TradeActivity.class);
+                            intent.putExtra("SEARCH_ID", p);
+                            startActivity(intent);
+                        }
+                    });
+                    comp_peer.addView(peer);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            else{
+                try {
+                    peers = companyPeers.getString(i);
+//                    peer.setText(", "+peers);
+                    peer.setText(Html.fromHtml("<font color=#2525ff>, <u>"+peers+"</u></font>"));
+                    peer.setClickable(true);//make your TextView Clickable
+                    peer.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String p = peer.getText().toString();
+                            Intent intent = new Intent(getBaseContext(), TradeActivity.class);
+                            intent.putExtra("SEARCH_ID", p.substring(2));
+                            startActivity(intent);
+                        }
+                    });
+                    comp_peer.addView(peer);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+
+
+
+
+        }
         // Value for company peers
     }
+
+    // Fetch data for History Chart
+//    private void getHistoricalCharts(){
+//
+//        String histChart_url = baseUrl+"company_historical_charts/"+search_id;
+//        Log.i("url", "onCreate: "+histChart_url);
+//        JsonObjectRequest histCharts = new JsonObjectRequest(Request.Method.GET, histChart_url,null, new Response.Listener<JSONObject>()
+//        {
+//            @Override
+//            public void onResponse(JSONObject history_chart_response) {
+//                try {
+////                    Log.i("histchartresponse", "onResponse: "+history_chart_response.toString());
+////                    List c = history_summary_response.getString("c");
+////                    for(int i = 0;i<history_summary_response.length();i++){
+////                    historySummary.add(history_chart_response.getString("c"));
+//                    setValuesForHistoricalCharts(history_chart_response);
+//                    historySummary.add(history_chart_response.getString("c"));
+////                        Log.i("history", "onResponse: "+historySummary);
+////                    }
+//
+//                }catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        },
+//                new Response.ErrorListener(){
+//                    @Override
+//                    public void onErrorResponse(VolleyError error){
+//                        error.printStackTrace();
+//                    }
+//
+//                });
+//        requestQueue.add(histCharts);
+//
+//
+//    }
+
 
 
     // Fetch Company News
@@ -465,6 +797,41 @@ public class TradeActivity extends AppCompatActivity {
 
     }
 
+    // Fetch Company Recommendation
+//    private void getCompanyRecommendations(){
+//
+//        String compRecomm_url = baseUrl+"company_recommendation/"+search_id;
+//        Log.i("url", "onCreate: "+compRecomm_url);
+//        JsonArrayRequest company_Recomm= new JsonArrayRequest(Request.Method.GET, compRecomm_url,null, new Response.Listener<JSONArray>()
+//        {
+//            @Override
+//            public void onResponse(JSONArray comp_recomm_response) {
+//                try {
+////
+//                    for(int i = 0;i<comp_recomm_response.length();i++){
+//                        companyRecommendation.add(comp_recomm_response.getJSONObject(i));
+//                    }
+//                    Log.i("recomm", "Recommendation: "+companyRecommendation);
+//
+////
+////
+//
+//                }catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        },
+//                new Response.ErrorListener(){
+//                    @Override
+//                    public void onErrorResponse(VolleyError error){
+//                        error.printStackTrace();
+//                    }
+//
+//                });
+//        requestQueue.add(company_Recomm);
+//
+//
+//    }
     private void setValuesForCompanyRecommendation() {
         WebView recommendation_charts = (WebView) findViewById(R.id.highcharts_recommendation);
         WebSettings get_settings = recommendation_charts.getSettings();
@@ -486,7 +853,41 @@ public class TradeActivity extends AppCompatActivity {
         });
     }
 
-
+    // Fetch Company Earning
+//    private void getCompanyEarnings(){
+//
+//        String compEarn_url = baseUrl+"company_earnings/"+search_id;
+//        Log.i("url", "onCreate: "+compEarn_url);
+//        JsonArrayRequest company_Earn= new JsonArrayRequest(Request.Method.GET, compEarn_url,null, new Response.Listener<JSONArray>()
+//        {
+//            @Override
+//            public void onResponse(JSONArray comp_earn_response) {
+//                try {
+////
+//                    for(int i = 0;i<comp_earn_response.length();i++){
+//                        companyEarning.add(comp_earn_response.getJSONObject(i));
+//                    }
+//                    Log.i("earn", "Earnings: "+companyEarning);
+//
+////
+////
+//
+//                }catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        },
+//                new Response.ErrorListener(){
+//                    @Override
+//                    public void onErrorResponse(VolleyError error){
+//                        error.printStackTrace();
+//                    }
+//
+//                });
+//        requestQueue.add(company_Earn);
+//
+//
+//    }
     private void setValuesForEPSCharts() {
         WebView eps_charts = (WebView) findViewById(R.id.highcharts_eps);
         WebSettings get_settings = eps_charts.getSettings();
@@ -625,6 +1026,7 @@ public class TradeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final Dialog trade_dialog = new Dialog(context);
                 trade_dialog.setContentView(R.layout.portfolio_trade);
+                trade_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 TextView trade_heading = (TextView) trade_dialog.findViewById(R.id.trade_heading);
                 trade_heading.setText("Trade " + comp_name + " shares");
                 EditText share_value = (EditText) trade_dialog.findViewById(R.id.share_value);
@@ -660,8 +1062,9 @@ public class TradeActivity extends AppCompatActivity {
                         try {
                             String latestPrice = latest_stock_response.getString("c");
                             double lp = Double.parseDouble(latestPrice);
-                            String share = share_value.getText().toString();
-                            int noOfShares = Integer.parseInt(share);
+//                            int share = share_value.getText().toString();
+                            int share = Integer.valueOf(share_value.getText().toString());
+                            int noOfShares = share;
                             double tot = noOfShares*lp;
                             total_value.setText(noOfShares+"*$" + df.format(lp) + "/shares = "+df.format(tot));
                         } catch (JSONException e) {
@@ -779,6 +1182,32 @@ public class TradeActivity extends AppCompatActivity {
 
 
                                 trade_dialog.dismiss();
+                                final Dialog done_dialog = new Dialog(context);
+                                done_dialog.setContentView(R.layout.done_layout);
+                                done_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                TextView message = (TextView) done_dialog.findViewById(R.id.message);
+                                message.setText("You have successfully bought "+noOfShares+" share of "+search_id);
+                                Button done = (Button) done_dialog.findViewById(R.id.done);
+                                done.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        done_dialog.dismiss();
+                                    }
+                                });
+                                done_dialog.show();
+
+
+//                                AlertDialog alertDialog = new MaterialAlertDialogBuilder(context, R.style.alertdialog).create(); //Read Update
+//                                alertDialog.setTitle("Congratulations");
+//                                alertDialog.setMessage("You have successfully bought "+noOfShares+" share of"+search_id);
+//                                alertDialog.setButton( -1,"Done", new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int which) {
+//
+//
+//                                    }
+//
+//                                });
+//                                alertDialog.show();
 
 
                             }
@@ -814,7 +1243,7 @@ public class TradeActivity extends AppCompatActivity {
                                 String portfolio= sharedPref.getString("Portfolio","");
                                 Log.i(TAG, "porttt: "+portfolio);
                                 if(portfolio.isEmpty()){
-                                    Toast.makeText(context, "Not enough shares to sell’", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(context, "Not enough shares to sell", Toast.LENGTH_LONG).show();
 //
 
                                 }
@@ -852,6 +1281,9 @@ public class TradeActivity extends AppCompatActivity {
                                                     sharedEditor.commit();
                                                     if(no_of_Share == 0){
                                                         Portfolio_Array.remove(port);
+                                                        sharedEditor.putString("Portfolio",Portfolio_Array.toString());
+                                                        sharedEditor.commit();
+
                                                         restoreInitialPortfolio();
                                                     }
                                                     else{
@@ -859,9 +1291,22 @@ public class TradeActivity extends AppCompatActivity {
                                                     }
 
                                                     trade_dialog.dismiss();
+                                                    final Dialog done_dialog = new Dialog(context);
+                                                    done_dialog.setContentView(R.layout.done_layout);
+                                                    done_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                                    TextView message = (TextView) done_dialog.findViewById(R.id.message);
+                                                    message.setText("You have successfully sold "+noOfShares+" share of "+search_id);
+                                                    Button done = (Button) done_dialog.findViewById(R.id.done);
+                                                    done.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View view) {
+                                                            done_dialog.dismiss();
+                                                        }
+                                                    });
+                                                    done_dialog.show();
 //                                                    AlertDialog alertDialog = new MaterialAlertDialogBuilder(context, R.style.alertdialog).create(); //Read Update
 //                                                    alertDialog.setTitle("Congratulations");
-//                                                    alertDialog.setMessage("You have successfully bought "+noOfShares+" share of"+search_id);
+//                                                    alertDialog.setMessage("You have successfully sold "+noOfShares+" share of"+search_id);
 //                                                    alertDialog.setButton( -1,"Done", new DialogInterface.OnClickListener() {
 //                                                        public void onClick(DialogInterface dialog, int which) {
 //
@@ -944,7 +1389,7 @@ public class TradeActivity extends AppCompatActivity {
                 Log.i(TAG, "Portfolio_Array>>: "+Portfolio_Array);
                 for(Object port_item : Portfolio_Array) {
                     org.json.simple.JSONObject port = (org.json.simple.JSONObject) port_item;
-                    Log.i(TAG, "portfolioDetails port1: "+port.get("tickerSymbol").getClass().getName()+" SID> "+search_id.getClass().getName());
+//                    Log.i(TAG, "portfolioDetails port1: "+port.get("tickerSymbol").getClass().getName()+" SID> "+search_id.getClass().getName());
 //                    String ticker = (String) port.get("tickerSymbol");
                     if(search_id.equals(port.get("tickerSymbol"))){
                         String nOs = (String) port.get("numOfShares");
@@ -987,4 +1432,3 @@ public class TradeActivity extends AppCompatActivity {
 
     }
 }
-

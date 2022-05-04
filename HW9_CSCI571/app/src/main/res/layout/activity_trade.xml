@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools">
+    <LinearLayout
+        android:id="@+id/lProgressBarArea"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <ProgressBar
+            android:id="@+id/ProgressBarMain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@color/purple_500">
+        </ProgressBar>
+    </LinearLayout>
     <androidx.core.widget.NestedScrollView
         android:id="@+id/page_content"
         android:layout_width="match_parent"
@@ -12,7 +28,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".InfoActivity"
+            tools:context=".TradeActivity"
             tools:ignore="MissingClass">
 
             <LinearLayout
@@ -34,8 +50,8 @@
                     <TextView
                         android:id="@+id/ticker_symbol"
                         android:layout_width="match_parent"
-                        android:layout_marginTop="5dp"
                         android:layout_height="30dp"
+                        android:layout_marginTop="10dp"
                         android:text="TextView"
                         android:textColor="@color/black"
                         android:textSize="25dp"
@@ -46,7 +62,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/ticker_symbol"
-                        android:layout_marginTop="15dp"
+                        android:layout_marginTop="10dp"
                         android:text="TextView"
                         android:textColor="@color/black"
                         android:textSize="15dp"
@@ -64,7 +80,7 @@
                         android:id="@+id/latest_price"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="10dp"
                         android:text="TextView"
                         android:textColor="@color/black"
                         android:textSize="25dp"
@@ -77,7 +93,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/latest_price"
-                        android:layout_marginTop="15dp"
+                        android:layout_marginTop="10dp"
                         android:gravity="right"
                         android:text="TextView"
                         android:textAlignment="gravity"
@@ -117,37 +133,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/highcharts"
+                app:tabIconTint="@color/selectedchart"
+                app:tabMode="fixed"/>
 
-                app:tabMode="fixed" />
-
-            <!--    <RelativeLayout-->
-            <!--        android:layout_width="match_parent"-->
-            <!--        android:layout_marginTop="30dp"-->
-            <!--        android:layout_height="350dp"-->
-            <!--        android:id="@+id/highcharts"-->
-            <!--        android:layout_below="@+id/comp_info">-->
-            <!--        <WebView-->
-            <!--            android:layout_width="match_parent"-->
-            <!--            android:layout_height="match_parent"-->
-            <!--            android:id="@+id/highcharts_sma_vbp">-->
-
-            <!--        </WebView>-->
-
-            <!--    </RelativeLayout>-->
-            <!--    <RelativeLayout-->
-            <!--        android:layout_width="match_parent"-->
-            <!--        android:layout_marginTop="10dp"-->
-            <!--        android:layout_height="350dp"-->
-            <!--        android:id="@+id/historical_summ"-->
-            <!--        android:layout_below="@+id/highcharts">-->
-            <!--        <WebView-->
-            <!--            android:layout_width="match_parent"-->
-            <!--            android:layout_height="match_parent"-->
-            <!--            android:id="@+id/highcharts_historical_summary">-->
-
-            <!--        </WebView>-->
-
-            <!--    </RelativeLayout>-->
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -367,11 +355,13 @@
                 </RelativeLayout>
 
             </RelativeLayout>
+
             <RelativeLayout
+                android:id="@+id/Stats"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/Stats"
                 android:layout_below="@+id/portfolio">
+
                 <RelativeLayout
                     android:id="@+id/stats_head"
                     android:layout_width="match_parent"
@@ -386,156 +376,289 @@
                         android:textSize="20dp"
                         android:textStyle="bold" />
                 </RelativeLayout>
+
                 <GridLayout
+                    android:id="@+id/stat_details"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/stat_details"
-                    android:layout_marginTop="10dp"
                     android:layout_below="@+id/stats_head"
-                    android:orientation="vertical"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
                     android:columnCount="2"
-                    android:rowCount="2"
-                    android:layout_marginLeft="20dp">
-                    <TextView
-                        android:layout_columnWeight="1"
-                        android:layout_rowWeight="1"
-                        android:textSize="15dp"
-                        android:text="1"
-                        android:textColor="@color/black"
-                        android:id="@+id/open_price"/>
-                    <TextView
-                        android:layout_columnWeight="1"
-                        android:layout_rowWeight="1"
-                        android:textSize="15dp"
-                        android:text="2"
-                        android:textColor="@color/black"
-                        android:layout_marginTop="10dp"
-                        android:id="@+id/low_price"/>
-                    <TextView
-                        android:layout_columnWeight="1"
-                        android:layout_rowWeight="1"
-                        android:textSize="15dp"
-                        android:text="3"
-                        android:textColor="@color/black"
-                        android:id="@+id/high_price"/>
+                    android:orientation="vertical"
+                    android:rowCount="2">
 
                     <TextView
-                        android:layout_columnWeight="1"
+                        android:id="@+id/open_price"
                         android:layout_rowWeight="1"
-                        android:textSize="15dp"
+                        android:layout_columnWeight="1"
+                        android:text="1"
+                        android:textColor="@color/black"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:id="@+id/low_price"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1"
+                        android:layout_marginTop="10dp"
+                        android:text="2"
+                        android:textColor="@color/black"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:id="@+id/high_price"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1"
+                        android:text="3"
+                        android:textColor="@color/black"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:id="@+id/close_price"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1"
+                        android:layout_marginTop="10dp"
                         android:text="4"
                         android:textColor="@color/black"
-                        android:layout_marginTop="10dp"
-                        android:id="@+id/close_price"/>
+                        android:textSize="15dp" />
 
 
                 </GridLayout>
 
             </RelativeLayout>
 
+            <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+            <!--        android:id="@+id/About"-->
+            <!--        android:layout_width="match_parent"-->
+            <!--        android:layout_height="wrap_content"-->
+            <!--        android:layout_below="@+id/Stats"-->
+            <!--        android:layout_marginTop="20dp">-->
+            <!--        <TextView-->
+            <!--            android:id="@+id/about_heading"-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="30dp"-->
+            <!--            android:layout_marginLeft="10dp"-->
+            <!--            android:text="About"-->
+            <!--            android:textColor="@color/black"-->
+            <!--            android:textSize="20dp"-->
+            <!--            android:textStyle="bold" />-->
+
+            <!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+
             <RelativeLayout
+                android:id="@+id/About"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/About"
-                android:layout_marginTop="20dp"
-                android:layout_below="@+id/Stats">
-                <RelativeLayout
-                    android:id="@+id/about_head"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp">
+                android:layout_below="@+id/Stats"
+                android:layout_marginTop="20dp">
 
-                    <TextView
-                        android:id="@+id/about_heading"
-                        android:text="About"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginLeft="10dp"
-                        android:textColor="@color/black"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
-                </RelativeLayout>
-                <GridLayout
+                <!--                <RelativeLayout-->
+                <!--                    android:id="@+id/about_head"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="30dp">-->
+
+                <TextView
+                    android:id="@+id/about_heading"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="About"
+                    android:textColor="@color/black"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+                <!--        </RelativeLayout>-->
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/about_details"
-                    android:layout_marginTop="10dp"
-                    android:layout_below="@+id/about_head"
-                    android:orientation="vertical"
-                    android:columnCount="2"
-                    android:rowCount="4"
-                    android:layout_marginLeft="20dp">
-                    <TextView
-                        android:layout_columnWeight="1"
-                        android:layout_rowWeight="1"
-                        android:textSize="15dp"
-                        android:text="1"
-                        android:textColor="@color/black"
-                        android:id="@+id/IPO_heading"/>
-                    <TextView
-                        android:layout_columnWeight="1"
-                        android:layout_rowWeight="1"
-                        android:textSize="15dp"
-                        android:text="2"
-                        android:layout_marginTop="10dp"
-                        android:textColor="@color/black"
-                        android:id="@+id/Industry_heading"/>
-                    <TextView
-                        android:layout_columnWeight="1"
-                        android:layout_rowWeight="1"
-                        android:textSize="15dp"
-                        android:text="3"
-                        android:layout_marginTop="10dp"
-                        android:textColor="@color/black"
-                        android:id="@+id/webpage_heading"/>
-                    <TextView
-                        android:layout_columnWeight="1"
-                        android:layout_rowWeight="1"
-                        android:textSize="15dp"
-                        android:text="Company Peers"
-                        android:layout_marginTop="10dp"
-                        android:textColor="@color/black"
-                        android:id="@+id/comp_peers_heading"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:layout_below="@+id/about_heading">
 
+                    <HorizontalScrollView
+                        android:layout_width="220dp"
+                        android:layout_height="25dp"
+                        android:layout_marginStart="25dp"
+                        android:layout_marginTop="15dp"
+                        android:scrollbars="none"
+                        app:layout_constraintStart_toEndOf="@+id/textView5"
+                        app:layout_constraintTop_toBottomOf="@+id/webpage_value">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:id="@+id/company_peers_value"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:textColor="@color/black">
+
+
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="10dp"
+                        android:text="IPO Start Date"
+                        android:textColor="@color/black"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="15dp"
+                        android:text="Industry"
+                        android:textColor="@color/black"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="15dp"
+                        android:text="Webpage"
+                        android:textColor="@color/black"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="15dp"
+                        android:text="Company Peers"
+                        android:textColor="@color/black"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
                     <TextView
                         android:id="@+id/IPO_value"
-                        android:layout_rowWeight="1"
-                        android:layout_columnWeight="1"
-                        android:text="5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="25dp"
+                        android:layout_marginTop="10dp"
+                        android:text="TextView"
                         android:textColor="@color/black"
-                        android:textSize="15dp" />
+                        app:layout_constraintStart_toEndOf="@+id/textView2"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:layout_columnWeight="1"
-                        android:layout_rowWeight="1"
-                        android:textSize="15dp"
-                        android:text="6"
-                        android:layout_marginTop="10dp"
+                        android:id="@+id/Industry_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="25dp"
+                        android:layout_marginTop="15dp"
+                        android:text="TextView"
                         android:textColor="@color/black"
-                        android:id="@+id/Industry_value"/>
-
+                        app:layout_constraintStart_toEndOf="@+id/textView2"
+                        app:layout_constraintTop_toBottomOf="@+id/IPO_value" />
 
                     <TextView
-                        android:layout_columnWeight="1"
-                        android:layout_rowWeight="1"
-                        android:textSize="15dp"
-                        android:text="7"
-                        android:layout_marginTop="10dp"
+                        android:id="@+id/webpage_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="25dp"
+                        android:layout_marginTop="15dp"
+                        android:text="TextView"
                         android:textColor="@color/black"
-                        android:id="@+id/webpage_value"/>
+                        app:layout_constraintStart_toEndOf="@+id/textView4"
+                        app:layout_constraintTop_toBottomOf="@+id/Industry_value" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!--        <GridLayout-->
+                <!--            android:id="@+id/about_details"-->
+                <!--            android:layout_width="match_parent"-->
+                <!--            android:layout_height="match_parent"-->
+                <!--            android:layout_below="@+id/about_heading"-->
+                <!--            android:layout_marginLeft="20dp"-->
+                <!--            android:layout_marginTop="10dp"-->
+                <!--            android:columnCount="2"-->
+                <!--            android:orientation="vertical"-->
+                <!--            android:rowCount="4">-->
+
+                <!--            <TextView-->
+                <!--                android:id="@+id/IPO_heading"-->
+                <!--                android:layout_rowWeight="1"-->
+                <!--                android:layout_columnWeight="1"-->
+                <!--                android:text="1"-->
+                <!--                android:textColor="@color/black"-->
+                <!--                android:textSize="15dp" />-->
+
+                <!--            <TextView-->
+                <!--                android:id="@+id/Industry_heading"-->
+                <!--                android:layout_rowWeight="1"-->
+                <!--                android:layout_columnWeight="1"-->
+                <!--                android:layout_marginTop="10dp"-->
+                <!--                android:text="2"-->
+                <!--                android:textColor="@color/black"-->
+                <!--                android:textSize="15dp" />-->
+
+                <!--            <TextView-->
+                <!--                android:id="@+id/webpage_heading"-->
+                <!--                android:layout_rowWeight="1"-->
+                <!--                android:layout_columnWeight="1"-->
+                <!--                android:layout_marginTop="10dp"-->
+                <!--                android:text="3"-->
+                <!--                android:textColor="@color/black"-->
+                <!--                android:textSize="15dp" />-->
+
+                <!--            <TextView-->
+                <!--                android:id="@+id/comp_peers_heading"-->
+                <!--                android:layout_rowWeight="1"-->
+                <!--                android:layout_columnWeight="1"-->
+                <!--                android:layout_marginTop="10dp"-->
+                <!--                android:text="Company Peers"-->
+                <!--                android:textColor="@color/black"-->
+                <!--                android:textSize="15dp" />-->
 
 
-                    <TextView
-                        android:layout_columnWeight="1"
-                        android:layout_rowWeight="1"
-                        android:textSize="15dp"
-                        android:text="8"
-                        android:layout_marginTop="10dp"
-                        android:textColor="@color/black"
-                        android:id="@+id/comp_peers_value"/>
+                <!--            <TextView-->
+                <!--                android:id="@+id/IPO_value"-->
+                <!--                android:layout_rowWeight="1"-->
+                <!--                android:layout_columnWeight="1"-->
+                <!--                android:text="5"-->
+                <!--                android:textColor="@color/black"-->
+                <!--                android:textSize="15dp" />-->
+
+                <!--            <TextView-->
+                <!--                android:id="@+id/Industry_value"-->
+                <!--                android:layout_rowWeight="1"-->
+                <!--                android:layout_columnWeight="1"-->
+                <!--                android:layout_marginTop="10dp"-->
+                <!--                android:text="6"-->
+                <!--                android:textColor="@color/black"-->
+                <!--                android:textSize="15dp" />-->
 
 
-                </GridLayout>
+                <!--            <TextView-->
+                <!--                android:id="@+id/webpage_value"-->
+                <!--                android:layout_rowWeight="1"-->
+                <!--                android:layout_columnWeight="1"-->
+                <!--                android:layout_marginTop="10dp"-->
+                <!--                android:text="7"-->
+                <!--                android:textColor="@color/black"-->
+                <!--                android:textSize="15dp" />-->
+
+                <!--            <LinearLayout-->
+                <!--                android:id="@+id/company_peers_value"-->
+                <!--                android:layout_rowWeight="1"-->
+                <!--                android:layout_columnWeight="1"-->
+                <!--                android:layout_width="fill_parent"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                android:orientation="horizontal">-->
+
+
+                <!--            </android.widget.HorizontalScrollView>-->
+
+
+                <!--        </GridLayout>-->
+
             </RelativeLayout>
 
             <RelativeLayout
@@ -553,6 +676,7 @@
                         android:id="@+id/insights_heading"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
+                        android:text="Insights"
                         android:layout_marginLeft="10dp"
                         android:textColor="@color/black"
                         android:textSize="20dp"
@@ -759,10 +883,11 @@
                         android:layout_height="400dp"
                         android:id="@+id/eps_chart"
                         android:layout_below="@+id/recommendation_chart">
+
                         <WebView
+                            android:id="@+id/highcharts_eps"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:id="@+id/highcharts_eps">
+                            android:layout_height="match_parent">
 
                         </WebView>
 

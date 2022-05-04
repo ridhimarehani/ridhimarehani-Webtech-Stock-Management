@@ -56,17 +56,7 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
 
         //Calculations for Favorite
         String currentPrice = favItems.get(position).get(2); // 2 for current price //3 for price since last closed
-        holder.currentPrice.setText(currentPrice);
-        String priceSinceLastClose = favItems.get(position).get(3);
-
-//        Double currentPriceDouble = Double.parseDouble(currentPrice);
-//        Double priceSinceLastCloseDouble = Double.parseDouble(priceSinceLastClose);
-//        Double priceChange = currentPriceDouble - priceSinceLastCloseDouble;
-//        String priceChangeString = df.format(priceChange);
-        //priceChange = df.format(priceChange);
-        //Double priceChangePercentage = (priceChange/priceSinceLastCloseDouble) * 100;
-        //String priceChangePercentageString = df.format(priceChange);
-
+        holder.currentPrice.setText("$"+currentPrice);
         String priceChangeString = favItems.get(position).get(3);
         Double priceChange = Double.parseDouble(priceChangeString);
         priceChangeString = df.format(priceChange);
@@ -77,8 +67,8 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         holder.priceChange.setText(changeString);
         //Calculation End
 
-        //Trending Symbol
-        if(priceChangeString.equals("-0.00")){
+        //Trending Symbol Start
+        if(priceChangeString.equals("-0.00") || priceChangeString.equals("0.00")){
             priceChange = 0.00;
         }
 
@@ -86,20 +76,14 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
             Drawable unwrappedDrawable = ContextCompat.getDrawable(context, R.drawable.trending_up).mutate();
             unwrappedDrawable.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
             holder.imageView.setImageDrawable(unwrappedDrawable);
-//            Drawable unwrappedDrawable = AppCompatResources.getDrawable(context, R.drawable.trending_up).mutate();
-//            Drawable wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable);
-//            DrawableCompat.setTint(wrappedDrawable, Color.GREEN);
-//            holder.trendingSymbol.setCompoundDrawablesWithIntrinsicBounds(R.drawable.trending_up,0 , 0, 0);
-            //holder.trendingSymbol.setTextColor(Color.GREEN);
 
         }
         else if (priceChange < 0){
             Drawable unwrappedDrawable = ContextCompat.getDrawable(context, R.drawable.trending_down).mutate();
             unwrappedDrawable.setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
             holder.imageView.setImageDrawable(unwrappedDrawable);
-//            holder.trendingSymbol.setCompoundDrawablesWithIntrinsicBounds(R.drawable.trending_down,0 , 0, 0);;
-//            setTextViewDrawableColor(holder.trendingSymbol, Color.RED);
         }
+        //Trending Symbol End
 
 
     }
@@ -146,7 +130,7 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
 
     @Override
     public void onRowSelected(FavoriteRecyclerAdapter.FavoriteViewHolder myViewHolder) {
-        myViewHolder.rowView.setBackgroundColor(Color.GRAY);
+        //myViewHolder.rowView.setBackgroundColor(Color.GRAY);
     }
 
     @Override
@@ -164,7 +148,7 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
 
         public FavoriteViewHolder(@NonNull View itemView, OnChevronClickListener onChevronClickListener) {
             super(itemView);
-            //Chevron Click
+            //Chevron Click Start
             this.onChevronClickListener = onChevronClickListener;
             rowView = itemView;
             portTickerText = itemView.findViewById(R.id.ticker_Sym);
@@ -174,7 +158,7 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
             trendingSymbol = itemView.findViewById(R.id.change_symbol);
             imageView = itemView.findViewById(R.id.imageView);
             chevronRight = itemView.findViewById(R.id.chevron_right_button);
-            //Chevron Click
+            //Chevron Click ENd
             chevronRight.setOnClickListener(this::onClick);
         }
 

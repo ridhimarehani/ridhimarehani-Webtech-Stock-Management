@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
 
-    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/stock/modules/data.js"></script>
     <script src="https://code.highcharts.com/stock/modules/drag-panes.js"></script>
     <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
@@ -19,13 +19,11 @@
 <script>
 let tickerSymbol;
 let historicalChartsData;
+url = "https://csci571hw8-backend-346006.wl.r.appspot.com/recommendation";
 
 function getRecommendationChartData(ticker, url){
 
-
-<!--        let ticker = "MSFT"-->
         tickerSymbol = ticker;
-<!--        let url = "https://csci571hw8-backend-346006.wl.r.appspot.com/recommendation"-->
         fetch(url+"?ticker="+tickerSymbol)
         .then(
             response => response.json()
@@ -46,6 +44,7 @@ function getRecommendationChartData(ticker, url){
               let temp_str = new String();
             //   temp_str = res['period'][i];
             temp_str = res[i].period;
+            console.log(res[i].period);
               recomm_period.push(temp_str);
 
               strongBuy.push(res[i].strongBuy);
@@ -56,7 +55,7 @@ function getRecommendationChartData(ticker, url){
             }
             console.log(recomm_period);
            recomm_data = [strongBuy, buy, hold, sell, strongSell];
-            Highcharts.stockChart('container', {
+            Highcharts.chart('container', {
                 chart: { type: 'column' },
               title: {
                 text: 'Recommendation Trends',
@@ -76,8 +75,13 @@ function getRecommendationChartData(ticker, url){
               enabled: false
             },
             // marginBottom : '100px',
-              xAxis: { categories: recomm_period ,
-                type: 'datetime'},
+              xAxis: { categories: recomm_period,
+              type: 'datetime',
+              startOnTick: true,
+            showFirstLabel: true,
+            endOnTick: true,
+            showLastLabel: true,
+              },
               yAxis: {
                 min: 0,
                 title: { text: '#Analysis'},
@@ -113,9 +117,9 @@ function getRecommendationChartData(ticker, url){
               plotOptions: {
                 column: {
                   stacking: 'normal',
-                //   dataLabels: {
-                //     enabled: true
-                //   }
+<!--                   dataLabels: {-->
+<!--                     enabled: true-->
+<!--                  }-->
                 }
               },
               series: [{
