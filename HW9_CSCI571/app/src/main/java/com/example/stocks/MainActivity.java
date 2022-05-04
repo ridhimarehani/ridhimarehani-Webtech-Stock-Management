@@ -161,8 +161,7 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
         readLocalStorage();
 //        count = 0;
 //        count1 = 0;
-//        getCurrentStockPriceVals();
-//        doTheAutoRefresh();
+        doTheAutoRefresh();
 //        readLocalStorage();
 
     }
@@ -177,8 +176,11 @@ public class MainActivity extends AppCompatActivity implements FavoriteRecyclerA
                 count = 0;
                 count1 = 0;
                 countAutoRefresh += 1;
+                writeLocalStorage();
+                readLocalStorage();
                 getCurrentStockPriceVals();
-//                Log.i(TAG, "run: Autorefresh> " + countAutoRefresh);
+                Log.i(TAG, "run: Autorefresh> " + countAutoRefresh);
+                Log.i(TAG, "run: count> "+count+" "+count1);
                 doTheAutoRefresh();
             }
         }, 15000);

@@ -52,11 +52,12 @@ public class FavoriteRecyclerAdapter extends RecyclerView.Adapter<FavoriteRecycl
         holder.portTickerText.setText(favItems.get(position).get(0)); // 0  for ticker Symbol, 1 for share count
         holder.numShares.setText(favItems.get(position).get(1)); //1 for company name
 
-        holder.priceChange.setText("$0.45 (0.09%)");
+//        holder.priceChange.setText("$0.45 (0.09%)");
 
         //Calculations for Favorite
         String currentPrice = favItems.get(position).get(2); // 2 for current price //3 for price since last closed
-        holder.currentPrice.setText("$"+currentPrice);
+        String currentPrice1 = df.format(Double.parseDouble(currentPrice));
+        holder.currentPrice.setText("$"+currentPrice1);
         String priceChangeString = favItems.get(position).get(3);
         Double priceChange = Double.parseDouble(priceChangeString);
         priceChangeString = df.format(priceChange);

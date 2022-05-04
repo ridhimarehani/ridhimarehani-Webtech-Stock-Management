@@ -369,7 +369,7 @@ public class TradeActivity extends AppCompatActivity {
             }
 
 
-            Toast.makeText(context, search_id+" is removed to favorites", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, search_id+" is removed from favorites", Toast.LENGTH_LONG).show();
         }
     }
 
