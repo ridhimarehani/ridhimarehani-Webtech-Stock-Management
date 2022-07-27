@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="app/src/main/res/drawable/done_drawable.xml" value="0.2145" />
+        <entry key="app/src/main/res/drawable/donebutton.xml" value="0.2145" />
+        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.188" />
+        <entry key="app/src/main/res/drawable/launch_screen.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/newsdialog.xml" value="0.2145" />
+        <entry key="app/src/main/res/drawable/tradebutton.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_info.xml" value="0.11775362318840579" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_trade.xml" value="0.11775362318840579" />
+        <entry key="app/src/main/res/layout/all_other_news.xml" value="0.11775362318840579" />
+        <entry key="app/src/main/res/layout/autocomplete_layout.xml" value="0.20652173913043478" />
+        <entry key="app/src/main/res/layout/done_layout.xml" value="0.24048913043478262" />
+        <entry key="app/src/main/res/layout/finhub_footer.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/first_news.xml" value="0.20652173913043478" />
+        <entry key="app/src/main/res/layout/historicalchart.xml" value="0.20652173913043478" />
+        <entry key="app/src/main/res/layout/historicalsummary.xml" value="0.20652173913043478" />
+        <entry key="app/src/main/res/layout/home_date_section.xml" value="0.15520833333333334" />
+        <entry key="app/src/main/res/layout/home_finhub_footer.xml" value="0.17028985507246377" />
+        <entry key="app/src/main/res/layout/home_section_headers.xml" value="0.15885416666666666" />
+        <entry key="app/src/main/res/layout/home_section_port_header.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/news_dialog.xml" value="0.25364583333333335" />
+        <entry key="app/src/main/res/layout/portfolio_header.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/portfolio_row.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/portfolio_trade.xml" value="0.11775362318840579" />
+        <entry key="app/src/main/res/layout/slpash_screen.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/splash_screen.xml" value="0.20652173913043478" />
+        <entry key="app/src/main/res/layout/ticker_item.xml" value="0.45" />
+        <entry key="app/src/main/res/layout/ticker_section.xml" value="0.24317617866004962" />
+        <entry key="app/src/main/res/menu/favorite.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/menu/search.xml" value="0.24074074074074073" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1755" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

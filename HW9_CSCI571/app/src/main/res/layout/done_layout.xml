@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/done_drawable">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="40dp"
+        android:paddingHorizontal="20dp"
+        android:gravity="center"
+        android:background="@drawable/done_drawable"
+        >
+
+        <TextView
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Congratulations!"
+            android:id="@+id/congrats"
+            android:layout_marginLeft="30dp"
+            android:textColor="@color/white"
+            android:layout_marginTop="40dp"
+            android:textSize="30dp" />
+        <TextView
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginLeft="30dp"
+            android:text="Congratulations!"
+            android:id="@+id/message"
+            android:layout_below="@+id/congrats"
+            android:textColor="@color/white"
+            android:layout_marginTop="20dp"
+            android:textStyle="italic"/>
+        <Button
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/message"
+            android:text="DONE"
+            android:id="@+id/done"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/donebutton"
+            android:textColor="@color/success"/>
+    </RelativeLayout>
+
+</LinearLayout>
