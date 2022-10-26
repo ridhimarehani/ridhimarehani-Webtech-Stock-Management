@@ -12,7 +12,7 @@ Youtube link : https://www.youtube.com/watch?v=feg9F545fhk
 HW 8 :
 Backend : nodeJS
 Forntend : Angular
-Youtube link L https://youtu.be/yeMWu9gF4Vs
+Youtube link : https://youtu.be/yeMWu9gF4Vs
 
 ################
 HW9 :
